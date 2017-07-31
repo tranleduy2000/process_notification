@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.duy.notifi">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <application
+        android:name="com.duy.notifi.statusbar.StatusApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name="com.duy.notifi.statusbar.activities.SplashActivity"
+            android:theme="@style/AppTheme.Splash">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <activity android:name="com.duy.notifi.statusbar.activities.MainActivity" />
+
+        <activity android:name="com.duy.notifi.statusbar.activities.AppSettingActivity" />
+
+        <activity
+            android:name="com.duy.notifi.statusbar.activities.ImagePickerActivity"
+            android:theme="@style/AppTheme.Transparent" />
+
+        <activity
+            android:name="com.duy.notifi.statusbar.activities.StartActivity"
+            android:theme="@style/AppTheme.Splash" />
+
+        <activity
+            android:name="com.duy.notifi.statusbar.activities.NotificationCompatActivity"
+            android:theme="@style/AppTheme.Transparent" />
+
+        <activity android:name="com.duy.notifi.statusbar.activities.AboutActivity" />
+
+        <receiver android:name="com.duy.notifi.statusbar.receivers.ActivityVisibilitySettingReceiver" />
+
+        <service android:name="com.duy.notifi.statusbar.services.StatusService">
+            <intent-filter>
+                <action android:name="com.duy.notifi.ACTION_UPDATE_RAM" />
+                <action android:name="com.duy.notifi.ACTION_UPDATE_CPU" />
+            </intent-filter>
+        </service>
+        <service android:name="com.duy.notifi.statusbar.services.ReaderService" />
+
+        <service
+            android:name="com.duy.notifi.statusbar.services.AccessibilityService"
+            android:label="@string/service_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibilityservice" />
+
+        </service>
+
+        <service
+            android:name="com.duy.notifi.statusbar.services.QuickToggleService"
+            android:icon="@drawable/ic_check_box_enabled"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>
