@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="filter_types">
+        <item>CPU CLOCK</item>
+        <item>CPU TEMP</item>
+        <item>RAM</item>
+        <item>BATTERY</item>
+        <item>INTERNAL MEMORY</item>
+        <item>EXTERNAL MEMORY</item>
+        <item>NETWORK UPLOAD</item>
+        <item>NETWORK DOWNLOAD</item>
+    </array>
+</resources>

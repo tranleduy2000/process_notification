@@ -3,6 +3,8 @@ package com.duy.notifi.statusbar.data.monitor;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -62,11 +64,16 @@ public class CpuIconData extends IconData<CpuIconData.CpuReceiver> {
     @Override
     public View getIconView() {
         if (statusView != null && view == null) {
-            view = statusView.findViewById(R.id.cpu_info);
+            view = statusView.findViewById(R.id.progress_1);
             if (view == null) {
                 LinearLayout child = this.statusView.getStatusView();
-                view = child.findViewById(R.id.cpu_info);
+                view = child.findViewById(R.id.progress_1);
+
             }
+        }
+        if (view != null) {
+            ProgressBar progressBar = (ProgressBar) view;
+            progressBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
         }
         return view;
     }

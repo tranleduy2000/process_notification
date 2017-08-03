@@ -28,14 +28,10 @@ import com.duy.notifi.R;
 import com.duy.notifi.statusbar.StatusApplication;
 import com.duy.notifi.statusbar.adapters.SimplePagerAdapter;
 import com.duy.notifi.statusbar.fragments.AppPreferenceFragment;
-import com.duy.notifi.statusbar.fragments.GeneralPreferenceFragment;
-import com.duy.notifi.statusbar.fragments.HelpFragment;
-import com.duy.notifi.statusbar.fragments.IconPreferenceFragment;
+import com.duy.notifi.statusbar.services.ReaderService;
 import com.duy.notifi.statusbar.services.StatusService;
 import com.duy.notifi.statusbar.utils.PreferenceUtils;
 import com.duy.notifi.statusbar.utils.StaticUtils;
-
-import com.duy.notifi.statusbar.services.ReaderService;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
@@ -60,11 +56,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setContentView(R.layout.activity_main);
 
         statusApplication = (StatusApplication) getApplicationContext();
-
-        if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this)
-                || !StaticUtils.isPermissionsGranted(this) || !StaticUtils.isIgnoringOptimizations(this)
-                || !StaticUtils.canDrawOverlays(this))
-            startActivity(new Intent(this, StartActivity.class));
+//
+//        if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this)
+//                || !StaticUtils.isPermissionsGranted(this) || !StaticUtils.isIgnoringOptimizations(this)
+//                || !StaticUtils.canDrawOverlays(this))
+//            startActivity(new Intent(this, StartActivity.class));
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
@@ -154,7 +150,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
 
-        adapter = new SimplePagerAdapter(this, getSupportFragmentManager(), viewPager, new GeneralPreferenceFragment(), new IconPreferenceFragment(), new AppPreferenceFragment(), new HelpFragment());
+        adapter = new SimplePagerAdapter(this, getSupportFragmentManager(), viewPager,
+                new AppPreferenceFragment());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(this);
 
@@ -257,9 +254,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 }
 
                 editor.apply();
-                break;
-            case R.id.action_about:
-                startActivity(new Intent(this, AboutActivity.class));
                 break;
             case R.id.action_reset:
                 if (adapter.getItem(viewPager.getCurrentItem()) instanceof AppPreferenceFragment)

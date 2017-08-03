@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.ColorInt;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSeekBar;
@@ -23,12 +22,10 @@ import android.widget.TextView;
 
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.StatusApplication;
-import com.duy.notifi.statusbar.activities.ImagePickerActivity;
 import com.duy.notifi.statusbar.utils.ColorUtils;
 import com.duy.notifi.statusbar.views.ColorImageView;
 import com.duy.notifi.statusbar.views.CustomImageView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -185,12 +182,6 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
             presetLayout.addView(v);
         }
 
-        findViewById(R.id.image).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getContext().startActivity(new Intent(getContext(), ImagePickerActivity.class));
-            }
-        });
 
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -286,13 +277,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Bitmap bitmap = null;
 
-        if (requestCode == ImagePickerActivity.ACTION_PICK_IMAGE && resultCode == ImagePickerActivity.RESULT_OK) {
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), data.getData());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+
 
         if (bitmap != null) {
             new ImageColorPickerDialog(getContext(), bitmap).setDefaultPreference(Color.BLACK).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {

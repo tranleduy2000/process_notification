@@ -4,6 +4,8 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -41,11 +43,15 @@ public class RamIconData extends IconData<RamIconData.RamReceiver> {
     @Override
     public View getIconView() {
         if (statusView != null && view == null) {
-            view = statusView.findViewById(R.id.ram_info);
+            view = statusView.findViewById(R.id.progress_2);
             if (view == null) {
                 LinearLayout child = this.statusView.getStatusView();
-                view = child.findViewById(R.id.ram_info);
+                view = child.findViewById(R.id.progress_2);
             }
+        }
+        if (view != null) {
+            ProgressBar progressBar = (ProgressBar) view;
+            progressBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
         }
         return view;
     }

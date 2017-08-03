@@ -14,7 +14,6 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.utils.StaticUtils;
@@ -166,39 +165,6 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
-    public static class NotificationStepFragment extends Fragment {
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            LinearLayout linearLayout = new LinearLayout(inflater.getContext());
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                AppCompatButton button = new AppCompatButton(inflater.getContext());
-                button.setText(R.string.action_access_grant);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startActivityForResult(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"), REQUEST_NOTIFICATION);
-                    }
-                });
-
-                linearLayout.addView(button);
-            }
-
-            AppCompatButton button = new AppCompatButton(inflater.getContext());
-            button.setText(R.string.notifications_compat);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivityForResult(new Intent(getActivity(), NotificationCompatActivity.class), REQUEST_NOTIFICATION);
-                }
-            });
-
-            linearLayout.addView(button);
-
-            return linearLayout;
-        }
-    }
 
     public static class PermissionsStepFragment extends Fragment {
         @Nullable

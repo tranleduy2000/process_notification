@@ -22,12 +22,6 @@ public class StatusApplication extends Application {
             Log.d("Status", message);
     }
 
-    public static boolean isDebug(Context context) {
-//        Boolean isDebug = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_DEBUG);
-//        return (isDebug != null && isDebug) || (isDebug == null && BuildConfig.DEBUG);
-        return false;
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -41,24 +35,8 @@ public class StatusApplication extends Application {
         onActivityResultListeners.add(listener);
     }
 
-    public void addListener(OnColorPickedListener listener) {
-        onColorPickedListeners.add(listener);
-    }
-
-    public void addListener(OnPreferenceChangedListener listener) {
-        onPreferenceChangedListeners.add(listener);
-    }
-
     public void removeListener(OnActivityResultListener listener) {
         onActivityResultListeners.remove(listener);
-    }
-
-    public void removeListener(OnColorPickedListener listener) {
-        onColorPickedListeners.remove(listener);
-    }
-
-    public void removeListener(OnPreferenceChangedListener listener) {
-        onPreferenceChangedListeners.remove(listener);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

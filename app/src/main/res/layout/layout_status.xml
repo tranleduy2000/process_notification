@@ -12,29 +12,41 @@
         android:layout_gravity="top"
         android:background="#00ffffff"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:weightSum="2">
+        android:orientation="horizontal">
 
         <ProgressBar
-            android:id="@+id/cpu_info"
+            android:id="@+id/progress_1"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
-            android:layout_height="4dp"
+            android:layout_height="3dp"
             android:layout_gravity="top"
-            android:layout_weight="1"
-            android:max="100"
-            android:progress="30" />
+            android:layout_marginRight="2dp"
+            android:layout_weight="1" />
 
         <ProgressBar
-            android:id="@+id/ram_info"
+            android:id="@+id/progress_2"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
-            android:layout_height="4dp"
+            android:layout_height="3dp"
             android:layout_gravity="top"
-            android:layout_weight="1"
-            android:max="100"
-            android:progress="30" />
+            android:layout_weight="1" />
 
+        <ProgressBar
+            android:id="@+id/progress_3"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_gravity="top"
+            android:layout_marginRight="2dp"
+            android:layout_weight="1" />
+
+        <ProgressBar
+            android:id="@+id/progress_4"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_gravity="top"
+            android:layout_weight="1" />
     </LinearLayout>
 
 </LinearLayout>

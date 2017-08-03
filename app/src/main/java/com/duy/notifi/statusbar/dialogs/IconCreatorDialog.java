@@ -1,11 +1,8 @@
 package com.duy.notifi.statusbar.dialogs;
 
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,7 +16,6 @@ import android.widget.Toast;
 
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.StatusApplication;
-import com.duy.notifi.statusbar.activities.ImagePickerActivity;
 import com.duy.notifi.statusbar.data.IconStyleData;
 
 public class IconCreatorDialog extends AppCompatDialog {
@@ -101,55 +97,6 @@ public class IconCreatorDialog extends AppCompatDialog {
 
                 ((ImageView) v.findViewById(R.id.image)).setImageDrawable(drawable);
             }
-
-            final int something = i;
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    statusApplication.addListener(new StatusApplication.OnActivityResultListener() {
-                        @Override
-                        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-                            if (requestCode == ImagePickerActivity.ACTION_PICK_IMAGE && resultCode == ImagePickerActivity.RESULT_OK) {
-                                String path = data.getDataString();
-                                try {
-                                    Cursor cursor = getContext().getContentResolver().query(data.getData(), null, null, null, null);
-                                    String documentId;
-                                    if (cursor != null) {
-                                        cursor.moveToFirst();
-                                        documentId = cursor.getString(0);
-                                        documentId = documentId.substring(documentId.lastIndexOf(":") + 1);
-                                        cursor.close();
-                                    } else return;
-
-                                    cursor = getContext().getContentResolver().query(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{documentId}, null);
-                                    if (cursor != null) {
-                                        cursor.moveToFirst();
-                                        path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                                        cursor.close();
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                                paths[something] = path;
-
-                                Drawable drawable = null;
-                                try {
-                                    drawable = Drawable.createFromPath(path);
-                                } catch (OutOfMemoryError e) {
-                                    e.printStackTrace();
-                                }
-
-                                ((ImageView) v.findViewById(R.id.image)).setImageDrawable(drawable);
-                            }
-
-                            statusApplication.removeListener(this);
-                        }
-                    });
-
-                    getContext().startActivity(new Intent(getContext(), ImagePickerActivity.class));
-                }
-            });
 
             layout.addView(v);
         }

@@ -62,10 +62,10 @@ public class BatteryIconData extends IconData<BatteryIconData.BatteryReceiver> {
     @Override
     public View getIconView() {
         if (statusView != null && view == null) {
-            view = statusView.findViewById(R.id.cpu_info);
+            view = statusView.findViewById(R.id.progress_1);
             if (view == null) {
                 LinearLayout child = this.statusView.getStatusView();
-                view = child.findViewById(R.id.cpu_info);
+                view = child.findViewById(R.id.progress_1);
             }
         }
         return view;

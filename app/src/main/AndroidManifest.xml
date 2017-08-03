@@ -26,8 +26,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="com.duy.notifi.statusbar.activities.SplashActivity"
-            android:theme="@style/AppTheme.Splash">
+            android:name="com.duy.notifi.statusbar.activities.SettingActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,18 +40,8 @@
         <activity android:name="com.duy.notifi.statusbar.activities.AppSettingActivity" />
 
         <activity
-            android:name="com.duy.notifi.statusbar.activities.ImagePickerActivity"
-            android:theme="@style/AppTheme.Transparent" />
-
-        <activity
             android:name="com.duy.notifi.statusbar.activities.StartActivity"
             android:theme="@style/AppTheme.Splash" />
-
-        <activity
-            android:name="com.duy.notifi.statusbar.activities.NotificationCompatActivity"
-            android:theme="@style/AppTheme.Transparent" />
-
-        <activity android:name="com.duy.notifi.statusbar.activities.AboutActivity" />
 
         <receiver android:name="com.duy.notifi.statusbar.receivers.ActivityVisibilitySettingReceiver" />
 
