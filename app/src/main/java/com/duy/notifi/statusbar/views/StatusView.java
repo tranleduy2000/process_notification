@@ -1,12 +1,9 @@
 package com.duy.notifi.statusbar.views;
 
 import android.animation.Animator;
-import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.app.WallpaperInfo;
 import android.app.WallpaperManager;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -37,21 +34,16 @@ import static com.duy.notifi.statusbar.utils.PreferenceUtils.getIntegerPreferenc
 
 public class StatusView extends FrameLayout {
 
-    private LinearLayout statusView/*, leftLayout, rightLayout, centerLayout*/;
+    private LinearLayout statusView;
     private float x, y;
     private int burnInOffsetX, burnInOffsetY;
-
-    public LinearLayout getStatusView() {
-        return statusView;
-    }
-
     @ColorInt
     private Integer color, iconColor = Color.WHITE;
-    private boolean isSystemShowing, isFullscreen, isAnimations, isIconAnimations, isTintedIcons, isContrastIcons, isRegistered;
-
+    private boolean isSystemShowing;
+    private boolean isFullscreen;
+    private boolean isAnimations;
+    private boolean isRegistered;
     private List<ProgressIcon> icons;
-    private WallpaperManager wallpaperManager;
-
     private Handler handler;
     private Runnable burnInRunnable = new Runnable() {
         @Override
@@ -125,6 +117,9 @@ public class StatusView extends FrameLayout {
         handler = new Handler();
     }
 
+    public LinearLayout getStatusView() {
+        return statusView;
+    }
 
     public void setUp() {
         if (statusView != null && statusView.getParent() != null) removeView(statusView);
@@ -133,31 +128,10 @@ public class StatusView extends FrameLayout {
         statusView = v.findViewById(R.id.status);
         statusView.getLayoutParams().height = StaticUtils.getStatusBarHeight(getContext());
 
-      /*  leftLayout = (LinearLayout) v.findViewById(R.id.notificationIcons);
-        rightLayout = (LinearLayout) v.findViewById(R.id.statusIcons);
-        centerLayout = (LinearLayout) v.findViewById(R.id.statusCenterIcons);
-*/
         Boolean isAnimations = getBooleanPreference(getContext(), PreferenceIdentifier.STATUS_BACKGROUND_ANIMATIONS);
         this.isAnimations = isAnimations != null ? isAnimations : true;
 
-        Boolean isIconAnimations = getBooleanPreference(getContext(), PreferenceIdentifier.STATUS_ICON_ANIMATIONS);
-        this.isIconAnimations = isIconAnimations != null ? isIconAnimations : true;
-
-  /*      if (this.isIconAnimations) {
-            leftLayout.setLayoutTransition(new LayoutTransition());
-            rightLayout.setLayoutTransition(new LayoutTransition());
-            centerLayout.setLayoutTransition(new LayoutTransition());
-        } else {
-            leftLayout.setLayoutTransition(null);
-            rightLayout.setLayoutTransition(null);
-            centerLayout.setLayoutTransition(null);
-        }
-*/
-        Boolean isTintedIcons = getBooleanPreference(getContext(), PreferenceIdentifier.STATUS_TINTED_ICONS);
-        this.isTintedIcons = isTintedIcons != null ? isTintedIcons : false;
-
         Boolean isContrastIcons = getBooleanPreference(getContext(), PreferenceIdentifier.STATUS_DARK_ICONS);
-        this.isContrastIcons = isContrastIcons != null ? isContrastIcons : true;
 
         addView(v);
         statusView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -183,8 +157,6 @@ public class StatusView extends FrameLayout {
 
         Integer defaultIconColor = getIntegerPreference(getContext(), PreferenceIdentifier.STATUS_ICON_COLOR);
         if (defaultIconColor != null) iconColor = defaultIconColor;
-
-        if (wallpaperManager == null) wallpaperManager = WallpaperManager.getInstance(getContext());
     }
 
     public List<ProgressIcon> getIcons() {
@@ -229,7 +201,11 @@ public class StatusView extends FrameLayout {
             if (!iconData.isVisible()) continue;
 
             final View item = iconData.getIconView();
-
+            if (!iconData.isActive()) {
+                item.setVisibility(View.INVISIBLE);
+            } else {
+                item.setVisibility(View.VISIBLE);
+            }
             iconData.setDrawableListener(new ProgressIcon.DrawableListener() {
                 @Override
                 public void onUpdate(@Nullable Drawable drawable) {
@@ -345,57 +321,6 @@ public class StatusView extends FrameLayout {
     public void setColor(@ColorInt int color) {
         if (this.color == null) this.color = Color.BLACK;
         color = Color.argb(255, Color.red(color), Color.green(color), Color.blue(color));
-
-        if (!isTintedIcons) {
-            if (isAnimations) {
-                ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), this.color, color);
-                animator.setDuration(150);
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        int color = (int) animation.getAnimatedValue();
-                        if (statusView != null) {
-//                            status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-                        }
-                    }
-                });
-                animator.start();
-            } else {
-////                status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-            }
-
-            setDarkMode(!ColorUtils.isColorDark(color));
-        } else if (statusView != null) {
-            int backgroundColor = getDefaultColor();
-            if (color == backgroundColor) {
-                if (color == Color.BLACK) color = getDefaultIconColor();
-                else if (color == Color.WHITE) color = Color.BLACK;
-            }
-
-////            status.setBackgroundColor(color);
-
-            if (isContrastIcons)
-                color = ColorUtils.isColorDark(backgroundColor) ? ColorUtils.lightColor(color) : ColorUtils.darkColor(color);
-
-            if (isIconAnimations) {
-                ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), this.color, color);
-                animator.setDuration(150);
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        int color = (int) animation.getAnimatedValue();
-                        if (statusView != null)
-                            setIconTint(statusView, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-                    }
-                });
-                animator.start();
-            } else {
-                setIconTint(statusView, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-            }
-
-            iconColor = color;
-        }
-
         this.color = color;
     }
 
@@ -413,59 +338,6 @@ public class StatusView extends FrameLayout {
         return color;
     }
 
-    public void setTransparent() {
-        if (statusView != null && wallpaperManager != null) {
-            Drawable backgroundDrawable;
-            WallpaperInfo wallpaperInfo = wallpaperManager.getWallpaperInfo();
-            if (wallpaperInfo != null)
-                backgroundDrawable = wallpaperInfo.loadThumbnail(getContext().getPackageManager());
-            else {
-                try {
-                    backgroundDrawable = wallpaperManager.getDrawable();
-                } catch (SecurityException e) {
-                    setColor(getDefaultColor());
-                    return;
-                }
-            }
-
-            Bitmap background = ImageUtils.cropBitmapToBar(getContext(), ImageUtils.drawableToBitmap(backgroundDrawable));
-
-            if (background != null) {
-                int color = ColorUtils.getAverageColor(background);
-
-                Boolean transparent = getBooleanPreference(getContext(), PreferenceIdentifier.STATUS_HOME_TRANSPARENT);
-                if (transparent == null || transparent) {
-//                    status.setBackground(new BitmapDrawable(getResources(), background));
-                    setDarkMode(!ColorUtils.isColorDark(color));
-                    StatusView.this.color = color;
-                } else setColor(color);
-            } else setColor(getDefaultColor());
-        }
-    }
-
-    public void setDarkMode(boolean isDarkMode) {
-        if (isContrastIcons) {
-            int color = isDarkMode ? Color.BLACK : getDefaultIconColor();
-
-            if (isIconAnimations) {
-                ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), iconColor, color);
-                animator.setDuration(150);
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        int color = (int) animation.getAnimatedValue();
-                        if (statusView != null)
-                            setIconTint(statusView, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-                    }
-                });
-                animator.start();
-            } else {
-                setIconTint(statusView, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-            }
-
-            iconColor = color;
-        }
-    }
 
     private void setIconTint(View view, @ColorInt int color) {
         for (ProgressIcon icon : getIcons()) {

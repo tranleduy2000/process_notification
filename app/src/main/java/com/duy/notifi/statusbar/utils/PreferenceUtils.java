@@ -230,9 +230,26 @@ public class PreferenceUtils {
         return getIntegerPreference(context, "key_progress_type" + index);
     }
 
-    public static Boolean isProgressActive(Context context, int index) {
-        return getBooleanPreference(context, "key_progress_activve" + index);
+    public static int getProgressType(Context context, int index, int def) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        return pref.getInt("key_progress_type" + index, def);
     }
+
+    public static void setProgressType(Context context, int index, int type) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        pref.edit().putInt("key_progress_type" + index, type).apply();
+    }
+
+    public static boolean isProgressActive(Context context, int index, boolean def) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        return pref.getBoolean("key_progress_active" + index, def);
+    }
+
+    public static void setActive(Context context, int index, boolean isActive) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        pref.edit().putBoolean("key_progress_active" + index, isActive).apply();
+    }
+
 
     public enum PreferenceIdentifier {
         STATUS_ENABLED,

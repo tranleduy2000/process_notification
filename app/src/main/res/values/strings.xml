@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Progress notifi</string>
+    <string name="app_name">Progress notification</string>
 
     <string name="action_setup">Setup</string>
     <string name="action_access_grant">Grant Access</string>

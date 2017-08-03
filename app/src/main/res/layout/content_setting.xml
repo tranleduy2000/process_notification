@@ -25,6 +25,7 @@
                 android:orientation="vertical">
 
                 <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/enable_progress_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?colorPrimary"
@@ -44,6 +45,7 @@
                         android:text="Filter type" />
 
                     <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/spinner_type_1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:entries="@array/filter_types"
@@ -67,11 +69,12 @@
                 android:orientation="vertical">
 
                 <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/enable_progress_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?colorPrimary"
                     android:padding="16dp"
-                    android:text="Progress 1"
+                    android:text="Progress 2"
                     android:textAllCaps="true" />
 
                 <LinearLayout
@@ -86,6 +89,7 @@
                         android:text="Filter type" />
 
                     <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/spinner_type_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:entries="@array/filter_types"
@@ -109,11 +113,12 @@
                 android:orientation="vertical">
 
                 <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/enable_progress_3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?colorPrimary"
                     android:padding="16dp"
-                    android:text="Progress 1"
+                    android:text="Progress 2"
                     android:textAllCaps="true" />
 
                 <LinearLayout
@@ -128,6 +133,7 @@
                         android:text="Filter type" />
 
                     <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/spinner_type_3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:entries="@array/filter_types"
@@ -151,11 +157,12 @@
                 android:orientation="vertical">
 
                 <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/enable_progress_4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?colorPrimary"
                     android:padding="16dp"
-                    android:text="Progress 1"
+                    android:text="Progress 4"
                     android:textAllCaps="true" />
 
                 <LinearLayout
@@ -170,6 +177,7 @@
                         android:text="Filter type" />
 
                     <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/spinner_type_4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:entries="@array/filter_types"

@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.Build;
@@ -32,9 +31,9 @@ import com.duy.notifi.statusbar.activities.AppSettingActivity;
 import com.duy.notifi.statusbar.activities.MainActivity;
 import com.duy.notifi.statusbar.data.AppData;
 import com.duy.notifi.statusbar.data.NotificationData;
-import com.duy.notifi.statusbar.data.monitor.ProgressIcon;
 import com.duy.notifi.statusbar.data.monitor.BatteryProgressIcon;
 import com.duy.notifi.statusbar.data.monitor.CpuProgressIcon;
+import com.duy.notifi.statusbar.data.monitor.ProgressIcon;
 import com.duy.notifi.statusbar.data.monitor.RamProgressIcon;
 import com.duy.notifi.statusbar.receivers.ActivityVisibilitySettingReceiver;
 import com.duy.notifi.statusbar.utils.PreferenceUtils;
@@ -44,6 +43,9 @@ import com.duy.notifi.statusbar.views.StatusView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.duy.notifi.statusbar.data.monitor.ProgressIcon.DEF_ENABLE;
+import static com.duy.notifi.statusbar.data.monitor.ProgressIcon.DEF_TYPE;
+import static com.duy.notifi.statusbar.data.monitor.ProgressIcon.PROGRESS_IDS;
 import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO;
 import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED;
 import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION;
@@ -69,7 +71,6 @@ public class StatusService extends Service {
     public static final int HEADSUP_LAYOUT_TRANSPARENT = 3;
 
     private static final int ID_FOREGROUND = 682;
-    private static final int[] PROGRESS_IDS = {R.id.progress_1, R.id.progress_2, R.id.progress_3, R.id.progress_4};
     private static final int COUNT = 4;
 
     private StatusView statusView;
@@ -94,8 +95,7 @@ public class StatusService extends Service {
         List<ProgressIcon> icons = new ArrayList<>();
         for (int index = 0; index < COUNT; index++) {
             ProgressIcon iconData = null;
-            Integer progressType = PreferenceUtils.getProgressType(context, index);
-            if (progressType == null) progressType = 0;
+            int progressType = PreferenceUtils.getProgressType(context, index, DEF_TYPE[index]);
             switch (progressType) {
                 case PreferenceUtils.ProgressType.CPU_CLOCK:
                     iconData = new CpuProgressIcon(context, statusView, PROGRESS_IDS[index]);
@@ -123,7 +123,7 @@ public class StatusService extends Service {
                     break;
             }
             if (iconData != null) {
-                iconData.setActive(PreferenceUtils.isProgressActive(context, index));
+                iconData.setActive(PreferenceUtils.isProgressActive(context, index, DEF_ENABLE[index]));
                 icons.add(iconData);
             }
         }
@@ -200,13 +200,6 @@ public class StatusService extends Service {
             case ACTION_UPDATE:
                 if (statusView != null) {
                     statusView.setLockscreen(keyguardManager.isKeyguardLocked());
-
-                    if (intent.hasExtra(EXTRA_IS_TRANSPARENT) && intent.getBooleanExtra(EXTRA_IS_TRANSPARENT, false)) {
-                        statusView.setTransparent();
-                    } else {
-                        if (intent.hasExtra(EXTRA_COLOR) && headsUpView == null)
-                            statusView.setColor(intent.getIntExtra(EXTRA_COLOR, Color.BLACK));
-                    }
 
                     statusView.setSystemShowing(intent.getBooleanExtra(EXTRA_IS_SYSTEM_FULLSCREEN,
                             statusView.isSystemShowing()));
@@ -336,7 +329,9 @@ public class StatusService extends Service {
             params.gravity = Gravity.TOP;
 
             windowManager.addView(statusView, params);
-        } else statusView.unregister();
+        } else {
+            statusView.unregister();
+        }
 
         statusView.setUp();
 

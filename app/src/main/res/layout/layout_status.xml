@@ -18,7 +18,7 @@
             android:id="@+id/progress_1"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
-            android:layout_height="3dp"
+            android:layout_height="2dp"
             android:layout_gravity="top"
             android:layout_marginRight="2dp"
             android:layout_weight="1" />
@@ -27,7 +27,7 @@
             android:id="@+id/progress_2"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
-            android:layout_height="3dp"
+            android:layout_height="2dp"
             android:layout_gravity="top"
             android:layout_weight="1" />
 
@@ -35,7 +35,7 @@
             android:id="@+id/progress_3"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
-            android:layout_height="3dp"
+            android:layout_height="2dp"
             android:layout_gravity="top"
             android:layout_marginRight="2dp"
             android:layout_weight="1" />
@@ -44,7 +44,7 @@
             android:id="@+id/progress_4"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
-            android:layout_height="3dp"
+            android:layout_height="2dp"
             android:layout_gravity="top"
             android:layout_weight="1" />
     </LinearLayout>

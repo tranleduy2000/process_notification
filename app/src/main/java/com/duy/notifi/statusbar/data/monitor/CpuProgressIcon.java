@@ -50,6 +50,7 @@ public class CpuProgressIcon extends ProgressIcon<CpuProgressIcon.CpuReceiver> {
 
     @Override
     public void onProcessUpdate(long current, long max) {
+        if (!isActive()) return;
         Log.d(TAG, "onProcessUpdate() called with: current = [" + current + "], max = [" + max + "]");
         if (view != null) {
             ProgressBar progressBar = (ProgressBar) view;
@@ -80,6 +81,7 @@ public class CpuProgressIcon extends ProgressIcon<CpuProgressIcon.CpuReceiver> {
     public IntentFilter getIntentFilter() {
         return new IntentFilter(ACTION_UPDATE_CPU);
     }
+
 
     public static class CpuReceiver extends IconUpdateReceiver<CpuProgressIcon> {
 

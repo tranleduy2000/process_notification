@@ -37,7 +37,31 @@ import java.util.List;
 public abstract class ProgressIcon<T extends IconUpdateReceiver> {
 
     public static final int LEFT_GRAVITY = -1, CENTER_GRAVITY = 0, RIGHT_GRAVITY = 1;
+    public static final int[] PROGRESS_IDS = {
+            R.id.progress_1,
+            R.id.progress_2,
+            R.id.progress_3,
+            R.id.progress_4};
+    public static final int[] ENABLE_IDS = {
+            R.id.enable_progress_1,
+            R.id.enable_progress_2,
+            R.id.enable_progress_3,
+            R.id.enable_progress_4};
+    public static final int[] SPINNER_IDS = {
+            R.id.spinner_type_1,
+            R.id.spinner_type_2,
+            R.id.spinner_type_3,
+            R.id.spinner_type_4};
+    public static final int[] DEF_TYPE = {
+            PreferenceUtils.ProgressType.CPU_TEMP,
+            PreferenceUtils.ProgressType.CPU_CLOCK,
+            PreferenceUtils.ProgressType.RAM,
+            PreferenceUtils.ProgressType.BATTERY};
+    public static final    boolean[] DEF_ENABLE = {false, true, true, true};
+
     protected View view;
+    protected int progressId;
+    protected Boolean active;
     private Context context;
     private DrawableListener drawableListener;
     private TextListener textListener;
@@ -46,8 +70,6 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
     private Drawable drawable;
     private String text;
     private int color;
-    protected int progressId;
-    private Boolean active;
 
     public ProgressIcon(Context context, int progressId) {
         this.context = context;
@@ -206,6 +228,14 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
         if (receiver == null) receiver = getReceiver();
         if (receiver != null) getContext().registerReceiver(receiver, getIntentFilter());
         onDrawableUpdate(-1);
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public void unregister() {
@@ -587,10 +617,6 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
     }
 
     public abstract void onProcessUpdate(long current, long max);
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
 
     public enum PreferenceIdentifier {
         VISIBILITY,
