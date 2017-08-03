@@ -57,7 +57,7 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
             PreferenceUtils.ProgressType.CPU_CLOCK,
             PreferenceUtils.ProgressType.RAM,
             PreferenceUtils.ProgressType.BATTERY};
-    public static final    boolean[] DEF_ENABLE = {false, true, true, true};
+    public static final boolean[] DEF_ENABLE = {false, true, true, true};
 
     protected View view;
     protected int progressId;
@@ -70,6 +70,7 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
     private Drawable drawable;
     private String text;
     private int color;
+    private boolean isRegister;
 
     public ProgressIcon(Context context, int progressId) {
         this.context = context;
@@ -225,6 +226,7 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
     }
 
     public void register() {
+        isRegister = true;
         if (receiver == null) receiver = getReceiver();
         if (receiver != null) getContext().registerReceiver(receiver, getIntentFilter());
         onDrawableUpdate(-1);
@@ -239,7 +241,10 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
     }
 
     public void unregister() {
-        if (receiver != null) getContext().unregisterReceiver(receiver);
+        if (receiver != null) {
+            getContext().unregisterReceiver(receiver);
+            isRegister = false;
+        }
     }
 
     public final int getIconPadding() {

@@ -12,12 +12,15 @@ package com.duy.notifi.statusbar.services;
 import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.BatteryManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
 import com.duy.notifi.R;
+import com.duy.notifi.statusbar.data.monitor.BatteryProgressIcon;
 import com.duy.notifi.statusbar.data.monitor.CpuProgressIcon;
 import com.duy.notifi.statusbar.data.monitor.RamProgressIcon;
 
@@ -120,9 +123,25 @@ public class ReaderService extends Service {
         try {
             readRamInfo();
             readCpuInfo();
+            readBattery();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void readBattery() {
+        IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = registerReceiver(null, iFilter);
+
+        int level = batteryStatus != null ? batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) : -1;
+        int scale = batteryStatus != null ? batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1) : -1;
+
+        float batteryPct = level / (float) scale;
+
+        int percent = (int) (batteryPct * 100);
+        Intent intent = new Intent(BatteryProgressIcon.ACTION_UPDATE_BATTERY);
+        intent.putExtra(BatteryProgressIcon.EXTRA_PERCENT, percent);
+        this.sendBroadcast(intent);
     }
 
     private void readCpuInfo() throws IOException {

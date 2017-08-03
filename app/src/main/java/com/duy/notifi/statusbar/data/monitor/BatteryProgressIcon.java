@@ -18,11 +18,11 @@ import com.duy.notifi.statusbar.views.StatusView;
 
 public class BatteryProgressIcon extends ProgressIcon<BatteryProgressIcon.BatteryReceiver> {
 
-    public static final String ACTION_UPDATE_BATTERY = "com.duy.notifi.ACTION_UPDATE_CPU";
+    public static final String ACTION_UPDATE_BATTERY = "com.duy.notifi.ACTION_UPDATE_BATTERY";
     public static final String EXTRA_MAX_VALUE = "max_value";
     public static final String EXTRA_USED_VALUE = "used_value";
     public static final String EXTRA_PERCENT = "percent";
-    private static final String TAG = "CpuIconData";
+    private static final String TAG = "BatteryProgressIcon";
 
     private int process;
     private StatusView statusView;
