@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
 import com.duy.notifi.R;
-import com.duy.notifi.statusbar.data.icon.IconData;
+import com.duy.notifi.statusbar.data.monitor.ProgressIcon;
 import com.duy.notifi.statusbar.utils.StaticUtils;
 
 import java.util.ArrayList;
@@ -21,13 +21,13 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
     public View itemView;
     private Activity activity;
-    private List<IconData> originalIcons, icons;
+    private List<ProgressIcon> originalIcons, icons;
     private String filter;
 
     public IconAdapter(Activity activity) {
         this.activity = activity;
 //        setIcons(StatusService.getIcons(activity));
-        setIcons(new ArrayList<IconData>());
+        setIcons(new ArrayList<ProgressIcon>());
     }
 
     @Override
@@ -37,12 +37,12 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        IconData icon = getIcon(position);
+        ProgressIcon icon = getIcon(position);
         if (icon == null) return;
 
         itemView = holder.v;
 
-        icon.putPreference(IconData.PreferenceIdentifier.POSITION, position);
+        icon.putPreference(ProgressIcon.PreferenceIdentifier.POSITION, position);
 
         holder.checkBox.setText(icon.getTitle());
         holder.checkBox.setOnCheckedChangeListener(null);
@@ -53,10 +53,10 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                IconData icon = getIcon(holder.getAdapterPosition());
+                ProgressIcon icon = getIcon(holder.getAdapterPosition());
                 if (icon == null) return;
 
-                icon.putPreference(IconData.PreferenceIdentifier.VISIBILITY, isChecked);
+                icon.putPreference(ProgressIcon.PreferenceIdentifier.VISIBILITY, isChecked);
                 StaticUtils.updateStatusService(activity);
 
                 notifyItemChanged(holder.getAdapterPosition());
@@ -67,11 +67,11 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
         holder.moveUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IconData icon = getIcon(holder.getAdapterPosition());
+                ProgressIcon icon = getIcon(holder.getAdapterPosition());
                 if (icon == null) return;
 
                 int position = icons.indexOf(icon);
-                List<IconData> icons = getIcons();
+                List<ProgressIcon> icons = getIcons();
                 icons.remove(icon);
                 icons.add(position - 1, icon);
 
@@ -85,11 +85,11 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
         holder.moveDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IconData icon = getIcon(holder.getAdapterPosition());
+                ProgressIcon icon = getIcon(holder.getAdapterPosition());
                 if (icon == null) return;
 
                 int position = icons.indexOf(icon);
-                List<IconData> icons = getIcons();
+                List<ProgressIcon> icons = getIcons();
                 icons.remove(icon);
                 icons.add(position + 1, icon);
 
@@ -116,7 +116,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
     }
 
     @Nullable
-    private IconData getIcon(int position) {
+    private ProgressIcon getIcon(int position) {
         if (position < 0 || position >= icons.size()) return null;
         else return icons.get(position);
     }
@@ -128,7 +128,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
         if (filter == null || filter.length() < 1) {
             icons.addAll(originalIcons);
         } else {
-            for (IconData icon : originalIcons) {
+            for (ProgressIcon icon : originalIcons) {
                 if (icon.getTitle().toLowerCase().contains(filter) || filter.contains(icon.getTitle().toLowerCase()))
                     icons.add(icon);
             }
@@ -137,13 +137,13 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public List<IconData> getIcons() {
-        List<IconData> icons = new ArrayList<>();
+    public List<ProgressIcon> getIcons() {
+        List<ProgressIcon> icons = new ArrayList<>();
         icons.addAll(originalIcons);
         return icons;
     }
 
-    public void setIcons(List<IconData> icons) {
+    public void setIcons(List<ProgressIcon> icons) {
         originalIcons = new ArrayList<>();
         originalIcons.addAll(icons);
 

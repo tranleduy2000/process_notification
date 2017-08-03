@@ -23,14 +23,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.duy.notifi.R;
-import com.duy.notifi.statusbar.data.icon.IconData;
+import com.duy.notifi.statusbar.data.monitor.ProgressIcon;
 import com.duy.notifi.statusbar.utils.ColorUtils;
 import com.duy.notifi.statusbar.utils.ImageUtils;
-import com.duy.notifi.statusbar.utils.PreferenceUtils;
 import com.duy.notifi.statusbar.utils.StaticUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier;
+import static com.duy.notifi.statusbar.utils.PreferenceUtils.getBooleanPreference;
+import static com.duy.notifi.statusbar.utils.PreferenceUtils.getIntegerPreference;
 
 public class StatusView extends FrameLayout {
 
@@ -46,7 +49,7 @@ public class StatusView extends FrameLayout {
     private Integer color, iconColor = Color.WHITE;
     private boolean isSystemShowing, isFullscreen, isAnimations, isIconAnimations, isTintedIcons, isContrastIcons, isRegistered;
 
-    private List<IconData> icons;
+    private List<ProgressIcon> icons;
     private WallpaperManager wallpaperManager;
 
     private Handler handler;
@@ -134,10 +137,10 @@ public class StatusView extends FrameLayout {
         rightLayout = (LinearLayout) v.findViewById(R.id.statusIcons);
         centerLayout = (LinearLayout) v.findViewById(R.id.statusCenterIcons);
 */
-        Boolean isAnimations = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BACKGROUND_ANIMATIONS);
+        Boolean isAnimations = getBooleanPreference(getContext(), PreferenceIdentifier.STATUS_BACKGROUND_ANIMATIONS);
         this.isAnimations = isAnimations != null ? isAnimations : true;
 
-        Boolean isIconAnimations = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_ANIMATIONS);
+        Boolean isIconAnimations = getBooleanPreference(getContext(), PreferenceIdentifier.STATUS_ICON_ANIMATIONS);
         this.isIconAnimations = isIconAnimations != null ? isIconAnimations : true;
 
   /*      if (this.isIconAnimations) {
@@ -150,10 +153,10 @@ public class StatusView extends FrameLayout {
             centerLayout.setLayoutTransition(null);
         }
 */
-        Boolean isTintedIcons = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_TINTED_ICONS);
+        Boolean isTintedIcons = getBooleanPreference(getContext(), PreferenceIdentifier.STATUS_TINTED_ICONS);
         this.isTintedIcons = isTintedIcons != null ? isTintedIcons : false;
 
-        Boolean isContrastIcons = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS);
+        Boolean isContrastIcons = getBooleanPreference(getContext(), PreferenceIdentifier.STATUS_DARK_ICONS);
         this.isContrastIcons = isContrastIcons != null ? isContrastIcons : true;
 
         addView(v);
@@ -163,7 +166,7 @@ public class StatusView extends FrameLayout {
                 x = statusView.getX();
                 y = statusView.getY();
 
-                Boolean isBurnInProtection = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BURNIN_PROTECTION);
+                Boolean isBurnInProtection = getBooleanPreference(getContext(), PreferenceIdentifier.STATUS_BURNIN_PROTECTION);
                 if (isBurnInProtection != null && isBurnInProtection)
                     handler.post(burnInRunnable);
 
@@ -171,25 +174,25 @@ public class StatusView extends FrameLayout {
             }
         });
 
-        Boolean isStatusColorAuto = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
+        Boolean isStatusColorAuto = getBooleanPreference(getContext(), PreferenceIdentifier.STATUS_COLOR_AUTO);
         if (isStatusColorAuto != null && !isStatusColorAuto) {
-            Integer statusBarColor = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
+            Integer statusBarColor = getIntegerPreference(getContext(), PreferenceIdentifier.STATUS_COLOR);
             if (statusBarColor != null) setColor(statusBarColor);
         } else if (color != null) setColor(color);
         else setColor(Color.BLACK);
 
-        Integer defaultIconColor = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_COLOR);
+        Integer defaultIconColor = getIntegerPreference(getContext(), PreferenceIdentifier.STATUS_ICON_COLOR);
         if (defaultIconColor != null) iconColor = defaultIconColor;
 
         if (wallpaperManager == null) wallpaperManager = WallpaperManager.getInstance(getContext());
     }
 
-    public List<IconData> getIcons() {
+    public List<ProgressIcon> getIcons() {
         if (icons == null) icons = new ArrayList<>();
         return icons;
     }
 
-    public void setIcons(List<IconData> icons) {
+    public void setIcons(List<ProgressIcon> icons) {
      /*   for (int i = (leftLayout.getChildCount() - 1); i >= 0; i--) {
             View child = leftLayout.getChildAt(i);
             Object tag = child.getTag();
@@ -222,12 +225,12 @@ public class StatusView extends FrameLayout {
 
         this.icons = icons;
 
-        for (final IconData iconData : icons) {
+        for (final ProgressIcon iconData : icons) {
             if (!iconData.isVisible()) continue;
 
             final View item = iconData.getIconView();
 
-            iconData.setDrawableListener(new IconData.DrawableListener() {
+            iconData.setDrawableListener(new ProgressIcon.DrawableListener() {
                 @Override
                 public void onUpdate(@Nullable Drawable drawable) {
                     CustomImageView iconView = item.findViewById(R.id.icon);
@@ -255,7 +258,7 @@ public class StatusView extends FrameLayout {
 
     public void register() {
         if (icons != null && !isRegistered()) {
-            for (IconData icon : icons) {
+            for (ProgressIcon icon : icons) {
                 icon.register();
             }
             isRegistered = true;
@@ -264,7 +267,7 @@ public class StatusView extends FrameLayout {
 
     public void unregister() {
         if (icons != null && isRegistered()) {
-            for (IconData icon : icons) {
+            for (ProgressIcon icon : icons) {
                 icon.unregister();
             }
             isRegistered = false;
@@ -398,14 +401,14 @@ public class StatusView extends FrameLayout {
 
     @ColorInt
     private int getDefaultColor() {
-        Integer color = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
+        Integer color = getIntegerPreference(getContext(), PreferenceIdentifier.STATUS_COLOR);
         if (color == null) color = Color.BLACK;
         return color;
     }
 
     @ColorInt
     private int getDefaultIconColor() {
-        Integer color = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_COLOR);
+        Integer color = getIntegerPreference(getContext(), PreferenceIdentifier.STATUS_ICON_COLOR);
         if (color == null) color = Color.WHITE;
         return color;
     }
@@ -430,7 +433,7 @@ public class StatusView extends FrameLayout {
             if (background != null) {
                 int color = ColorUtils.getAverageColor(background);
 
-                Boolean transparent = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_HOME_TRANSPARENT);
+                Boolean transparent = getBooleanPreference(getContext(), PreferenceIdentifier.STATUS_HOME_TRANSPARENT);
                 if (transparent == null || transparent) {
 //                    status.setBackground(new BitmapDrawable(getResources(), background));
                     setDarkMode(!ColorUtils.isColorDark(color));
@@ -465,7 +468,7 @@ public class StatusView extends FrameLayout {
     }
 
     private void setIconTint(View view, @ColorInt int color) {
-        for (IconData icon : getIcons()) {
+        for (ProgressIcon icon : getIcons()) {
             icon.setColor(color);
         }
 
@@ -487,7 +490,7 @@ public class StatusView extends FrameLayout {
 
 
     public void setLockscreen(boolean lockscreen) {
-        Boolean expand = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_LOCKSCREEN_EXPAND);
+        Boolean expand = getBooleanPreference(getContext(), PreferenceIdentifier.STATUS_LOCKSCREEN_EXPAND);
         if (expand != null && expand)
             statusView.getLayoutParams().height = StaticUtils.getStatusBarHeight(getContext()) * (lockscreen ? 3 : 1);
 

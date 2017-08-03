@@ -18,8 +18,8 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.duy.notifi.R;
-import com.duy.notifi.statusbar.data.monitor.CpuIconData;
-import com.duy.notifi.statusbar.data.monitor.RamIconData;
+import com.duy.notifi.statusbar.data.monitor.CpuProgressIcon;
+import com.duy.notifi.statusbar.data.monitor.RamProgressIcon;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -177,16 +177,16 @@ public class ReaderService extends Service {
 
     private void updateRamInfo(ActivityManager.MemoryInfo memoryInfo) {
         //update ram notification
-        Intent intent = new Intent(RamIconData.ACTION_UPDATE_RAM);
-        intent.putExtra(RamIconData.EXTRA_INFO, memoryInfo);
+        Intent intent = new Intent(RamProgressIcon.ACTION_UPDATE_RAM);
+        intent.putExtra(RamProgressIcon.EXTRA_INFO, memoryInfo);
         sendBroadcast(intent);
     }
 
 
     private void updateCpuInfo(float percentage) {
         //update cpu notification
-        Intent intent = new Intent(CpuIconData.ACTION_UPDATE_CPU);
-        intent.putExtra(CpuIconData.EXTRA_PERCENT, percentage);
+        Intent intent = new Intent(CpuProgressIcon.ACTION_UPDATE_CPU);
+        intent.putExtra(CpuProgressIcon.EXTRA_PERCENT, percentage);
         sendBroadcast(intent);
     }
 

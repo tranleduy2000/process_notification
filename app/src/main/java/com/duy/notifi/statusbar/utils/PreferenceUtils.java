@@ -44,6 +44,20 @@ public class PreferenceUtils {
     }
 
     @Nullable
+    public static Boolean getBooleanPreference(Context context, String identifier) {
+        if (context == null || identifier == null) return null;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        if (prefs.contains(identifier)) {
+            try {
+                return prefs.getBoolean(identifier, false);
+            } catch (ClassCastException e) {
+                return null;
+            }
+        } else return null;
+    }
+
+    @Nullable
     public static Integer getIntegerPreference(Context context, PreferenceIdentifier identifier) {
         if (context == null || identifier == null) return null;
 
@@ -51,6 +65,20 @@ public class PreferenceUtils {
         if (prefs.contains(identifier.toString())) {
             try {
                 return prefs.getInt(identifier.toString(), 0);
+            } catch (ClassCastException e) {
+                return null;
+            }
+        } else return null;
+    }
+
+    @Nullable
+    public static Integer getIntegerPreference(Context context, String identifier) {
+        if (context == null || identifier == null) return null;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        if (prefs.contains(identifier)) {
+            try {
+                return prefs.getInt(identifier, 0);
             } catch (ClassCastException e) {
                 return null;
             }
@@ -198,6 +226,14 @@ public class PreferenceUtils {
         return Environment.getExternalStorageDirectory() + "/status/backups";
     }
 
+    public static Integer getProgressType(Context context, int index) {
+        return getIntegerPreference(context, "key_progress_type" + index);
+    }
+
+    public static Boolean isProgressActive(Context context, int index) {
+        return getBooleanPreference(context, "key_progress_activve" + index);
+    }
+
     public enum PreferenceIdentifier {
         STATUS_ENABLED,
         STATUS_NOTIFICATIONS_COMPAT,
@@ -216,6 +252,22 @@ public class PreferenceUtils {
         STATUS_HIDE_ON_VOLUME,
         STATUS_PERSISTENT_NOTIFICATION,
         STATUS_BURNIN_PROTECTION,
-        STATUS_DEBUG
+        STATUS_DEBUG,
+
+        ENABLE_PROCESS_1, TYPE_PROGRESS_1,
+        ENABLE_PROCESS_2, TYPE_PROGRESS_2,
+        ENABLE_PROCESS_3, TYPE_PROGRESS_3,
+        ENABLE_PROCESS_4, TYPE_PROGRESS_4,
+    }
+
+    public static class ProgressType {
+        public static final int CPU_CLOCK = 0;
+        public static final int CPU_TEMP = 1;
+        public static final int RAM = 2;
+        public static final int BATTERY = 3;
+        public static final int INTERNAL_MEMORY = 4;
+        public static final int EXTERNAL_MEMORY = 5;
+        public static final int NET_UP = 6;
+        public static final int NET_DOWN = 7;
     }
 }

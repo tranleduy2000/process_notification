@@ -11,8 +11,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.duy.notifi.R;
-import com.duy.notifi.statusbar.data.icon.IconData;
 import com.duy.notifi.statusbar.receivers.IconUpdateReceiver;
 import com.duy.notifi.statusbar.views.StatusView;
 
@@ -20,7 +18,7 @@ import com.duy.notifi.statusbar.views.StatusView;
  * Created by Duy on 31-Jul-17.
  */
 
-public class RamIconData extends IconData<RamIconData.RamReceiver> {
+public class RamProgressIcon extends ProgressIcon<RamProgressIcon.RamReceiver> {
 
     public static final String ACTION_UPDATE_RAM = "com.duy.notifi.ACTION_UPDATE_RAM";
     public static final String EXTRA_MAX_VALUE = "max_value";
@@ -30,8 +28,8 @@ public class RamIconData extends IconData<RamIconData.RamReceiver> {
     private int process;
     private StatusView statusView;
 
-    public RamIconData(Context context, StatusView statusView) {
-        super(context);
+    public RamProgressIcon(Context context, StatusView statusView, int progressId) {
+        super(context, progressId);
         this.statusView = statusView;
     }
 
@@ -43,10 +41,10 @@ public class RamIconData extends IconData<RamIconData.RamReceiver> {
     @Override
     public View getIconView() {
         if (statusView != null && view == null) {
-            view = statusView.findViewById(R.id.progress_2);
+            view = statusView.findViewById(progressId);
             if (view == null) {
                 LinearLayout child = this.statusView.getStatusView();
-                view = child.findViewById(R.id.progress_2);
+                view = child.findViewById(progressId);
             }
         }
         if (view != null) {
@@ -82,14 +80,14 @@ public class RamIconData extends IconData<RamIconData.RamReceiver> {
         return new IntentFilter(ACTION_UPDATE_RAM);
     }
 
-    public static class RamReceiver extends IconUpdateReceiver<RamIconData> {
+    public static class RamReceiver extends IconUpdateReceiver<RamProgressIcon> {
 
-        public RamReceiver(RamIconData iconData) {
+        public RamReceiver(RamProgressIcon iconData) {
             super(iconData);
         }
 
         @Override
-        public void onReceive(RamIconData icon, Intent intent) {
+        public void onReceive(RamProgressIcon icon, Intent intent) {
             if (intent != null) {
                 if (intent.getAction().equals(ACTION_UPDATE_RAM)) {
                     ActivityManager.MemoryInfo memoryInfo = intent.getParcelableExtra(EXTRA_INFO);

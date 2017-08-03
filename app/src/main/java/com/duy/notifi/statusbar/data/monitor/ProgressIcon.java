@@ -1,4 +1,4 @@
-package com.duy.notifi.statusbar.data.icon;
+package com.duy.notifi.statusbar.data.monitor;
 
 import android.content.Context;
 import android.content.IntentFilter;
@@ -34,26 +34,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class IconData<T extends IconUpdateReceiver> {
+public abstract class ProgressIcon<T extends IconUpdateReceiver> {
 
     public static final int LEFT_GRAVITY = -1, CENTER_GRAVITY = 0, RIGHT_GRAVITY = 1;
-
+    protected View view;
     private Context context;
     private DrawableListener drawableListener;
     private TextListener textListener;
     private IconStyleData style;
     private T receiver;
-
     private Drawable drawable;
     private String text;
     private int color;
+    protected int progressId;
+    private Boolean active;
 
-    protected View view;
-
-    public IconData(Context context) {
+    public ProgressIcon(Context context, int progressId) {
         this.context = context;
-
         color = ColorUtils.getDefaultColor(context);
+        this.progressId = progressId;
 
         String name = getStringPreference(PreferenceIdentifier.ICON_STYLE);
         List<IconStyleData> styles = getIconStyles();
@@ -588,6 +587,10 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     }
 
     public abstract void onProcessUpdate(long current, long max);
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 
     public enum PreferenceIdentifier {
         VISIBILITY,

@@ -7,7 +7,6 @@ import android.telephony.TelephonyManager;
 
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.data.IconStyleData;
-import com.duy.notifi.statusbar.data.icon.IconData;
 
 import java.lang.ref.SoftReference;
 import java.util.Arrays;
@@ -15,14 +14,14 @@ import java.util.List;
 
 import james.signalstrengthslib.SignalStrengths;
 
-public class NetworkIconData extends IconData  {
+public class NetworkProgressIcon extends ProgressIcon {
 
     private TelephonyManager telephonyManager;
     private NetworkListener networkListener;
     private boolean isRegistered;
 
-    public NetworkIconData(Context context) {
-        super(context);
+    public NetworkProgressIcon(Context context, int progressId) {
+        super(context, progressId);
         telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
     }
 
@@ -123,9 +122,9 @@ public class NetworkIconData extends IconData  {
 
     private static class NetworkListener extends PhoneStateListener {
 
-        private SoftReference<NetworkIconData> reference;
+        private SoftReference<NetworkProgressIcon> reference;
 
-        private NetworkListener(NetworkIconData iconData) {
+        private NetworkListener(NetworkProgressIcon iconData) {
             reference = new SoftReference<>(iconData);
         }
 
@@ -133,7 +132,7 @@ public class NetworkIconData extends IconData  {
         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
             super.onSignalStrengthsChanged(signalStrength);
 
-            NetworkIconData icon = null;
+            NetworkProgressIcon icon = null;
             if (reference != null) icon = reference.get();
 
             if (icon != null && icon.isRegistered)

@@ -32,18 +32,24 @@ import com.duy.notifi.statusbar.activities.AppSettingActivity;
 import com.duy.notifi.statusbar.activities.MainActivity;
 import com.duy.notifi.statusbar.data.AppData;
 import com.duy.notifi.statusbar.data.NotificationData;
-import com.duy.notifi.statusbar.data.icon.IconData;
-import com.duy.notifi.statusbar.data.monitor.CpuIconData;
-import com.duy.notifi.statusbar.data.monitor.RamIconData;
+import com.duy.notifi.statusbar.data.monitor.ProgressIcon;
+import com.duy.notifi.statusbar.data.monitor.BatteryProgressIcon;
+import com.duy.notifi.statusbar.data.monitor.CpuProgressIcon;
+import com.duy.notifi.statusbar.data.monitor.RamProgressIcon;
 import com.duy.notifi.statusbar.receivers.ActivityVisibilitySettingReceiver;
 import com.duy.notifi.statusbar.utils.PreferenceUtils;
 import com.duy.notifi.statusbar.utils.StaticUtils;
 import com.duy.notifi.statusbar.views.StatusView;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+
+import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO;
+import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED;
+import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION;
+import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_PERSISTENT_NOTIFICATION;
+import static com.duy.notifi.statusbar.utils.PreferenceUtils.getBooleanPreference;
+import static com.duy.notifi.statusbar.utils.PreferenceUtils.getIntegerPreference;
 
 public class StatusService extends Service {
 
@@ -63,79 +69,64 @@ public class StatusService extends Service {
     public static final int HEADSUP_LAYOUT_TRANSPARENT = 3;
 
     private static final int ID_FOREGROUND = 682;
+    private static final int[] PROGRESS_IDS = {R.id.progress_1, R.id.progress_2, R.id.progress_3, R.id.progress_4};
+    private static final int COUNT = 4;
 
     private StatusView statusView;
     private View fullscreenView;
     private View headsUpView;
-
     private KeyguardManager keyguardManager;
     private WindowManager windowManager;
-    private PackageManager packageManager;
 
-//    private NotificationReceiver notificationReceiver;
+    //    private NotificationReceiver notificationReceiver;
 //    private ArrayMap<String, NotificationData> notifications;
-
+    private PackageManager packageManager;
     private Handler headsUpHandler;
     private Runnable headsUpRunnable, headsUpDisabledRunnable;
     private NotificationData headsUpNotification;
-
     private boolean shouldFireClickEvent = true;
     private int headsUpDuration = 10000;
     private boolean isRegistered;
-
     private String packageName;
     private AppData.ActivityData activityData;
 
-    public static List<IconData> getIcons(Context context, StatusView statusView) {
-        List<IconData> icons = new ArrayList<>();
-//        icons.add(new NotificationsIconData(context));
-//        icons.add(new TimeIconData(context));
-//        icons.add(new BatteryIconData(context));
-
-//        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY) || BuildConfig.DEBUG) {
-//            icons.add(new NetworkIconData(context));
-////            icons.add(new CarrierIconData(context));
-//            icons.add(new DataIconData(context));
-//        }
-//
-//        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI) || BuildConfig.DEBUG) {
-//            icons.add(new WifiIconData(context));
-//        }
-
-//        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH) || BuildConfig.DEBUG)
-//            icons.add(new BluetoothIconData(context));
-
-//        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS) || BuildConfig.DEBUG)
-//            icons.add(new GpsIconData(context));
-
-//        icons.add(new AirplaneModeIconData(context));
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC) || BuildConfig.DEBUG)) {
-//            icons.add(new NfcIconData(context));
-//        }
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP || BuildConfig.DEBUG) {
-//            icons.add(new AlarmIconData(context));
-//        }
-
-//        icons.add(new RingerIconData(context));
-//        icons.add(new HeadphoneIconData(context));
-//        icons.add(new OrientationIconData(context));
-        icons.add(new CpuIconData(context, statusView));
-        icons.add(new RamIconData(context, statusView));
-
-        for (IconData icon : icons) {
-            if (icon.getIntegerPreference(IconData.PreferenceIdentifier.POSITION) == null) {
-                icon.putPreference(IconData.PreferenceIdentifier.POSITION, icons.indexOf(icon));
+    public static List<ProgressIcon> getIcons(Context context, StatusView statusView) {
+        List<ProgressIcon> icons = new ArrayList<>();
+        for (int index = 0; index < COUNT; index++) {
+            ProgressIcon iconData = null;
+            Integer progressType = PreferenceUtils.getProgressType(context, index);
+            if (progressType == null) progressType = 0;
+            switch (progressType) {
+                case PreferenceUtils.ProgressType.CPU_CLOCK:
+                    iconData = new CpuProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    break;
+                case PreferenceUtils.ProgressType.CPU_TEMP:
+                    iconData = new CpuProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    break;
+                case PreferenceUtils.ProgressType.RAM:
+                    iconData = new RamProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    break;
+                case PreferenceUtils.ProgressType.BATTERY:
+                    iconData = new BatteryProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    break;
+                case PreferenceUtils.ProgressType.EXTERNAL_MEMORY:
+                    iconData = new BatteryProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    break;
+                case PreferenceUtils.ProgressType.INTERNAL_MEMORY:
+                    iconData = new BatteryProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    break;
+                case PreferenceUtils.ProgressType.NET_DOWN:
+                    iconData = new BatteryProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    break;
+                case PreferenceUtils.ProgressType.NET_UP:
+                    iconData = new BatteryProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    break;
+            }
+            if (iconData != null) {
+                iconData.setActive(PreferenceUtils.isProgressActive(context, index));
+                icons.add(iconData);
             }
         }
-
-        Collections.sort(icons, new Comparator<IconData>() {
-            @Override
-            public int compare(IconData lhs, IconData rhs) {
-                return lhs.getPosition() - rhs.getPosition();
-            }
-        });
-
         return icons;
     }
 
@@ -168,10 +159,10 @@ public class StatusService extends Service {
             }
         };
 
-        Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
+        Boolean enabled = getBooleanPreference(this, STATUS_ENABLED);
         if (enabled != null && enabled && StaticUtils.isPermissionsGranted(this)) setUp();
 
-        Integer duration = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION);
+        Integer duration = getIntegerPreference(this, STATUS_HEADS_UP_DURATION);
         if (duration != null) headsUpDuration = duration * 1000;
     }
 
@@ -183,7 +174,7 @@ public class StatusService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
+        Boolean enabled = getBooleanPreference(this, STATUS_ENABLED);
         if (enabled == null || !enabled || !StaticUtils.isPermissionsGranted(this)) {
             if (statusView != null) {
                 if (statusView.getParent() != null) windowManager.removeView(statusView);
@@ -223,7 +214,7 @@ public class StatusService extends Service {
                             isFullscreen()));
 
                     if (intent.hasExtra(EXTRA_PACKAGE) && intent.hasExtra(EXTRA_ACTIVITY)) {
-                        Boolean isForeground = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_PERSISTENT_NOTIFICATION);
+                        Boolean isForeground = getBooleanPreference(this, STATUS_PERSISTENT_NOTIFICATION);
                         if (isForeground == null || isForeground) {
                             packageName = intent.getStringExtra(EXTRA_PACKAGE);
                             activityData = intent.getParcelableExtra(EXTRA_ACTIVITY);
@@ -235,7 +226,7 @@ public class StatusService extends Service {
                 return START_STICKY;
         }
 
-        Boolean isForeground = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_PERSISTENT_NOTIFICATION);
+        Boolean isForeground = getBooleanPreference(this, STATUS_PERSISTENT_NOTIFICATION);
         if (isForeground == null || isForeground) {
             if (packageName != null && activityData != null)
                 startForeground(packageName, activityData);
@@ -285,7 +276,7 @@ public class StatusService extends Service {
                 .setSubText(packageName)
                 .setContentIntent(contentStackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT));
 
-        Boolean isColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
+        Boolean isColorAuto = getBooleanPreference(this, STATUS_COLOR_AUTO);
         if (isColorAuto == null || isColorAuto) {
             Intent colorIntent = new Intent(this, AppSettingActivity.class);
             colorIntent.putExtra(AppSettingActivity.EXTRA_APP, appData);
@@ -375,13 +366,7 @@ public class StatusService extends Service {
         statusView.setIcons(getIcons(this, statusView));
         statusView.register();
 
-//        IntentFilter notificationFilter = new IntentFilter();
-//        notificationFilter.addAction(NotificationsIconData.ACTION_NOTIFICATION_ADDED);
-//        notificationFilter.addAction(NotificationsIconData.ACTION_NOTIFICATION_REMOVED);
-
-//        registerReceiver(notificationReceiver, notificationFilter);
         isRegistered = true;
-
         if (StaticUtils.isAccessibilityServiceRunning(this)) {
             Intent intent = new Intent(AccessibilityService.ACTION_GET_COLOR);
             intent.setClass(this, AccessibilityService.class);

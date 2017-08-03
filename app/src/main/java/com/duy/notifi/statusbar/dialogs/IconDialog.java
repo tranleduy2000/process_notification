@@ -13,21 +13,21 @@ import android.view.View;
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.adapters.IconStyleAdapter;
 import com.duy.notifi.statusbar.data.IconStyleData;
-import com.duy.notifi.statusbar.data.icon.IconData;
+import com.duy.notifi.statusbar.data.monitor.ProgressIcon;
 import com.duy.notifi.statusbar.utils.ImageUtils;
 
 import java.util.List;
 
 public class IconDialog extends PreferenceDialog<IconStyleData> implements IconStyleAdapter.OnCheckedChangeListener {
 
-    private IconData icon;
+    private ProgressIcon icon;
     private List<IconStyleData> styles;
     private IconStyleAdapter adapter;
     private RecyclerView recycler;
 
     private String title;
 
-    public IconDialog(Context context, IconData icon) {
+    public IconDialog(Context context, ProgressIcon icon) {
         super(context, R.style.AppTheme_Dialog_FullScreen);
         this.icon = icon;
         styles = icon.getIconStyles();
@@ -62,7 +62,7 @@ public class IconDialog extends PreferenceDialog<IconStyleData> implements IconS
         findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new IconCreatorDialog(getContext(), getPreference().getSize(), icon.getStringArrayPreference(IconData.PreferenceIdentifier.ICON_STYLE_NAMES)).setListener(new IconCreatorDialog.OnIconStyleListener() {
+                new IconCreatorDialog(getContext(), getPreference().getSize(), icon.getStringArrayPreference(ProgressIcon.PreferenceIdentifier.ICON_STYLE_NAMES)).setListener(new IconCreatorDialog.OnIconStyleListener() {
                     @Override
                     public void onIconStyle(IconStyleData style) {
                         icon.addIconStyle(style);

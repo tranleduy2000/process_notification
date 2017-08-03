@@ -3,15 +3,12 @@ package com.duy.notifi.statusbar.data.monitor;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.duy.notifi.R;
-import com.duy.notifi.statusbar.data.icon.IconData;
 import com.duy.notifi.statusbar.receivers.IconUpdateReceiver;
 import com.duy.notifi.statusbar.views.StatusView;
 
@@ -19,9 +16,9 @@ import com.duy.notifi.statusbar.views.StatusView;
  * Created by Duy on 31-Jul-17.
  */
 
-public class CpuIconData extends IconData<CpuIconData.CpuReceiver> {
+public class BatteryProgressIcon extends ProgressIcon<BatteryProgressIcon.BatteryReceiver> {
 
-    public static final String ACTION_UPDATE_CPU = "com.duy.notifi.ACTION_UPDATE_CPU";
+    public static final String ACTION_UPDATE_BATTERY = "com.duy.notifi.ACTION_UPDATE_CPU";
     public static final String EXTRA_MAX_VALUE = "max_value";
     public static final String EXTRA_USED_VALUE = "used_value";
     public static final String EXTRA_PERCENT = "percent";
@@ -30,14 +27,14 @@ public class CpuIconData extends IconData<CpuIconData.CpuReceiver> {
     private int process;
     private StatusView statusView;
 
-    public CpuIconData(Context context, StatusView statusView) {
-        super(context);
+    public BatteryProgressIcon(Context context, StatusView statusView, int progressId) {
+        super(context, progressId);
         this.statusView = statusView;
     }
 
     @Override
-    public CpuReceiver getReceiver() {
-        return new CpuReceiver(this);
+    public BatteryReceiver getReceiver() {
+        return new BatteryReceiver(this);
     }
 
     @Override
@@ -68,31 +65,26 @@ public class CpuIconData extends IconData<CpuIconData.CpuReceiver> {
             if (view == null) {
                 LinearLayout child = this.statusView.getStatusView();
                 view = child.findViewById(R.id.progress_1);
-
             }
-        }
-        if (view != null) {
-            ProgressBar progressBar = (ProgressBar) view;
-            progressBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
         }
         return view;
     }
 
     @Override
     public IntentFilter getIntentFilter() {
-        return new IntentFilter(ACTION_UPDATE_CPU);
+        return new IntentFilter(ACTION_UPDATE_BATTERY);
     }
 
-    public static class CpuReceiver extends IconUpdateReceiver<CpuIconData> {
+    public static class BatteryReceiver extends IconUpdateReceiver<BatteryProgressIcon> {
 
-        public CpuReceiver(CpuIconData iconData) {
+        public BatteryReceiver(BatteryProgressIcon iconData) {
             super(iconData);
         }
 
         @Override
-        public void onReceive(CpuIconData icon, Intent intent) {
+        public void onReceive(BatteryProgressIcon icon, Intent intent) {
             if (intent != null) {
-                if (intent.getAction().equals(ACTION_UPDATE_CPU)) {
+                if (intent.getAction().equals(ACTION_UPDATE_BATTERY)) {
                     int percent = (int) intent.getFloatExtra(EXTRA_PERCENT, -1);
                     if (percent != -1) {
                         icon.onProcessUpdate(percent, 100);

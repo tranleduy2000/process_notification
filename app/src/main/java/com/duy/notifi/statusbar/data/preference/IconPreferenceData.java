@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.data.IconStyleData;
-import com.duy.notifi.statusbar.data.icon.IconData;
+import com.duy.notifi.statusbar.data.monitor.ProgressIcon;
 import com.duy.notifi.statusbar.dialogs.IconDialog;
 import com.duy.notifi.statusbar.dialogs.PreferenceDialog;
 import com.duy.notifi.statusbar.views.IconStyleImageView;
@@ -16,9 +16,9 @@ import com.duy.notifi.statusbar.views.IconStyleImageView;
 public class IconPreferenceData extends PreferenceData<IconStyleData> {
 
     private IconStyleData iconStyle;
-    private IconData iconData;
+    private ProgressIcon iconData;
 
-    public IconPreferenceData(Context context, Identifier identifier, IconStyleData iconStyle, IconData iconData, OnPreferenceChangeListener<IconStyleData> listener) {
+    public IconPreferenceData(Context context, Identifier identifier, IconStyleData iconStyle, ProgressIcon iconData, OnPreferenceChangeListener<IconStyleData> listener) {
         super(context, identifier, listener);
 
         if (iconStyle == null) iconStyle = (IconStyleData) iconData.getIconStyles().get(0);

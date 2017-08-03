@@ -9,19 +9,18 @@ import android.net.wifi.WifiManager;
 
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.data.IconStyleData;
-import com.duy.notifi.statusbar.data.icon.IconData;
 import com.duy.notifi.statusbar.receivers.IconUpdateReceiver;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
+public class WifiProgressIcon extends ProgressIcon<WifiProgressIcon.WifiReceiver> {
 
     private WifiManager wifiManager;
     private ConnectivityManager connectivityManager;
 
-    public WifiIconData(Context context) {
-        super(context);
+    public WifiProgressIcon(Context context, int progressId) {
+        super(context, progressId);
         wifiManager = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
@@ -126,14 +125,14 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
 
     }
 
-    static class WifiReceiver extends IconUpdateReceiver<WifiIconData> {
+    static class WifiReceiver extends IconUpdateReceiver<WifiProgressIcon> {
 
-        private WifiReceiver(WifiIconData iconData) {
+        private WifiReceiver(WifiProgressIcon iconData) {
             super(iconData);
         }
 
         @Override
-        public void onReceive(WifiIconData icon, Intent intent) {
+        public void onReceive(WifiProgressIcon icon, Intent intent) {
             NetworkInfo networkInfo = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
             if (networkInfo == null) networkInfo = icon.connectivityManager.getActiveNetworkInfo();
 

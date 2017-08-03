@@ -4,11 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.duy.notifi.statusbar.data.icon.IconData;
+import com.duy.notifi.statusbar.data.monitor.ProgressIcon;
 
 import java.lang.ref.SoftReference;
 
-public abstract class IconUpdateReceiver<T extends IconData> extends BroadcastReceiver {
+public abstract class IconUpdateReceiver<T extends ProgressIcon> extends BroadcastReceiver {
 
     private SoftReference<T> reference;
 
