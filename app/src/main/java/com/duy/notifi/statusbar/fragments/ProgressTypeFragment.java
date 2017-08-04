@@ -59,7 +59,7 @@ public class ProgressTypeFragment extends SimpleFragment {
             enable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean active) {
-                    PreferenceUtils.setActive(getContext(), finalI, active);
+                    PreferenceUtils.setProgressActive(getContext(), finalI, active);
                     Intent intent = new Intent(StatusService.ACTION_START);
                     intent.setClass(getContext(), StatusService.class);
                     getActivity().startService(intent);

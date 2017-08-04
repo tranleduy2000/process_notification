@@ -10,10 +10,17 @@ import android.util.Log;
 public class TrafficManager {
     private static final String TAG = "TrafficManager";
     private long mLastTx, mLastRx;
+    private boolean canRead;
 
     public TrafficManager() {
         mLastRx = TrafficStats.getTotalRxBytes();
         mLastTx = TrafficStats.getMobileTxBytes();
+        if (mLastRx == TrafficStats.UNSUPPORTED || mLastTx == TrafficStats.UNSUPPORTED) {
+            this.canRead = false;
+        } else {
+            this.canRead = true;
+        }
+
     }
 
     public long getTrafficDown() {
@@ -34,5 +41,10 @@ public class TrafficManager {
 
     public long getTrafficUpDown() {
         return getTrafficDown() + getTrafficUpLoad();
+    }
+
+    public boolean canRead() {
+
+        return canRead;
     }
 }

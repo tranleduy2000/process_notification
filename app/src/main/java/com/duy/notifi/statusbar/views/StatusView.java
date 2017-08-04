@@ -21,6 +21,7 @@ import com.duy.notifi.R;
 import com.duy.notifi.statusbar.data.icon.ProgressIcon;
 import com.duy.notifi.statusbar.utils.ColorUtils;
 import com.duy.notifi.statusbar.utils.ImageUtils;
+import com.duy.notifi.statusbar.utils.PreferenceUtils;
 import com.duy.notifi.statusbar.utils.StaticUtils;
 
 import java.util.ArrayList;
@@ -204,11 +205,12 @@ public class StatusView extends FrameLayout {
     }
 
     public void setFullscreen(boolean isFullscreen) {
-        if (((getVisibility() == View.GONE) != isFullscreen) && !isSystemShowing) {
+        if (getVisibility() == View.GONE != isFullscreen
+                && !isSystemShowing
+                && !PreferenceUtils.isShowInFullScreen(getContext())) {
             setStatusBarVisibility(!isFullscreen);
+            this.isFullscreen = isFullscreen;
         }
-
-        this.isFullscreen = isFullscreen;
     }
 
     private void setStatusBarVisibility(final boolean visible) {

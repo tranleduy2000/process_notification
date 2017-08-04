@@ -18,6 +18,60 @@ import java.util.Set;
 
 public class PreferenceUtils {
 
+    public static final String SHOW_IN_FULL_SCREEN = "SHOW_IN_FULL_SCREEN";
+    public static final String PROGRESS_ACTIVE = "PROGRESS_ACTIVE";
+    public static final String MAX_CPU_TEMP = "MAX_CPU_TEMP";
+    public static final String MAX_BATTERY_TEMP = "MAX_BATTERY_TEMP";
+    public static final String MAX_UPLOAD_SPEED = "MAX_UPLOAD_SPEED";
+    public static final String MAX_DOWN_SPEED = "MAX_DOWN_SPEED";
+    public static final String CPU_TEMP_PATH = "MAX_BATTERY_TEMP";
+
+    private static final int DEF_MAX_CPU_TEMP = 70; //C
+    private static final int DEF_MAX_BATTERY_TEMP = 60; //C
+    private static final int DEF_MAX_UP_DOWN = 2048; //KB
+    private static final String DEF_CPU_TEMP_PATH = "/sys/class/thermal/thermal_zone0/temp";
+    ;
+
+    public static int getMaxCpuTemp(Context context) {
+        return getPref(context).getInt(MAX_CPU_TEMP, DEF_MAX_CPU_TEMP);
+    }
+
+    public static int getMaxBatteryTemp(Context context) {
+        return getPref(context).getInt(MAX_BATTERY_TEMP, DEF_MAX_BATTERY_TEMP);
+    }
+
+    public static void setMaxCpuTemp(Context context, int temp) {
+        edit(context).putInt(MAX_CPU_TEMP, temp).apply();
+    }
+
+    public static void setMaxBatteryTemp(Context context, int temp) {
+        edit(context).putInt(MAX_BATTERY_TEMP, temp).apply();
+    }
+
+    public static int getMaxNetUp(Context context) {
+        return getPref(context).getInt(MAX_UPLOAD_SPEED, DEF_MAX_UP_DOWN);
+    }
+
+    public static int getMaxNetDown(Context context) {
+        return getPref(context).getInt(MAX_DOWN_SPEED, DEF_MAX_UP_DOWN);
+    }
+
+    public static void setMaxUploadSpeed(Context context, int maxUploadSpeed) {
+        edit(context).putInt(MAX_UPLOAD_SPEED, maxUploadSpeed).apply();
+    }
+
+    public static void setMaxDownloadSpeed(Context context, int maxDownSpeed) {
+        edit(context).putInt(MAX_DOWN_SPEED, maxDownSpeed).apply();
+    }
+
+    public static String getCpuTempPath(Context context) {
+        return getPref(context).getString(CPU_TEMP_PATH, DEF_CPU_TEMP_PATH);
+    }
+
+    public static void setCpuTempPath(Context context, String path) {
+        edit(context).putString(CPU_TEMP_PATH, path).apply();
+    }
+
     @Nullable
     public static Object getPreference(Context context, PreferenceIdentifier identifier) {
         if (context == null || identifier == null) return null;
@@ -43,18 +97,18 @@ public class PreferenceUtils {
         } else return null;
     }
 
-    @Nullable
-    public static Boolean getBooleanPreference(Context context, String identifier) {
-        if (context == null || identifier == null) return null;
-
+    public static boolean getBooleanPreference(Context context, String identifier, boolean def) {
+        if (context == null || identifier == null) return def;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.contains(identifier)) {
             try {
-                return prefs.getBoolean(identifier, false);
+                return prefs.getBoolean(identifier, def);
             } catch (ClassCastException e) {
-                return null;
+                return def;
             }
-        } else return null;
+        } else {
+            return def;
+        }
     }
 
     @Nullable
@@ -242,12 +296,30 @@ public class PreferenceUtils {
 
     public static boolean isProgressActive(Context context, int index, boolean def) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        return pref.getBoolean("key_progress_active" + index, def);
+        return pref.getBoolean(PROGRESS_ACTIVE + index, def);
     }
 
-    public static void setActive(Context context, int index, boolean isActive) {
+    public static void setProgressActive(Context context, int index, boolean isActive) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        pref.edit().putBoolean("key_progress_active" + index, isActive).apply();
+        pref.edit().putBoolean(PROGRESS_ACTIVE + index, isActive).apply();
+    }
+
+    public static void setShowInFullScreen(Context context, boolean isChecked) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.edit().putBoolean(SHOW_IN_FULL_SCREEN, isChecked).apply();
+    }
+
+    public static boolean isShowInFullScreen(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getBoolean(SHOW_IN_FULL_SCREEN, false);
+    }
+
+    private static SharedPreferences getPref(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    private static SharedPreferences.Editor edit(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).edit();
     }
 
 
@@ -274,7 +346,7 @@ public class PreferenceUtils {
         ENABLE_PROCESS_1, TYPE_PROGRESS_1,
         ENABLE_PROCESS_2, TYPE_PROGRESS_2,
         ENABLE_PROCESS_3, TYPE_PROGRESS_3,
-        ENABLE_PROCESS_4, TYPE_PROGRESS_4,
+        ENABLE_PROCESS_4, TYPE_PROGRESS_4, SHOW_IN_FULL_SCREEN,
     }
 
 

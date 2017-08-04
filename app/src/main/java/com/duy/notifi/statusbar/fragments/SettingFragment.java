@@ -3,11 +3,14 @@ package com.duy.notifi.statusbar.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import com.duy.notifi.R;
+import com.duy.notifi.statusbar.utils.PreferenceUtils;
 
 /**
  * Created by Duy on 04-Aug-17.
@@ -37,6 +40,14 @@ public class SettingFragment extends SimpleFragment {
     }
 
     private void bindView(View view) {
+        SwitchCompat fullscreen =view.findViewById(R.id.show_fullscreen);
+        fullscreen.setChecked(PreferenceUtils.isShowInFullScreen(getContext()));
+        fullscreen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                PreferenceUtils.setShowInFullScreen(getContext(), isChecked);
+            }
+        });
     }
 
     @Override

@@ -57,10 +57,8 @@ import static com.duy.notifi.statusbar.data.icon.ProgressIcon.PROGRESS_IDS;
 import static com.duy.notifi.statusbar.data.icon.ProgressIcon.ProgressType;
 import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO;
 import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED;
-import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION;
 import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_PERSISTENT_NOTIFICATION;
 import static com.duy.notifi.statusbar.utils.PreferenceUtils.getBooleanPreference;
-import static com.duy.notifi.statusbar.utils.PreferenceUtils.getIntegerPreference;
 
 public class StatusService extends Service {
 
@@ -160,8 +158,6 @@ public class StatusService extends Service {
 
         Boolean enabled = getBooleanPreference(this, STATUS_ENABLED);
         if (enabled != null && enabled && StaticUtils.isPermissionsGranted(this)) setUp();
-
-        Integer duration = getIntegerPreference(this, STATUS_HEADS_UP_DURATION);
     }
 
     @Nullable

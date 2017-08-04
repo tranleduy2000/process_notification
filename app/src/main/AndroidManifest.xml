@@ -30,7 +30,6 @@
         </activity>
 
         <activity android:name="com.duy.notifi.statusbar.activities.MainActivity2" />
-
         <activity android:name="com.duy.notifi.statusbar.activities.AppSettingActivity" />
 
         <activity

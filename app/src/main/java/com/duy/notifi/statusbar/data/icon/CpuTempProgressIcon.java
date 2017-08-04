@@ -34,6 +34,7 @@ public class CpuTempProgressIcon extends ProgressIcon<CpuTempProgressIcon.CpuTem
         super.register();
     }
 
+
     @Override
     public void unregister() {
         super.unregister();
