@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_setting">
+    android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -22,18 +20,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:animateLayoutChanges="true"
 
-                <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
-                    android:id="@+id/progress_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    app:rcBackgroundColor="#000"
-                    app:rcBackgroundPadding="0dp"
-                    app:rcMax="100"
-                    app:rcProgress="30"
-                    app:rcProgressColor="#fff"
-                    app:rcRadius="0dp"/>
+                android:orientation="vertical">
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/enable_progress_1"
@@ -83,6 +72,8 @@
                     android:id="@+id/enable_progress_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+
+                    android:animateLayoutChanges="true"
                     android:background="?colorPrimary"
                     android:padding="16dp"
                     android:text="Progress 2"
@@ -127,7 +118,9 @@
                     android:id="@+id/enable_progress_3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
                     android:background="?colorPrimary"
+
                     android:padding="16dp"
                     android:text="Progress 2"
                     android:textAllCaps="true" />
@@ -171,6 +164,7 @@
                     android:id="@+id/enable_progress_4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
                     android:background="?colorPrimary"
                     android:padding="16dp"
                     android:text="Progress 4"

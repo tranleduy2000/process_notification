@@ -14,7 +14,8 @@ public class SimplePagerAdapter extends FragmentStatePagerAdapter {
     private Context context;
     private SimpleFragment[] fragments;
 
-    public SimplePagerAdapter(Context context, FragmentManager fm, ViewPager viewPager, final SimpleFragment... fragments) {
+    public SimplePagerAdapter(Context context, FragmentManager fm, ViewPager viewPager,
+                              final SimpleFragment... fragments) {
         super(fm);
         this.context = context;
         this.fragments = fragments;

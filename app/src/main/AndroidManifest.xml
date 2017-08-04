@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.duy.notifi.statusbar.activities.SettingActivity">
+        <activity android:name="com.duy.notifi.statusbar.activities.MainActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +29,7 @@
 
         </activity>
 
-        <activity android:name="com.duy.notifi.statusbar.activities.MainActivity" />
+        <activity android:name="com.duy.notifi.statusbar.activities.MainActivity2" />
 
         <activity android:name="com.duy.notifi.statusbar.activities.AppSettingActivity" />
 

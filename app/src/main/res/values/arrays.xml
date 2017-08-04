@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="filter_types">
-        <item>CPU clock</item> <!--0-->
+        <item>CPU usage</item> <!--0-->
         <item>CPU temperature</item> <!--1-->
         <item>RAM</item> <!--2-->
         <item>Battery level</item><!--3-->

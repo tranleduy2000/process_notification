@@ -196,4 +196,14 @@ public class CpuUtil {
 
         return 0;
     }
+
+    public static float readTemp() throws IOException {
+        String defPath = "/sys/class/thermal/thermal_zone0/temp";
+        String s = FileUtil.readFile(defPath);
+        float currentTemp = Float.parseFloat(s);
+        // Calculation
+        float divisor = 1000.0f;
+        currentTemp /= divisor;
+        return (float) currentTemp;
+    }
 }

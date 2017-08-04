@@ -32,7 +32,6 @@ import com.duy.notifi.statusbar.data.icon.TrafficUpProgressIcon;
 import com.duy.notifi.statusbar.data.monitor.CpuUtil;
 import com.duy.notifi.statusbar.data.monitor.StorageUtil;
 import com.duy.notifi.statusbar.data.monitor.TrafficManager;
-import com.duy.notifi.statusbar.utils.FileUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -134,14 +133,9 @@ public class ReaderService extends Service {
     }
 
     private void readCpuTemp() {
-        String defPath = "/sys/class/thermal/thermal_zone0/temp";
         try {
-            String s = FileUtil.readFile(defPath);
-            double currentTemp = Double.parseDouble(s);
-            // Calculation
-            double divisor = 1000.0d;
-            currentTemp /= divisor;
-            int percent = (int) (currentTemp / 100.0f);
+           float currentTemp = CpuUtil.readTemp();
+            int percent = (int) (currentTemp);
             Intent intent = new Intent(CpuTempProgressIcon.ACTION_UPDATE_CPU_TEMP);
             intent.putExtra(CpuTempProgressIcon.EXTRA_PERCENT, percent);
             this.sendBroadcast(intent);

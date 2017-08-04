@@ -117,6 +117,10 @@
 
     <string name="empty">Nothing here…</string>
     <string name="reset_apps_confirm">Are you sure you want to reset all the app-specific preferences? This cannot be undone.</string>
+    <string name="progress_type">Progress type</string>
+    <string name="setting">Setting</string>
+    <string name="default_cpu_temp_path">sys/class/thermal_zone0/cpu</string>
+    <string name="default_upload_speed">2048</string>
 
     <string-array name="libraries">
         <item>

@@ -28,7 +28,7 @@ import android.view.animation.DecelerateInterpolator;
 
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.activities.AppSettingActivity;
-import com.duy.notifi.statusbar.activities.MainActivity;
+import com.duy.notifi.statusbar.activities.MainActivity2;
 import com.duy.notifi.statusbar.data.AppData;
 import com.duy.notifi.statusbar.data.icon.BatteryLevelProgressIcon;
 import com.duy.notifi.statusbar.data.icon.BatteryTempProgressIcon;
@@ -222,11 +222,11 @@ public class StatusService extends Service {
             if (packageName != null && activityData != null)
                 startForeground(packageName, activityData);
             else {
-                Intent contentIntent = new Intent(this, MainActivity.class);
+                Intent contentIntent = new Intent(this, MainActivity2.class);
                 contentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 TaskStackBuilder contentStackBuilder = TaskStackBuilder.create(this);
-                contentStackBuilder.addParentStack(MainActivity.class);
+                contentStackBuilder.addParentStack(MainActivity2.class);
                 contentStackBuilder.addNextIntent(contentIntent);
 
                 startForeground(ID_FOREGROUND, new NotificationCompat.Builder(this)
@@ -252,11 +252,11 @@ public class StatusService extends Service {
             return;
         }
 
-        Intent contentIntent = new Intent(this, MainActivity.class);
+        Intent contentIntent = new Intent(this, MainActivity2.class);
         contentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         TaskStackBuilder contentStackBuilder = TaskStackBuilder.create(this);
-        contentStackBuilder.addParentStack(MainActivity.class);
+        contentStackBuilder.addParentStack(MainActivity2.class);
         contentStackBuilder.addNextIntent(contentIntent);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
