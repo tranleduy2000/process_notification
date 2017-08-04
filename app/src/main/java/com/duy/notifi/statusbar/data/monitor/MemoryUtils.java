@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2013 Baidu Inc. All rights reserved.
  */
-package com.duy.notifi.statusbar.data.status;
+package com.duy.notifi.statusbar.data.monitor;
 
 import android.app.ActivityManager;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.duy.notifi.statusbar.data.monitor;
+package com.duy.notifi.statusbar.data.icon;
 
 import android.content.Context;
 import android.content.IntentFilter;

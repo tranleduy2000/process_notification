@@ -30,14 +30,16 @@ import com.duy.notifi.R;
 import com.duy.notifi.statusbar.activities.AppSettingActivity;
 import com.duy.notifi.statusbar.activities.MainActivity;
 import com.duy.notifi.statusbar.data.AppData;
-import com.duy.notifi.statusbar.data.monitor.BatteryProgressIcon;
-import com.duy.notifi.statusbar.data.monitor.CpuProgressIcon;
-import com.duy.notifi.statusbar.data.monitor.ExternalStorageProgressIcon;
-import com.duy.notifi.statusbar.data.monitor.InternalStorageProgressIcon;
-import com.duy.notifi.statusbar.data.monitor.NetworkProgressIcon;
-import com.duy.notifi.statusbar.data.monitor.ProgressIcon;
-import com.duy.notifi.statusbar.data.monitor.RamProgressIcon;
-import com.duy.notifi.statusbar.data.monitor.WifiProgressIcon;
+import com.duy.notifi.statusbar.data.icon.BatteryProgressIcon;
+import com.duy.notifi.statusbar.data.icon.CpuProgressIcon;
+import com.duy.notifi.statusbar.data.icon.ExternalStorageProgressIcon;
+import com.duy.notifi.statusbar.data.icon.InternalStorageProgressIcon;
+import com.duy.notifi.statusbar.data.icon.NetworkProgressIcon;
+import com.duy.notifi.statusbar.data.icon.ProgressIcon;
+import com.duy.notifi.statusbar.data.icon.RamProgressIcon;
+import com.duy.notifi.statusbar.data.icon.TrafficUpDownProgressIcon;
+import com.duy.notifi.statusbar.data.icon.TrafficUpProgressIcon;
+import com.duy.notifi.statusbar.data.icon.WifiProgressIcon;
 import com.duy.notifi.statusbar.receivers.ActivityVisibilitySettingReceiver;
 import com.duy.notifi.statusbar.utils.PreferenceUtils;
 import com.duy.notifi.statusbar.utils.StaticUtils;
@@ -46,10 +48,10 @@ import com.duy.notifi.statusbar.views.StatusView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.duy.notifi.statusbar.data.monitor.ProgressIcon.DEF_ENABLE;
-import static com.duy.notifi.statusbar.data.monitor.ProgressIcon.DEF_TYPE;
-import static com.duy.notifi.statusbar.data.monitor.ProgressIcon.PROGRESS_IDS;
-import static com.duy.notifi.statusbar.data.monitor.ProgressIcon.ProgressType;
+import static com.duy.notifi.statusbar.data.icon.ProgressIcon.DEF_ENABLE;
+import static com.duy.notifi.statusbar.data.icon.ProgressIcon.DEF_TYPE;
+import static com.duy.notifi.statusbar.data.icon.ProgressIcon.PROGRESS_IDS;
+import static com.duy.notifi.statusbar.data.icon.ProgressIcon.ProgressType;
 import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO;
 import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED;
 import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION;
@@ -110,10 +112,10 @@ public class StatusService extends Service {
                     iconData = new ExternalStorageProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
                 case ProgressType.TRAFFIC_DOWN:
-                    iconData = new BatteryProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    iconData = new TrafficUpDownProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
                 case ProgressType.TRAFFIC_UP:
-                    iconData = new BatteryProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    iconData = new TrafficUpProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
                 case ProgressType.WIFI:
                     iconData = new WifiProgressIcon(context, statusView, PROGRESS_IDS[index]);

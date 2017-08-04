@@ -13,7 +13,7 @@ import android.view.View;
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.adapters.IconStyleAdapter;
 import com.duy.notifi.statusbar.data.IconStyleData;
-import com.duy.notifi.statusbar.data.monitor.ProgressIcon;
+import com.duy.notifi.statusbar.data.icon.ProgressIcon;
 import com.duy.notifi.statusbar.utils.ImageUtils;
 
 import java.util.List;

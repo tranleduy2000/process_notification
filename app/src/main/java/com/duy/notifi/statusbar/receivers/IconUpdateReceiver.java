@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.duy.notifi.statusbar.data.monitor.ProgressIcon;
+import com.duy.notifi.statusbar.data.icon.ProgressIcon;
 
 import java.lang.ref.SoftReference;
 

@@ -20,19 +20,20 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.duy.notifi.R;
-import com.duy.notifi.statusbar.data.monitor.BatteryProgressIcon;
-import com.duy.notifi.statusbar.data.monitor.CpuProgressIcon;
-import com.duy.notifi.statusbar.data.monitor.ExternalStorageProgressIcon;
-import com.duy.notifi.statusbar.data.monitor.InternalStorageProgressIcon;
-import com.duy.notifi.statusbar.data.monitor.RamProgressIcon;
+import com.duy.notifi.statusbar.data.icon.BatteryProgressIcon;
+import com.duy.notifi.statusbar.data.icon.CpuProgressIcon;
+import com.duy.notifi.statusbar.data.icon.ExternalStorageProgressIcon;
+import com.duy.notifi.statusbar.data.icon.InternalStorageProgressIcon;
+import com.duy.notifi.statusbar.data.icon.RamProgressIcon;
+import com.duy.notifi.statusbar.data.monitor.CpuUtil;
 import com.duy.notifi.statusbar.utils.StorageUtil;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.duy.notifi.statusbar.services.Constants.percent;
 
 public class ReaderService extends Service {
 
@@ -125,13 +126,22 @@ public class ReaderService extends Service {
     private void collectData() {
         try {
             readRamInfo();
-            readCpuInfo();
+            readCpuFreq();
             readBattery();
-//            readInternalState();
+            readInternalState();
             readExternalState();
+            readNetUpDown();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    private void readNetUpDown() {
+//        TrafficUtils.getTrafficDownload()
+        Intent intent = new Intent(ExternalStorageProgressIcon.ACTION_UPDATE_EXTERNAL_STORAGE);
+        intent.putExtra(ExternalStorageProgressIcon.EXTRA_PERCENT, percent);
+        this.sendBroadcast(intent);
     }
 
     private void readExternalState() {
@@ -167,29 +177,22 @@ public class ReaderService extends Service {
         this.sendBroadcast(intent);
     }
 
-    private void readCpuInfo() throws IOException {
-//			CPU usage percents calculation. It is possible negative values or values higher than 100% may appear.
-//			http://stackoverflow.com/questions/1420426
-//			http://kernel.org/doc/Documentation/filesystems/proc.txt
-        BufferedReader reader = new BufferedReader(new FileReader("/proc/stat"));
-        String[] args = reader.readLine().split("[ ]+", 9);
-        long work = Long.parseLong(args[1]) + Long.parseLong(args[2]) + Long.parseLong(args[3]);
-        long total = work + Long.parseLong(args[4]) + Long.parseLong(args[5]) + Long.parseLong(args[6]) + Long.parseLong(args[7]);
-        reader.close();
-
-
-        float percentage = 0;
-        if (totalBefore != 0) {
-            long totalT = total - totalBefore;
-            long workT = work - workBefore;
-            percentage = restrictPercentage(workT * 100 / (float) totalT);
-            Log.d(TAG, "readCpuInfo percentage = " + percentage);
+    private void readCpuFreq() throws IOException {
+        try {
+//            String maxFreq = CpuUtil.getMaxFreq(0);
+//            String currentFreq = CpuUtil.getCurrentFreq(0);
+////            String currentFreq = CpuUtil.getCurrentCPULoad();
+//            Long max = Long.parseLong(maxFreq.trim());
+//            Long current = Long.parseLong(currentFreq.trim());
+//            int percentage = (int) ((float) current / (float) max) * 100;
+            //update cpu notification
+            int percentage = (int) (CpuUtil.readUsage() * 100);
+            Intent intent = new Intent(CpuProgressIcon.ACTION_UPDATE_CPU);
+            intent.putExtra(CpuProgressIcon.EXTRA_PERCENT, percentage);
+            intent.putExtra(CpuProgressIcon.EXTRA_CPU_INDEX, 0);
+            sendBroadcast(intent);
+        } catch (Exception e) {
         }
-        totalBefore = total;
-        workBefore = work;
-        reader.close();
-
-        updateCpuInfo(percentage);
     }
 
 
@@ -226,10 +229,7 @@ public class ReaderService extends Service {
 
 
     private void updateCpuInfo(float percentage) {
-        //update cpu notification
-        Intent intent = new Intent(CpuProgressIcon.ACTION_UPDATE_CPU);
-        intent.putExtra(CpuProgressIcon.EXTRA_PERCENT, percentage);
-        sendBroadcast(intent);
+
     }
 
     void setIntervals(int intervalRead, int intervalUpdate, int intervalWidth) {

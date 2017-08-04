@@ -1,11 +1,9 @@
-package com.duy.notifi.statusbar.data.monitor;
+package com.duy.notifi.statusbar.data.icon;
 
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
-import android.widget.ProgressBar;
 
 import com.duy.notifi.statusbar.receivers.IconUpdateReceiver;
 import com.duy.notifi.statusbar.views.StatusView;
@@ -21,7 +19,7 @@ public class RamProgressIcon extends ProgressIcon<RamProgressIcon.RamReceiver> {
     public static final String EXTRA_USED_VALUE = "used_value";
     public static final String EXTRA_INFO = "memory_info";
     private static final String TAG = "RamIconData";
-    private int process;
+
     private StatusView statusView;
 
     public RamProgressIcon(Context context, StatusView statusView, int progressId) {

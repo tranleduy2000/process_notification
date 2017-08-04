@@ -1,4 +1,4 @@
-package com.duy.notifi.statusbar.data.monitor;
+package com.duy.notifi.statusbar.data.icon;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,17 +11,16 @@ import com.duy.notifi.statusbar.views.StatusView;
 /**
  * Created by Duy on 31-Jul-17.
  */
-public class InternalStorageProgressIcon extends ProgressIcon<InternalStorageProgressIcon.StorageReceiver> {
+public class ExternalStorageProgressIcon extends ProgressIcon<ExternalStorageProgressIcon.StorageReceiver> {
 
-    public static final String ACTION_UPDATE_INTERNAL_STORAGE = "com.duy.notifi.ACTION_UPDATE_INTERNAL_STORAGE";
+    public static final String ACTION_UPDATE_EXTERNAL_STORAGE = "com.duy.notifi.ACTION_UPDATE_EXTERNAL_STORAGE";
     public static final String EXTRA_MAX_VALUE = "max_value";
     public static final String EXTRA_USED_VALUE = "used_value";
     public static final String EXTRA_PERCENT = "percent";
     private static final String TAG = "InternalStorageProgressIcon";
 
-    private int process;
 
-    public InternalStorageProgressIcon(Context context, StatusView statusView, int progressId) {
+    public ExternalStorageProgressIcon(Context context, StatusView statusView, int progressId) {
         super(context, statusView, progressId);
     }
 
@@ -48,19 +47,19 @@ public class InternalStorageProgressIcon extends ProgressIcon<InternalStoragePro
 
     @Override
     public IntentFilter getIntentFilter() {
-        return new IntentFilter(ACTION_UPDATE_INTERNAL_STORAGE);
+        return new IntentFilter(ACTION_UPDATE_EXTERNAL_STORAGE);
     }
 
-    public static class StorageReceiver extends IconUpdateReceiver<InternalStorageProgressIcon> {
+    public static class StorageReceiver extends IconUpdateReceiver<ExternalStorageProgressIcon> {
 
-        public StorageReceiver(InternalStorageProgressIcon iconData) {
+        public StorageReceiver(ExternalStorageProgressIcon iconData) {
             super(iconData);
         }
 
         @Override
-        public void onReceive(InternalStorageProgressIcon icon, Intent intent) {
+        public void onReceive(ExternalStorageProgressIcon icon, Intent intent) {
             if (intent != null) {
-                if (intent.getAction().equals(ACTION_UPDATE_INTERNAL_STORAGE)) {
+                if (intent.getAction().equals(ACTION_UPDATE_EXTERNAL_STORAGE)) {
                     int percent = intent.getIntExtra(EXTRA_PERCENT, -1);
                     if (percent != -1) {
                         icon.onProcessUpdate(percent, 100);

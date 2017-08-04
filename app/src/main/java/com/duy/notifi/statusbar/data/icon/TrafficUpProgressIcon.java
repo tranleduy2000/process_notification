@@ -1,4 +1,4 @@
-package com.duy.notifi.statusbar.data.monitor;
+package com.duy.notifi.statusbar.data.icon;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,18 +11,18 @@ import com.duy.notifi.statusbar.views.StatusView;
 /**
  * Created by Duy on 31-Jul-17.
  */
-public class TrafficDownProgressIcon extends ProgressIcon<TrafficDownProgressIcon.BatteryReceiver> {
+public class TrafficUpProgressIcon extends ProgressIcon<TrafficUpProgressIcon.BatteryReceiver> {
 
-    public static final String ACTION_UPDATE_TRAFFIC_DOWN = "com.duy.notifi.ACTION_UPDATE_TRAFFIC_DOWN";
+    public static final String ACTION_UPDATE_TRAFFIC_UP = "com.duy.notifi.ACTION_UPDATE_TRAFFIC_UP";
     public static final String EXTRA_MAX_VALUE = "max_value";
     public static final String EXTRA_USED_VALUE = "used_value";
     public static final String EXTRA_PERCENT = "percent";
-    private static final String TAG = "TrafficDownProgressIcon";
+    private static final String TAG = "TrafficUpProgressIcon";
 
-    private int process;
 
-    public TrafficDownProgressIcon(Context context, StatusView statusView, int progressId) {
-        super(context, statusView, progressId);
+
+    public TrafficUpProgressIcon(Context context, StatusView statusView, int progressId) {
+        super(context,statusView, progressId);
     }
 
     @Override
@@ -41,26 +41,27 @@ public class TrafficDownProgressIcon extends ProgressIcon<TrafficDownProgressIco
     }
 
 
+
     @Override
     public View initView() {
-        return super.initView();
+      return super.initView();
     }
 
     @Override
     public IntentFilter getIntentFilter() {
-        return new IntentFilter(ACTION_UPDATE_TRAFFIC_DOWN);
+        return new IntentFilter(ACTION_UPDATE_TRAFFIC_UP);
     }
 
-    public static class BatteryReceiver extends IconUpdateReceiver<TrafficDownProgressIcon> {
+    public static class BatteryReceiver extends IconUpdateReceiver<TrafficUpProgressIcon> {
 
-        public BatteryReceiver(TrafficDownProgressIcon iconData) {
+        public BatteryReceiver(TrafficUpProgressIcon iconData) {
             super(iconData);
         }
 
         @Override
-        public void onReceive(TrafficDownProgressIcon icon, Intent intent) {
+        public void onReceive(TrafficUpProgressIcon icon, Intent intent) {
             if (intent != null) {
-                if (intent.getAction().equals(ACTION_UPDATE_TRAFFIC_DOWN)) {
+                if (intent.getAction().equals(ACTION_UPDATE_TRAFFIC_UP)) {
                     int percent = intent.getIntExtra(EXTRA_PERCENT, -1);
                     if (percent != -1) {
                         icon.onProcessUpdate(percent, 100);

@@ -16,10 +16,10 @@ import com.duy.notifi.statusbar.services.StatusService;
 import com.duy.notifi.statusbar.utils.PreferenceUtils;
 import com.duy.notifi.statusbar.utils.StaticUtils;
 
-import static com.duy.notifi.statusbar.data.monitor.ProgressIcon.DEF_ENABLE;
-import static com.duy.notifi.statusbar.data.monitor.ProgressIcon.DEF_TYPE;
-import static com.duy.notifi.statusbar.data.monitor.ProgressIcon.ENABLE_IDS;
-import static com.duy.notifi.statusbar.data.monitor.ProgressIcon.SPINNER_IDS;
+import static com.duy.notifi.statusbar.data.icon.ProgressIcon.DEF_ENABLE;
+import static com.duy.notifi.statusbar.data.icon.ProgressIcon.DEF_TYPE;
+import static com.duy.notifi.statusbar.data.icon.ProgressIcon.ENABLE_IDS;
+import static com.duy.notifi.statusbar.data.icon.ProgressIcon.SPINNER_IDS;
 
 /**
  * Created by Duy on 03-Aug-17.

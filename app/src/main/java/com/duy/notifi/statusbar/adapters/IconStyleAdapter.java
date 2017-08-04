@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.data.IconStyleData;
-import com.duy.notifi.statusbar.data.monitor.ProgressIcon;
+import com.duy.notifi.statusbar.data.icon.ProgressIcon;
 import com.duy.notifi.statusbar.dialogs.IconCreatorDialog;
 import com.duy.notifi.statusbar.views.CustomImageView;
 

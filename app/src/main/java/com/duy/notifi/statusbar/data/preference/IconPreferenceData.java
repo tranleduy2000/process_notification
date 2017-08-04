@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.data.IconStyleData;
-import com.duy.notifi.statusbar.data.monitor.ProgressIcon;
+import com.duy.notifi.statusbar.data.icon.ProgressIcon;
 import com.duy.notifi.statusbar.dialogs.IconDialog;
 import com.duy.notifi.statusbar.dialogs.PreferenceDialog;
 import com.duy.notifi.statusbar.views.IconStyleImageView;

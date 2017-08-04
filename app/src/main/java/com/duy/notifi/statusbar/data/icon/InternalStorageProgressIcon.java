@@ -1,4 +1,4 @@
-package com.duy.notifi.statusbar.data.monitor;
+package com.duy.notifi.statusbar.data.icon;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,23 +11,23 @@ import com.duy.notifi.statusbar.views.StatusView;
 /**
  * Created by Duy on 31-Jul-17.
  */
-public class TrafficUpDownProgressIcon extends ProgressIcon<TrafficUpDownProgressIcon.TrafficReceiver> {
+public class InternalStorageProgressIcon extends ProgressIcon<InternalStorageProgressIcon.StorageReceiver> {
 
-    public static final String ACTION_UPDATE_TRAFFIC_UP_DOWN = "com.duy.notifi.ACTION_UPDATE_TRAFFIC_UP_DOWN";
+    public static final String ACTION_UPDATE_INTERNAL_STORAGE = "com.duy.notifi.ACTION_UPDATE_INTERNAL_STORAGE";
     public static final String EXTRA_MAX_VALUE = "max_value";
     public static final String EXTRA_USED_VALUE = "used_value";
     public static final String EXTRA_PERCENT = "percent";
-    private static final String TAG = "TrafficUpDownProgressIcon";
+    private static final String TAG = "InternalStorageProgressIcon";
 
-    private int process;
 
-    public TrafficUpDownProgressIcon(Context context, StatusView statusView, int progressId) {
-        super(context,statusView, progressId);
+
+    public InternalStorageProgressIcon(Context context, StatusView statusView, int progressId) {
+        super(context, statusView, progressId);
     }
 
     @Override
-    public TrafficReceiver getReceiver() {
-        return new TrafficReceiver(this);
+    public StorageReceiver getReceiver() {
+        return new StorageReceiver(this);
     }
 
     @Override
@@ -41,27 +41,26 @@ public class TrafficUpDownProgressIcon extends ProgressIcon<TrafficUpDownProgres
     }
 
 
-
     @Override
     public View initView() {
-      return super.initView();
+        return super.initView();
     }
 
     @Override
     public IntentFilter getIntentFilter() {
-        return new IntentFilter(ACTION_UPDATE_TRAFFIC_UP_DOWN);
+        return new IntentFilter(ACTION_UPDATE_INTERNAL_STORAGE);
     }
 
-    public static class TrafficReceiver extends IconUpdateReceiver<TrafficUpDownProgressIcon> {
+    public static class StorageReceiver extends IconUpdateReceiver<InternalStorageProgressIcon> {
 
-        public TrafficReceiver(TrafficUpDownProgressIcon iconData) {
+        public StorageReceiver(InternalStorageProgressIcon iconData) {
             super(iconData);
         }
 
         @Override
-        public void onReceive(TrafficUpDownProgressIcon icon, Intent intent) {
+        public void onReceive(InternalStorageProgressIcon icon, Intent intent) {
             if (intent != null) {
-                if (intent.getAction().equals(ACTION_UPDATE_TRAFFIC_UP_DOWN)) {
+                if (intent.getAction().equals(ACTION_UPDATE_INTERNAL_STORAGE)) {
                     int percent = intent.getIntExtra(EXTRA_PERCENT, -1);
                     if (percent != -1) {
                         icon.onProcessUpdate(percent, 100);

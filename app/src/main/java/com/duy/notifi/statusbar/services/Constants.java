@@ -18,7 +18,7 @@ class Constants {
 	static final String android = "android";
 	static final String europeLondon = "Europe/London";
 	static final String marketDetails = "market://details?id=";
-	static final int defaultIntervalRead = 1000;
+	static final int defaultIntervalRead = 300;
 	static final int defaultIntervalUpdate = 1000;
 	static final int defaultIntervalWidth = 1;
 	
