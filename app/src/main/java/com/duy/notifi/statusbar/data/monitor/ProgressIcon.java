@@ -5,15 +5,17 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.duy.notifi.R;
@@ -29,6 +31,7 @@ import com.duy.notifi.statusbar.utils.ColorUtils;
 import com.duy.notifi.statusbar.utils.PreferenceUtils;
 import com.duy.notifi.statusbar.utils.StaticUtils;
 import com.duy.notifi.statusbar.views.CustomImageView;
+import com.duy.notifi.statusbar.views.StatusView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,15 +56,17 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
             R.id.spinner_type_3,
             R.id.spinner_type_4};
     public static final int[] DEF_TYPE = {
-            PreferenceUtils.ProgressType.CPU_TEMP,
-            PreferenceUtils.ProgressType.CPU_CLOCK,
-            PreferenceUtils.ProgressType.RAM,
-            PreferenceUtils.ProgressType.BATTERY};
-    public static final boolean[] DEF_ENABLE = {false, true, true, true};
+            ProgressType.CPU_TEMP,
+            ProgressType.CPU_CLOCK,
+            ProgressType.RAM,
+            ProgressType.BATTERY};
 
+    public static final boolean[] DEF_ENABLE = {false, true, true, true};
+    private static final String TAG = "ProgressIcon";
     protected View view;
     protected int progressId;
     protected Boolean active;
+    private StatusView statusView;
     private Context context;
     private DrawableListener drawableListener;
     private TextListener textListener;
@@ -72,9 +77,10 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
     private int color;
     private boolean isRegister;
 
-    public ProgressIcon(Context context, int progressId) {
+    public ProgressIcon(Context context, StatusView statusView, int progressId) {
         this.context = context;
         color = ColorUtils.getDefaultColor(context);
+        this.statusView = statusView;
         this.progressId = progressId;
 
         String name = getStringPreference(PreferenceIdentifier.ICON_STYLE);
@@ -309,22 +315,18 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
     }
 
     public View getIconView() {
-        if (view == null) {
-            view = LayoutInflater.from(getContext()).inflate(getIconLayout(), null);
-            view.setTag(this);
+        if (statusView != null && view == null) {
+            view = statusView.findViewById(progressId);
+            if (view == null) {
+                LinearLayout child = this.statusView.getStatusView();
+                view = child.findViewById(progressId);
 
-            float iconPaddingDp = StaticUtils.getPixelsFromDp(getIconPadding());
-            view.setPadding((int) iconPaddingDp, 0, (int) iconPaddingDp, 0);
-
-            TextView textView = (TextView) view.findViewById(R.id.text);
-            if (textView != null) textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, getTextSize());
-
-            View iconView = view.findViewById(R.id.icon);
-            if (iconView != null && !hasDrawable()) iconView.setVisibility(View.GONE);
-            if (textView != null && !hasText()) textView.setVisibility(View.GONE);
-            view.setVisibility(View.GONE);
+            }
         }
-
+        if (view != null) {
+            ProgressBar progressBar = (ProgressBar) view;
+            progressBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+        }
         return view;
     }
 
@@ -621,7 +623,15 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
         return getClass().getName() + "/" + identifier.toString();
     }
 
-    public abstract void onProcessUpdate(long current, long max);
+    public void onProcessUpdate(int current, int max) {
+        if (!isActive()) return;
+        Log.d(TAG, "onProcessUpdate() called with: current = [" + current + "], max = [" + max + "]");
+        if (view != null) {
+            ProgressBar progressBar = (ProgressBar) view;
+            progressBar.setMax(max);
+            progressBar.setProgress(current);
+        }
+    }
 
     public enum PreferenceIdentifier {
         VISIBILITY,
@@ -644,5 +654,18 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
 
     public interface TextListener {
         void onUpdate(@Nullable String text);
+    }
+
+    public static class ProgressType {
+        public static final int CPU_CLOCK = 0;
+        public static final int CPU_TEMP = 1;
+        public static final int RAM = 2;
+        public static final int BATTERY = 3;
+        public static final int INTERNAL_MEMORY = 4;
+        public static final int EXTERNAL_MEMORY = 5;
+        public static final int INTERNET_UP = 6;
+        public static final int INTERNET_DOWN = 7;
+        public static final int WIFI = 8;
+        public static final int NETWORK_SIGN = 9;
     }
 }

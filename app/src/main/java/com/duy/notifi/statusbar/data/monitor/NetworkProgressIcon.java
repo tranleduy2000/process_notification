@@ -5,12 +5,9 @@ import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 
-import com.duy.notifi.R;
-import com.duy.notifi.statusbar.data.IconStyleData;
+import com.duy.notifi.statusbar.views.StatusView;
 
 import java.lang.ref.SoftReference;
-import java.util.Arrays;
-import java.util.List;
 
 import james.signalstrengthslib.SignalStrengths;
 
@@ -20,8 +17,8 @@ public class NetworkProgressIcon extends ProgressIcon {
     private NetworkListener networkListener;
     private boolean isRegistered;
 
-    public NetworkProgressIcon(Context context, int progressId) {
-        super(context, progressId);
+    public NetworkProgressIcon(Context context, StatusView statusView, int progressId) {
+        super(context, statusView, progressId);
         telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
     }
 
@@ -40,84 +37,8 @@ public class NetworkProgressIcon extends ProgressIcon {
     }
 
     @Override
-    public String getTitle() {
-        return getContext().getString(R.string.icon_network);
-    }
-
-    @Override
-    public int getIconStyleSize() {
-        return 5;
-    }
-
-    @Override
-    public List<IconStyleData> getIconStyles() {
-        List<IconStyleData> styles = super.getIconStyles();
-
-        styles.addAll(
-                Arrays.asList(
-                        new IconStyleData(
-                                getContext().getString(R.string.icon_style_default),
-                                IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_signal_0,
-                                R.drawable.ic_signal_1,
-                                R.drawable.ic_signal_2,
-                                R.drawable.ic_signal_3,
-                                R.drawable.ic_signal_4
-                        ),
-                        new IconStyleData(
-                                getContext().getString(R.string.icon_style_square),
-                                IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_signal_square_0,
-                                R.drawable.ic_signal_square_1,
-                                R.drawable.ic_signal_square_2,
-                                R.drawable.ic_signal_square_3,
-                                R.drawable.ic_signal_square_4
-                        ),
-                        new IconStyleData(
-                                getContext().getString(R.string.icon_style_retro),
-                                IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_signal_retro_0,
-                                R.drawable.ic_signal_retro_1,
-                                R.drawable.ic_signal_retro_2,
-                                R.drawable.ic_signal_retro_3,
-                                R.drawable.ic_signal_retro_4
-                        ),
-                        new IconStyleData(
-                                getContext().getString(R.string.icon_style_circle),
-                                IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_network_circle_0,
-                                R.drawable.ic_network_circle_1,
-                                R.drawable.ic_network_circle_2,
-                                R.drawable.ic_network_circle_3,
-                                R.drawable.ic_network_circle_4
-                        ),
-                        new IconStyleData(
-                                getContext().getString(R.string.icon_style_curved),
-                                IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_network_curved_0,
-                                R.drawable.ic_network_curved_1,
-                                R.drawable.ic_network_curved_2,
-                                R.drawable.ic_network_curved_3,
-                                R.drawable.ic_network_curved_4
-                        ),
-                        new IconStyleData(
-                                getContext().getString(R.string.icon_style_clip),
-                                IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_number_clip_0,
-                                R.drawable.ic_number_clip_1,
-                                R.drawable.ic_number_clip_2,
-                                R.drawable.ic_number_clip_3,
-                                R.drawable.ic_number_clip_4
-                        )
-                )
-        );
-
-        return styles;
-    }
-
-    @Override
-    public void onProcessUpdate(long current, long max) {
-
+    public void onProcessUpdate(int current, int max) {
+        super.onProcessUpdate(current, max);
     }
 
     private static class NetworkListener extends PhoneStateListener {
@@ -134,9 +55,9 @@ public class NetworkProgressIcon extends ProgressIcon {
 
             NetworkProgressIcon icon = null;
             if (reference != null) icon = reference.get();
-
-            if (icon != null && icon.isRegistered)
-                icon.onDrawableUpdate((int) Math.round(SignalStrengths.getFirstValid(signalStrength)));
+            if (icon != null && icon.isRegistered) {
+                icon.onProcessUpdate((int) Math.round(SignalStrengths.getFirstValid(signalStrength)), 4);
+            }
         }
     }
 }

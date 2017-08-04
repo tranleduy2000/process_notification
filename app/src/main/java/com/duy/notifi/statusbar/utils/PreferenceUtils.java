@@ -277,14 +277,5 @@ public class PreferenceUtils {
         ENABLE_PROCESS_4, TYPE_PROGRESS_4,
     }
 
-    public static class ProgressType {
-        public static final int CPU_CLOCK = 0;
-        public static final int CPU_TEMP = 1;
-        public static final int RAM = 2;
-        public static final int BATTERY = 3;
-        public static final int INTERNAL_MEMORY = 4;
-        public static final int EXTERNAL_MEMORY = 5;
-        public static final int NET_UP = 6;
-        public static final int NET_DOWN = 7;
-    }
+
 }

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -29,7 +28,7 @@ public class CpuProgressIcon extends ProgressIcon<CpuProgressIcon.CpuReceiver> {
     private StatusView statusView;
 
     public CpuProgressIcon(Context context, StatusView statusView, int progressId) {
-        super(context, progressId);
+        super(context, statusView, progressId);
         this.statusView = statusView;
     }
 
@@ -49,15 +48,8 @@ public class CpuProgressIcon extends ProgressIcon<CpuProgressIcon.CpuReceiver> {
     }
 
     @Override
-    public void onProcessUpdate(long current, long max) {
-        if (!isActive()) return;
-        Log.d(TAG, "onProcessUpdate() called with: current = [" + current + "], max = [" + max + "]");
-        if (view != null) {
-            ProgressBar progressBar = (ProgressBar) view;
-            float factor = ((float) current) / max;
-            progressBar.setMax(100);
-            progressBar.setProgress((int) (factor * 100));
-        }
+    public void onProcessUpdate(int current, int max) {
+        super.onProcessUpdate(current, max);
     }
 
     @Override

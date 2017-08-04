@@ -49,6 +49,7 @@
             <intent-filter>
                 <action android:name="com.duy.notifi.ACTION_UPDATE_RAM" />
                 <action android:name="com.duy.notifi.ACTION_UPDATE_CPU" />
+                <action android:name="com.duy.notifi.ACTION_UPDATE_BATTERY" />
             </intent-filter>
         </service>
         <service android:name="com.duy.notifi.statusbar.services.ReaderService" />

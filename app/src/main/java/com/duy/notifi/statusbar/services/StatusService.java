@@ -33,8 +33,10 @@ import com.duy.notifi.statusbar.data.AppData;
 import com.duy.notifi.statusbar.data.NotificationData;
 import com.duy.notifi.statusbar.data.monitor.BatteryProgressIcon;
 import com.duy.notifi.statusbar.data.monitor.CpuProgressIcon;
+import com.duy.notifi.statusbar.data.monitor.NetworkProgressIcon;
 import com.duy.notifi.statusbar.data.monitor.ProgressIcon;
 import com.duy.notifi.statusbar.data.monitor.RamProgressIcon;
+import com.duy.notifi.statusbar.data.monitor.WifiProgressIcon;
 import com.duy.notifi.statusbar.receivers.ActivityVisibilitySettingReceiver;
 import com.duy.notifi.statusbar.utils.PreferenceUtils;
 import com.duy.notifi.statusbar.utils.StaticUtils;
@@ -46,6 +48,7 @@ import java.util.List;
 import static com.duy.notifi.statusbar.data.monitor.ProgressIcon.DEF_ENABLE;
 import static com.duy.notifi.statusbar.data.monitor.ProgressIcon.DEF_TYPE;
 import static com.duy.notifi.statusbar.data.monitor.ProgressIcon.PROGRESS_IDS;
+import static com.duy.notifi.statusbar.data.monitor.ProgressIcon.ProgressType;
 import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO;
 import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED;
 import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION;
@@ -97,30 +100,37 @@ public class StatusService extends Service {
             ProgressIcon iconData = null;
             int progressType = PreferenceUtils.getProgressType(context, index, DEF_TYPE[index]);
             switch (progressType) {
-                case PreferenceUtils.ProgressType.CPU_CLOCK:
+                case ProgressType.CPU_CLOCK:
                     iconData = new CpuProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
-                case PreferenceUtils.ProgressType.CPU_TEMP:
+                case ProgressType.CPU_TEMP:
                     iconData = new CpuProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
-                case PreferenceUtils.ProgressType.RAM:
+                case ProgressType.RAM:
                     iconData = new RamProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
-                case PreferenceUtils.ProgressType.BATTERY:
+                case ProgressType.BATTERY:
                     iconData = new BatteryProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
-                case PreferenceUtils.ProgressType.EXTERNAL_MEMORY:
+                case ProgressType.EXTERNAL_MEMORY:
                     iconData = new BatteryProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
-                case PreferenceUtils.ProgressType.INTERNAL_MEMORY:
+                case ProgressType.INTERNAL_MEMORY:
                     iconData = new BatteryProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
-                case PreferenceUtils.ProgressType.NET_DOWN:
+                case ProgressType.INTERNET_DOWN:
                     iconData = new BatteryProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
-                case PreferenceUtils.ProgressType.NET_UP:
+                case ProgressType.INTERNET_UP:
                     iconData = new BatteryProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
+                case ProgressType.WIFI:
+                    iconData = new WifiProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    break;
+                case ProgressType.NETWORK_SIGN:
+                    iconData = new NetworkProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    break;
+
             }
             if (iconData != null) {
                 iconData.setActive(PreferenceUtils.isProgressActive(context, index, DEF_ENABLE[index]));

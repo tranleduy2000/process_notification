@@ -4,11 +4,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.util.Log;
-import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.duy.notifi.statusbar.receivers.IconUpdateReceiver;
@@ -29,29 +25,13 @@ public class RamProgressIcon extends ProgressIcon<RamProgressIcon.RamReceiver> {
     private StatusView statusView;
 
     public RamProgressIcon(Context context, StatusView statusView, int progressId) {
-        super(context, progressId);
+        super(context, statusView, progressId);
         this.statusView = statusView;
     }
 
     @Override
     public RamReceiver getReceiver() {
         return new RamReceiver(this);
-    }
-
-    @Override
-    public View getIconView() {
-        if (statusView != null && view == null) {
-            view = statusView.findViewById(progressId);
-            if (view == null) {
-                LinearLayout child = this.statusView.getStatusView();
-                view = child.findViewById(progressId);
-            }
-        }
-        if (view != null) {
-            ProgressBar progressBar = (ProgressBar) view;
-            progressBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-        }
-        return view;
     }
 
     @Override
@@ -65,7 +45,8 @@ public class RamProgressIcon extends ProgressIcon<RamProgressIcon.RamReceiver> {
     }
 
     @Override
-    public void onProcessUpdate(long current, long max) {
+    public void onProcessUpdate(int current, int max) {
+
         Log.d(TAG, "onProcessUpdate() called with: current = [" + current + "], max = [" + max + "]");
         if (view != null) {
             ProgressBar progressBar = (ProgressBar) view;
@@ -91,8 +72,9 @@ public class RamProgressIcon extends ProgressIcon<RamProgressIcon.RamReceiver> {
             if (intent != null) {
                 if (intent.getAction().equals(ACTION_UPDATE_RAM)) {
                     ActivityManager.MemoryInfo memoryInfo = intent.getParcelableExtra(EXTRA_INFO);
-                    icon.onProcessUpdate(memoryInfo.totalMem - memoryInfo.availMem,
-                            memoryInfo.totalMem);
+                    int total = (int) (memoryInfo.totalMem / 1024);
+                    int current = (int) (total - memoryInfo.availMem / 1024);
+                    icon.onProcessUpdate(current, total);
                 }
             }
         }
