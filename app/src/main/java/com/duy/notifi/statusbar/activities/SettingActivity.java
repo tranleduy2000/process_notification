@@ -30,6 +30,12 @@ public class SettingActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+        if (!StaticUtils.isPermissionsGranted(this) || !StaticUtils.isIgnoringOptimizations(this)
+                || !StaticUtils.canDrawOverlays(this)) {
+            startActivity(new Intent(this, StartActivity.class));
+        }
+
         setupSwitch();
         setupProgress();
     }

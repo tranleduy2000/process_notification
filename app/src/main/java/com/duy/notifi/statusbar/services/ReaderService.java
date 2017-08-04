@@ -22,7 +22,10 @@ import android.util.Log;
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.data.monitor.BatteryProgressIcon;
 import com.duy.notifi.statusbar.data.monitor.CpuProgressIcon;
+import com.duy.notifi.statusbar.data.monitor.ExternalStorageProgressIcon;
+import com.duy.notifi.statusbar.data.monitor.InternalStorageProgressIcon;
 import com.duy.notifi.statusbar.data.monitor.RamProgressIcon;
+import com.duy.notifi.statusbar.utils.StorageUtil;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -124,9 +127,29 @@ public class ReaderService extends Service {
             readRamInfo();
             readCpuInfo();
             readBattery();
+            readInternalState();
+            readExternalState();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void readExternalState() {
+        if (StorageUtil.hasExternalMemory()) {
+            StorageUtil.Storage storage = StorageUtil.getExternalMemory();
+            int percent = (int) ((storage.getAvailable() / 1024) / (storage.getTotal() / 1024)) * 100;
+            Intent intent = new Intent(ExternalStorageProgressIcon.ACTION_UPDATE_EXTERNAL_STORAGE);
+            intent.putExtra(ExternalStorageProgressIcon.EXTRA_PERCENT, percent);
+            this.sendBroadcast(intent);
+        }
+    }
+
+    private void readInternalState() {
+        StorageUtil.Storage storage = StorageUtil.getInternalMemory();
+        int percent = (int) ((storage.getAvailable() / 1024) / (storage.getTotal() / 1024)) * 100;
+        Intent intent = new Intent(InternalStorageProgressIcon.ACTION_UPDATE_INTERNAL_STORAGE);
+        intent.putExtra(InternalStorageProgressIcon.EXTRA_PERCENT, percent);
+        this.sendBroadcast(intent);
     }
 
     private void readBattery() {

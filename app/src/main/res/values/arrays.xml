@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="filter_types">
-        <item>CPU CLOCK</item>
-        <item>CPU TEMP</item>
+        <item>CPU clock</item>
+        <item>CPU temp</item>
         <item>RAM</item>
-        <item>BATTERY</item>
-        <item>INTERNAL MEMORY</item>
-        <item>EXTERNAL MEMORY</item>
-        <item>NETWORK UPLOAD</item>
-        <item>NETWORK DOWNLOAD</item>
-        <item>WIFI</item>
+        <item>Battery</item>
+        <item>Internal memory</item>
+        <item>External memory</item>
+        <item>Internet upload</item>
+        <item>Internet download</item>
+        <item>Wifi</item>
+        <item>Network</item>
     </array>
 </resources>
