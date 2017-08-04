@@ -103,16 +103,16 @@ public class StatusService extends Service {
                 case ProgressType.BATTERY:
                     iconData = new BatteryProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
-                case ProgressType.EXTERNAL_MEMORY:
-                    iconData = new ExternalStorageProgressIcon(context, statusView, PROGRESS_IDS[index]);
-                    break;
                 case ProgressType.INTERNAL_MEMORY:
                     iconData = new InternalStorageProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
-                case ProgressType.INTERNET_DOWN:
+                case ProgressType.EXTERNAL_MEMORY:
+                    iconData = new ExternalStorageProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    break;
+                case ProgressType.TRAFFIC_DOWN:
                     iconData = new BatteryProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
-                case ProgressType.INTERNET_UP:
+                case ProgressType.TRAFFIC_UP:
                     iconData = new BatteryProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
                 case ProgressType.WIFI:

@@ -8,11 +8,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
@@ -25,8 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity
-            android:name="com.duy.notifi.statusbar.activities.SettingActivity">
+        <activity android:name="com.duy.notifi.statusbar.activities.SettingActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,6 +44,8 @@
                 <action android:name="com.duy.notifi.ACTION_UPDATE_RAM" />
                 <action android:name="com.duy.notifi.ACTION_UPDATE_CPU" />
                 <action android:name="com.duy.notifi.ACTION_UPDATE_BATTERY" />
+                <action android:name="com.duy.notifi.ACTION_UPDATE_INTERNAL_STORAGE" />
+                <action android:name="com.duy.notifi.ACTION_UPDATE_EXTERNAL_STORAGE" />
             </intent-filter>
         </service>
         <service android:name="com.duy.notifi.statusbar.services.ReaderService" />

@@ -10,6 +10,8 @@
         <item>Internet upload</item>
         <item>Internet download</item>
         <item>Wifi</item>
-        <item>Network</item>
+        <item>Traffic upload</item>
+        <item>Traffic download</item>
+        <item>Traffic down + up</item>
     </array>
 </resources>

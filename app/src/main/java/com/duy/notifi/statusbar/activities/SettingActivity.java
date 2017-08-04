@@ -31,7 +31,8 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        if (!StaticUtils.isPermissionsGranted(this) || !StaticUtils.isIgnoringOptimizations(this)
+        if (!StaticUtils.isPermissionsGranted(this)
+                || !StaticUtils.isIgnoringOptimizations(this)
                 || !StaticUtils.canDrawOverlays(this)) {
             startActivity(new Intent(this, StartActivity.class));
         }

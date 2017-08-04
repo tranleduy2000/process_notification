@@ -643,8 +643,8 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
         public static final int BATTERY = 3;
         public static final int INTERNAL_MEMORY = 4;
         public static final int EXTERNAL_MEMORY = 5;
-        public static final int INTERNET_UP = 6;
-        public static final int INTERNET_DOWN = 7;
+        public static final int TRAFFIC_UP = 6;
+        public static final int TRAFFIC_DOWN = 7;
         public static final int WIFI = 8;
         public static final int NETWORK_SIGN = 9;
     }
