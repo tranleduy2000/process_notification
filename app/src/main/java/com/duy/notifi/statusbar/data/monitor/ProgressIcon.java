@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.data.IconStyleData;
@@ -28,7 +27,6 @@ import com.duy.notifi.statusbar.data.preference.ListPreferenceData;
 import com.duy.notifi.statusbar.data.preference.PreferenceData;
 import com.duy.notifi.statusbar.receivers.IconUpdateReceiver;
 import com.duy.notifi.statusbar.utils.ColorUtils;
-import com.duy.notifi.statusbar.utils.PreferenceUtils;
 import com.duy.notifi.statusbar.utils.StaticUtils;
 import com.duy.notifi.statusbar.views.CustomImageView;
 import com.duy.notifi.statusbar.views.StatusView;
@@ -45,16 +43,19 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
             R.id.progress_2,
             R.id.progress_3,
             R.id.progress_4};
+
     public static final int[] ENABLE_IDS = {
             R.id.enable_progress_1,
             R.id.enable_progress_2,
             R.id.enable_progress_3,
             R.id.enable_progress_4};
+
     public static final int[] SPINNER_IDS = {
             R.id.spinner_type_1,
             R.id.spinner_type_2,
             R.id.spinner_type_3,
             R.id.spinner_type_4};
+
     public static final int[] DEF_TYPE = {
             ProgressType.CPU_TEMP,
             ProgressType.CPU_CLOCK,
@@ -62,8 +63,9 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
             ProgressType.BATTERY};
 
     public static final boolean[] DEF_ENABLE = {false, true, true, true};
+
     private static final String TAG = "ProgressIcon";
-    protected View view;
+    protected ProgressBar progressBarView;
     protected int progressId;
     protected Boolean active;
     private StatusView statusView;
@@ -74,12 +76,12 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
     private T receiver;
     private Drawable drawable;
     private String text;
-    private int color;
+    private int progressColor;
     private boolean isRegister;
 
     public ProgressIcon(Context context, StatusView statusView, int progressId) {
         this.context = context;
-        color = ColorUtils.getDefaultColor(context);
+        this.progressColor = ColorUtils.getDefaultColor(context);
         this.statusView = statusView;
         this.progressId = progressId;
 
@@ -104,12 +106,12 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
     }
 
     @ColorInt
-    public final int getColor() {
-        return color;
+    public final int getProgressColor() {
+        return progressColor;
     }
 
-    public final void setColor(@ColorInt int color) {
-        this.color = color;
+    public final void setProgressColor(@ColorInt int progressColor) {
+        this.progressColor = progressColor;
     }
 
     public final boolean hasDrawableListener() {
@@ -140,12 +142,12 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
         if (hasDrawable()) {
             drawable = style.getDrawable(context, level);
 
-            if (view != null) {
-                CustomImageView iconView = view.findViewById(R.id.icon);
+            if (progressBarView != null) {
+                CustomImageView iconView = progressBarView.findViewById(R.id.icon);
 
                 if (iconView != null) {
                     if (drawable != null) {
-                        view.setVisibility(View.VISIBLE);
+                        progressBarView.setVisibility(View.VISIBLE);
                         iconView.setVisibility(View.VISIBLE);
 
                         ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
@@ -159,7 +161,7 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
                     } else {
                         iconView.setVisibility(View.GONE);
                         if (canHazText() && getText() == null)
-                            view.setVisibility(View.GONE);
+                            progressBarView.setVisibility(View.GONE);
                     }
                 }
             }
@@ -168,35 +170,6 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
         if (hasDrawableListener()) getDrawableListener().onUpdate(drawable);
     }
 
-    public final void onTextUpdate(@Nullable String text) {
-        if (hasText()) {
-            if (view != null) {
-                TextView textView = (TextView) view.findViewById(R.id.text);
-
-                if (text != null) {
-                    view.setVisibility(View.VISIBLE);
-                    textView.setVisibility(View.VISIBLE);
-
-                    Integer color = getTextColor();
-                    Boolean isContrast = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS);
-
-                    if (color != null && !((isContrast == null || isContrast) && (color == Color.WHITE || color == Color.BLACK))) {
-                        textView.setTextColor(color);
-                        textView.setTag(color);
-                    } else textView.setTag(null);
-
-                    textView.setText(text);
-                } else {
-                    textView.setVisibility(View.GONE);
-                    if (canHazDrawable() && getDrawable() == null)
-                        view.setVisibility(View.GONE);
-                }
-            }
-
-            if (hasTextListener()) getTextListener().onUpdate(text);
-            this.text = text;
-        }
-    }
 
     public boolean isVisible() {
         Boolean isVisible = getBooleanPreference(PreferenceIdentifier.VISIBILITY);
@@ -232,10 +205,12 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
     }
 
     public void register() {
-        isRegister = true;
+        if (!isActive()) return;
+
         if (receiver == null) receiver = getReceiver();
         if (receiver != null) getContext().registerReceiver(receiver, getIntentFilter());
-        onDrawableUpdate(-1);
+        onProcessUpdate(0, 100);
+        isRegister = true;
     }
 
     public boolean isActive() {
@@ -314,20 +289,24 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
         return R.layout.item_icon;
     }
 
-    public View getIconView() {
-        if (statusView != null && view == null) {
-            view = statusView.findViewById(progressId);
-            if (view == null) {
+    public View initView() {
+        if (statusView != null) {
+            progressBarView = statusView.findViewById(progressId);
+            if (progressBarView == null) {
                 LinearLayout child = this.statusView.getStatusView();
-                view = child.findViewById(progressId);
+                progressBarView = child.findViewById(progressId);
+            }
 
+            if (progressBarView != null) {
+                progressBarView.getProgressDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+                if (!isActive()) {
+                    progressBarView.setVisibility(View.INVISIBLE);
+                } else {
+                    progressBarView.setVisibility(View.VISIBLE);
+                }
             }
         }
-        if (view != null) {
-            ProgressBar progressBar = (ProgressBar) view;
-            progressBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-        }
-        return view;
+        return progressBarView;
     }
 
     public List<PreferenceData> getPreferences() {
@@ -624,12 +603,13 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
     }
 
     public void onProcessUpdate(int current, int max) {
-        if (!isActive()) return;
-        Log.d(TAG, "onProcessUpdate() called with: current = [" + current + "], max = [" + max + "]");
-        if (view != null) {
-            ProgressBar progressBar = (ProgressBar) view;
+        Log.d(TAG, getClass().getSimpleName() + " onProcessUpdate() called with: current = [" +
+                current + "], max = [" + max + "]");
+        if (progressBarView != null && isActive()) {
+            ProgressBar progressBar = this.progressBarView;
             progressBar.setMax(max);
             progressBar.setProgress(current);
+            progressBar.invalidate();
         }
     }
 

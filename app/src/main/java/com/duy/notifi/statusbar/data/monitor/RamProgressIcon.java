@@ -44,17 +44,6 @@ public class RamProgressIcon extends ProgressIcon<RamProgressIcon.RamReceiver> {
         super.unregister();
     }
 
-    @Override
-    public void onProcessUpdate(int current, int max) {
-
-        Log.d(TAG, "onProcessUpdate() called with: current = [" + current + "], max = [" + max + "]");
-        if (view != null) {
-            ProgressBar progressBar = (ProgressBar) view;
-            float factor = ((float) current) / max;
-            progressBar.setMax(100);
-            progressBar.setProgress((int) (factor * 100));
-        }
-    }
 
     @Override
     public IntentFilter getIntentFilter() {

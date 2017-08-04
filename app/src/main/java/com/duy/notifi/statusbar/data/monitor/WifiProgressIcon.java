@@ -53,10 +53,6 @@ public class WifiProgressIcon extends ProgressIcon<WifiProgressIcon.WifiReceiver
     }
 
 
-    @Override
-    public void onProcessUpdate(int current, int max) {
-        super.onProcessUpdate(current, max);
-    }
 
     static class WifiReceiver extends IconUpdateReceiver<WifiProgressIcon> {
 

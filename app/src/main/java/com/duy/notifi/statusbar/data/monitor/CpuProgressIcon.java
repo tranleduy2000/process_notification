@@ -3,11 +3,6 @@ package com.duy.notifi.statusbar.data.monitor;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.duy.notifi.statusbar.receivers.IconUpdateReceiver;
 import com.duy.notifi.statusbar.views.StatusView;
@@ -45,28 +40,6 @@ public class CpuProgressIcon extends ProgressIcon<CpuProgressIcon.CpuReceiver> {
     @Override
     public void unregister() {
         super.unregister();
-    }
-
-    @Override
-    public void onProcessUpdate(int current, int max) {
-        super.onProcessUpdate(current, max);
-    }
-
-    @Override
-    public View getIconView() {
-        if (statusView != null && view == null) {
-            view = statusView.findViewById(progressId);
-            if (view == null) {
-                LinearLayout child = this.statusView.getStatusView();
-                view = child.findViewById(progressId);
-
-            }
-        }
-        if (view != null) {
-            ProgressBar progressBar = (ProgressBar) view;
-            progressBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-        }
-        return view;
     }
 
     @Override

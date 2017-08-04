@@ -36,10 +36,6 @@ public class NetworkProgressIcon extends ProgressIcon {
         isRegistered = false;
     }
 
-    @Override
-    public void onProcessUpdate(int current, int max) {
-        super.onProcessUpdate(current, max);
-    }
 
     private static class NetworkListener extends PhoneStateListener {
 

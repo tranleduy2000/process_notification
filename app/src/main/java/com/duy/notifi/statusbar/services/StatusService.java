@@ -30,7 +30,6 @@ import com.duy.notifi.R;
 import com.duy.notifi.statusbar.activities.AppSettingActivity;
 import com.duy.notifi.statusbar.activities.MainActivity;
 import com.duy.notifi.statusbar.data.AppData;
-import com.duy.notifi.statusbar.data.NotificationData;
 import com.duy.notifi.statusbar.data.monitor.BatteryProgressIcon;
 import com.duy.notifi.statusbar.data.monitor.CpuProgressIcon;
 import com.duy.notifi.statusbar.data.monitor.NetworkProgressIcon;
@@ -68,11 +67,6 @@ public class StatusService extends Service {
     public static final String EXTRA_PACKAGE = "com.duy.notifi.EXTRA_PACKAGE";
     public static final String EXTRA_ACTIVITY = "com.duy.notifi.EXTRA_ACTIVITY";
 
-    public static final int HEADSUP_LAYOUT_PLAIN = 0;
-    public static final int HEADSUP_LAYOUT_CARD = 1;
-    public static final int HEADSUP_LAYOUT_CONDENSED = 2;
-    public static final int HEADSUP_LAYOUT_TRANSPARENT = 3;
-
     private static final int ID_FOREGROUND = 682;
     private static final int COUNT = 4;
 
@@ -82,14 +76,9 @@ public class StatusService extends Service {
     private KeyguardManager keyguardManager;
     private WindowManager windowManager;
 
-    //    private NotificationReceiver notificationReceiver;
-//    private ArrayMap<String, NotificationData> notifications;
     private PackageManager packageManager;
     private Handler headsUpHandler;
-    private Runnable headsUpRunnable, headsUpDisabledRunnable;
-    private NotificationData headsUpNotification;
-    private boolean shouldFireClickEvent = true;
-    private int headsUpDuration = 10000;
+    private Runnable headsUpRunnable;
     private boolean isRegistered;
     private String packageName;
     private AppData.ActivityData activityData;
@@ -148,8 +137,6 @@ public class StatusService extends Service {
         keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         packageManager = getPackageManager();
 
-//        notificationReceiver = new NotificationReceiver();
-
         headsUpHandler = new Handler();
         headsUpRunnable = new Runnable() {
             @Override
@@ -158,22 +145,10 @@ public class StatusService extends Service {
             }
         };
 
-        headsUpDisabledRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (statusView != null) {
-                    statusView.setSystemShowing(false);
-                    statusView.setFullscreen(isFullscreen());
-                    headsUpNotification = null;
-                }
-            }
-        };
-
         Boolean enabled = getBooleanPreference(this, STATUS_ENABLED);
         if (enabled != null && enabled && StaticUtils.isPermissionsGranted(this)) setUp();
 
         Integer duration = getIntegerPreference(this, STATUS_HEADS_UP_DURATION);
-        if (duration != null) headsUpDuration = duration * 1000;
     }
 
     @Nullable
@@ -584,7 +559,6 @@ public class StatusService extends Service {
 //    }
 
     private void removeHeadsUpView() {
-        headsUpNotification = null;
         headsUpHandler.removeCallbacks(headsUpRunnable);
 
         ValueAnimator animator = ValueAnimator.ofInt((int) headsUpView.getY(), -headsUpView.getHeight());
@@ -615,7 +589,6 @@ public class StatusService extends Service {
 //            startService(intent);
 //        }
 
-        headsUpNotification = null;
         headsUpHandler.removeCallbacks(headsUpRunnable);
 
         Point size = new Point();

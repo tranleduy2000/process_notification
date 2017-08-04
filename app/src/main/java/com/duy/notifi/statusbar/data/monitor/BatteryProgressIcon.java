@@ -40,14 +40,11 @@ public class BatteryProgressIcon extends ProgressIcon<BatteryProgressIcon.Batter
         super.unregister();
     }
 
-    @Override
-    public void onProcessUpdate(int current, int max){
-        super.onProcessUpdate(current, max);
-    }
+
 
     @Override
-    public View getIconView() {
-      return super.getIconView();
+    public View initView() {
+      return super.initView();
     }
 
     @Override

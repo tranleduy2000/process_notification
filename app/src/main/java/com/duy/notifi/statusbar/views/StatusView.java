@@ -5,7 +5,6 @@ import android.animation.ValueAnimator;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.data.monitor.ProgressIcon;
@@ -122,7 +120,7 @@ public class StatusView extends FrameLayout {
     }
 
     public void setUp() {
-        if (statusView != null && statusView.getParent() != null) removeView(statusView);
+        removeAllViews();
 
         View v = LayoutInflater.from(getContext()).inflate(R.layout.layout_status, this, false);
         statusView = v.findViewById(R.id.status);
@@ -130,8 +128,6 @@ public class StatusView extends FrameLayout {
 
         Boolean isAnimations = getBooleanPreference(getContext(), PreferenceIdentifier.STATUS_BACKGROUND_ANIMATIONS);
         this.isAnimations = isAnimations != null ? isAnimations : true;
-
-        Boolean isContrastIcons = getBooleanPreference(getContext(), PreferenceIdentifier.STATUS_DARK_ICONS);
 
         addView(v);
         statusView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -141,8 +137,9 @@ public class StatusView extends FrameLayout {
                 y = statusView.getY();
 
                 Boolean isBurnInProtection = getBooleanPreference(getContext(), PreferenceIdentifier.STATUS_BURNIN_PROTECTION);
-                if (isBurnInProtection != null && isBurnInProtection)
+                if (isBurnInProtection != null && isBurnInProtection) {
                     handler.post(burnInRunnable);
+                }
 
                 statusView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
@@ -152,8 +149,11 @@ public class StatusView extends FrameLayout {
         if (isStatusColorAuto != null && !isStatusColorAuto) {
             Integer statusBarColor = getIntegerPreference(getContext(), PreferenceIdentifier.STATUS_COLOR);
             if (statusBarColor != null) setColor(statusBarColor);
-        } else if (color != null) setColor(color);
-        else setColor(Color.BLACK);
+        } else if (color != null) {
+            setColor(color);
+        } else {
+            setColor(Color.BLACK);
+        }
 
         Integer defaultIconColor = getIntegerPreference(getContext(), PreferenceIdentifier.STATUS_ICON_COLOR);
         if (defaultIconColor != null) iconColor = defaultIconColor;
@@ -165,78 +165,13 @@ public class StatusView extends FrameLayout {
     }
 
     public void setIcons(List<ProgressIcon> icons) {
-     /*   for (int i = (leftLayout.getChildCount() - 1); i >= 0; i--) {
-            View child = leftLayout.getChildAt(i);
-            Object tag = child.getTag();
-
-            if (tag != null && tag instanceof IconData) {
-                ((IconData) tag).unregister();
-                leftLayout.removeViewAt(i);
-            }
-        }
-
-        for (int i = (centerLayout.getChildCount() - 1); i >= 0; i--) {
-            View child = centerLayout.getChildAt(i);
-            Object tag = child.getTag();
-
-            if (tag != null && tag instanceof IconData) {
-                ((IconData) tag).unregister();
-                centerLayout.removeViewAt(i);
-            }
-        }
-
-        for (int i = (rightLayout.getChildCount() - 1); i >= 0; i--) {
-            View child = rightLayout.getChildAt(i);
-            Object tag = child.getTag();
-
-            if (tag != null && tag instanceof IconData) {
-                ((IconData) tag).unregister();
-                rightLayout.removeViewAt(i);
-            }
-        }*/
-
         this.icons = icons;
-
-        for (final ProgressIcon iconData : icons) {
-            if (!iconData.isVisible()) continue;
-
-            final View item = iconData.getIconView();
-            if (!iconData.isActive()) {
-                item.setVisibility(View.INVISIBLE);
-            } else {
-                item.setVisibility(View.VISIBLE);
-            }
-            iconData.setDrawableListener(new ProgressIcon.DrawableListener() {
-                @Override
-                public void onUpdate(@Nullable Drawable drawable) {
-                    CustomImageView iconView = item.findViewById(R.id.icon);
-
-                    if (drawable != null && iconView != null)
-                        iconView.setImageDrawable(drawable, iconColor);
-                    else if (iconView == null || !iconView.getParent().equals(item))
-                        setIconTint(item, iconColor);
-                }
-            });
-
-          /*  switch (iconData.getGravity()) {
-                case IconData.LEFT_GRAVITY:
-                    leftLayout.addView(item, 0);
-                    break;
-                case IconData.CENTER_GRAVITY:
-                    centerLayout.addView(item, 0);
-                    break;
-                case IconData.RIGHT_GRAVITY:
-                    rightLayout.addView(item, 0);
-                    break;
-            }*/
-        }
+        for (ProgressIcon iconData : icons) iconData.initView();
     }
 
     public void register() {
         if (icons != null && !isRegistered()) {
-            for (ProgressIcon icon : icons) {
-                icon.register();
-            }
+            for (ProgressIcon icon : icons) icon.register();
             isRegistered = true;
         }
     }
@@ -336,28 +271,6 @@ public class StatusView extends FrameLayout {
         Integer color = getIntegerPreference(getContext(), PreferenceIdentifier.STATUS_ICON_COLOR);
         if (color == null) color = Color.WHITE;
         return color;
-    }
-
-
-    private void setIconTint(View view, @ColorInt int color) {
-        for (ProgressIcon icon : getIcons()) {
-            icon.setColor(color);
-        }
-
-        if (view instanceof LinearLayout) {
-            for (int i = 0; i < ((LinearLayout) view).getChildCount(); i++) {
-                setIconTint(((LinearLayout) view).getChildAt(i), color);
-            }
-        } else if (view instanceof TextView) {
-            if (view.getTag() == null) {
-                ((TextView) view).setTextColor(color);
-            }
-        } else if (view instanceof CustomImageView) {
-            CustomImageView imageView = (CustomImageView) view;
-            if (imageView.getDrawable() != null) {
-                imageView.setColorFilter(color);
-            }
-        }
     }
 
 

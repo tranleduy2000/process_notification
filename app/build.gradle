@@ -35,4 +35,5 @@ dependencies {
     compile 'com.afollestad:async:0.2.3'
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.github.castorflex.smoothprogressbar:library:1.1.0'
+    compile 'com.akexorcist:RoundCornerProgressBar:2.0.3'
 }
