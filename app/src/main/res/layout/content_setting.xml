@@ -41,7 +41,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="16dp"
                         android:text="Filter type" />
 
                     <android.support.v7.widget.AppCompatSpinner
@@ -87,7 +89,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="16dp"
                         android:text="Filter type" />
 
                     <android.support.v7.widget.AppCompatSpinner
@@ -133,7 +137,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="16dp"
                         android:text="Filter type" />
 
                     <android.support.v7.widget.AppCompatSpinner
@@ -178,7 +184,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="16dp"
                         android:text="Filter type" />
 
                     <android.support.v7.widget.AppCompatSpinner
