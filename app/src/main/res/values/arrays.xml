@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="filter_types">
-        <item>CPU clock</item>
-        <item>CPU temp</item>
-        <item>RAM</item>
-        <item>Battery</item>
-        <item>Internal memory</item>
-        <item>External memory</item>
-        <item>Internet upload</item>
-        <item>Internet download</item>
-        <item>Wifi</item>
-        <item>Traffic upload</item>
-        <item>Traffic download</item>
-        <item>Traffic down + up</item>
+        <item>CPU clock</item> <!--0-->
+        <item>CPU temp</item> <!--1-->
+        <item>RAM</item> <!--2-->
+        <item>Battery</item><!--3-->
+        <item>Internal memory</item><!--4-->
+        <item>External memory</item><!--5-->
+        <item>Internet upload</item><!--6-->
+        <item>Internet download</item><!--7-->
+        <item>Internet down + up</item><!--8-->
+        <item>Wifi</item> <!--9-->
+        <item>Network signal length</item> <!--10-->
     </array>
 </resources>

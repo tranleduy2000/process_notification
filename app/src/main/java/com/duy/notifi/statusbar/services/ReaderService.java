@@ -14,6 +14,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
 import android.os.BatteryManager;
 import android.os.Binder;
 import android.os.IBinder;
@@ -26,10 +27,11 @@ import com.duy.notifi.statusbar.data.icon.ExternalStorageProgressIcon;
 import com.duy.notifi.statusbar.data.icon.InternalStorageProgressIcon;
 import com.duy.notifi.statusbar.data.icon.RamProgressIcon;
 import com.duy.notifi.statusbar.data.icon.TrafficDownProgressIcon;
+import com.duy.notifi.statusbar.data.icon.TrafficUpDownProgressIcon;
 import com.duy.notifi.statusbar.data.icon.TrafficUpProgressIcon;
 import com.duy.notifi.statusbar.data.monitor.CpuUtil;
+import com.duy.notifi.statusbar.data.monitor.StorageUtil;
 import com.duy.notifi.statusbar.data.monitor.TrafficManager;
-import com.duy.notifi.statusbar.utils.StorageUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,14 +44,11 @@ public class ReaderService extends Service {
     public static final String ACTION_STOP = "com.duy.notifi.READER_STOP";
     private static final String TAG = "ReaderService";
     private int intervalRead;
-    private int intervalUpdate;
-    private int intervalWidth;
     private List<Integer> memoryActivityManager;
     private ActivityManager mActivityManager;
     private SharedPreferences mPrefs;
     private Thread readThread;
     private AtomicBoolean canRead = new AtomicBoolean(false);
-    private long totalBefore, workBefore;
     private Runnable readRunnable;
     private TrafficManager mTrafficManager;
 
@@ -57,7 +56,6 @@ public class ReaderService extends Service {
         readRunnable = new Runnable() {
             @Override
             public void run() {
-                Log.d(TAG, "run() called");
                 while (canRead.get()) {
                     collectData();
                     try {
@@ -82,12 +80,6 @@ public class ReaderService extends Service {
 
         mPrefs = getSharedPreferences(getString(R.string.app_name) + Constants.prefs, MODE_PRIVATE);
         intervalRead = mPrefs.getInt(Constants.intervalRead, Constants.defaultIntervalRead);
-        intervalUpdate = mPrefs.getInt(Constants.intervalUpdate, Constants.defaultIntervalUpdate);
-        intervalWidth = mPrefs.getInt(Constants.intervalWidth, Constants.defaultIntervalWidth);
-
-
-//        mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
     }
 
     @Override
@@ -128,8 +120,8 @@ public class ReaderService extends Service {
 
     private void collectData() {
         try {
-            readRamInfo();
-            readCpuFreq();
+            readRamUsage();
+            readCpuUsage();
             readBattery();
             readInternalState();
             readExternalState();
@@ -154,6 +146,14 @@ public class ReaderService extends Service {
         intent = new Intent(TrafficUpProgressIcon.ACTION_UPDATE_TRAFFIC_UP);
         intent.putExtra(TrafficUpProgressIcon.EXTRA_PERCENT, percent);
         this.sendBroadcast(intent);
+
+        max = 4 * 1024 * 1024; // 4MB
+        percent = (int) ((trafficUp + trafficDown) / max * 100f);
+        intent = new Intent(TrafficUpDownProgressIcon.ACTION_UPDATE_TRAFFIC_UP_DOWN);
+        intent.putExtra(TrafficUpDownProgressIcon.EXTRA_PERCENT, percent);
+        this.sendBroadcast(intent);
+
+
     }
 
     private void readExternalState() {
@@ -189,15 +189,8 @@ public class ReaderService extends Service {
         this.sendBroadcast(intent);
     }
 
-    private void readCpuFreq() throws IOException {
+    private void readCpuUsage() throws IOException {
         try {
-//            String maxFreq = CpuUtil.getMaxFreq(0);
-//            String currentFreq = CpuUtil.getCurrentFreq(0);
-////            String currentFreq = CpuUtil.getCurrentCPULoad();
-//            Long max = Long.parseLong(maxFreq.trim());
-//            Long current = Long.parseLong(currentFreq.trim());
-//            int percentage = (int) ((float) current / (float) max) * 100;
-            //update cpu notification
             int percentage = (int) (CpuUtil.readUsage() * 100);
             Intent intent = new Intent(CpuProgressIcon.ACTION_UPDATE_CPU);
             intent.putExtra(CpuProgressIcon.EXTRA_PERCENT, percentage);
@@ -207,63 +200,14 @@ public class ReaderService extends Service {
         }
     }
 
-
-    private float restrictPercentage(float percentage) {
-        if (percentage > 100)
-            return 100;
-        else if (percentage < 0)
-            return 0;
-        else return percentage;
-    }
-
-    private void readRamInfo() {
-
+    private void readRamUsage() {
         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
         mActivityManager.getMemoryInfo(memoryInfo);
 
-        long memTotal = memoryInfo.totalMem / 1024;
-        long memoryUsed = memTotal - memoryInfo.availMem / 1024;
-        long memoryAvailable = memoryInfo.availMem / 1024;
-
-        Log.d(TAG, "read memoryUsed = " + memoryUsed);
-        Log.d(TAG, "read memoryAvailable = " + memoryAvailable);
-        Log.d(TAG, "read totalMem = " + memTotal);
-
-        updateRamInfo(memoryInfo);
-    }
-
-    private void updateRamInfo(ActivityManager.MemoryInfo memoryInfo) {
         //update ram notification
         Intent intent = new Intent(RamProgressIcon.ACTION_UPDATE_RAM);
         intent.putExtra(RamProgressIcon.EXTRA_INFO, memoryInfo);
         sendBroadcast(intent);
-    }
-
-
-    private void updateCpuInfo(float percentage) {
-
-    }
-
-    void setIntervals(int intervalRead, int intervalUpdate, int intervalWidth) {
-        this.intervalRead = intervalRead;
-        this.intervalUpdate = intervalUpdate;
-        this.intervalWidth = intervalWidth;
-    }
-
-    int getIntervalRead() {
-        return intervalRead;
-    }
-
-    int getIntervalUpdate() {
-        return intervalUpdate;
-    }
-
-    int getIntervalWidth() {
-        return intervalWidth;
-    }
-
-    List<Integer> getMemoryActivityManager() {
-        return memoryActivityManager;
     }
 
 
@@ -272,4 +216,5 @@ public class ReaderService extends Service {
             return ReaderService.this;
         }
     }
+
 }

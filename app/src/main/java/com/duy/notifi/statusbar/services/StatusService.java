@@ -32,12 +32,14 @@ import com.duy.notifi.statusbar.activities.MainActivity;
 import com.duy.notifi.statusbar.data.AppData;
 import com.duy.notifi.statusbar.data.icon.BatteryProgressIcon;
 import com.duy.notifi.statusbar.data.icon.CpuProgressIcon;
+import com.duy.notifi.statusbar.data.icon.CpuTempProgressIcon;
 import com.duy.notifi.statusbar.data.icon.ExternalStorageProgressIcon;
 import com.duy.notifi.statusbar.data.icon.InternalStorageProgressIcon;
 import com.duy.notifi.statusbar.data.icon.NetworkProgressIcon;
 import com.duy.notifi.statusbar.data.icon.ProgressIcon;
 import com.duy.notifi.statusbar.data.icon.RamProgressIcon;
 import com.duy.notifi.statusbar.data.icon.TrafficDownProgressIcon;
+import com.duy.notifi.statusbar.data.icon.TrafficUpDownProgressIcon;
 import com.duy.notifi.statusbar.data.icon.TrafficUpProgressIcon;
 import com.duy.notifi.statusbar.data.icon.WifiProgressIcon;
 import com.duy.notifi.statusbar.receivers.ActivityVisibilitySettingReceiver;
@@ -97,7 +99,7 @@ public class StatusService extends Service {
                     iconData = new CpuProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
                 case ProgressType.CPU_TEMP:
-                    iconData = new CpuProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    iconData = new CpuTempProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
                 case ProgressType.RAM:
                     iconData = new RamProgressIcon(context, statusView, PROGRESS_IDS[index]);
@@ -113,6 +115,9 @@ public class StatusService extends Service {
                     break;
                 case ProgressType.TRAFFIC_DOWN:
                     iconData = new TrafficDownProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    break;
+                case ProgressType.TRAFFIC_UP_DOWN:
+                    iconData = new TrafficUpDownProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
                 case ProgressType.TRAFFIC_UP:
                     iconData = new TrafficUpProgressIcon(context, statusView, PROGRESS_IDS[index]);
