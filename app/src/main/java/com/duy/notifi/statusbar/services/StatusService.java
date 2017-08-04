@@ -37,7 +37,7 @@ import com.duy.notifi.statusbar.data.icon.InternalStorageProgressIcon;
 import com.duy.notifi.statusbar.data.icon.NetworkProgressIcon;
 import com.duy.notifi.statusbar.data.icon.ProgressIcon;
 import com.duy.notifi.statusbar.data.icon.RamProgressIcon;
-import com.duy.notifi.statusbar.data.icon.TrafficUpDownProgressIcon;
+import com.duy.notifi.statusbar.data.icon.TrafficDownProgressIcon;
 import com.duy.notifi.statusbar.data.icon.TrafficUpProgressIcon;
 import com.duy.notifi.statusbar.data.icon.WifiProgressIcon;
 import com.duy.notifi.statusbar.receivers.ActivityVisibilitySettingReceiver;
@@ -112,7 +112,7 @@ public class StatusService extends Service {
                     iconData = new ExternalStorageProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
                 case ProgressType.TRAFFIC_DOWN:
-                    iconData = new TrafficUpDownProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    iconData = new TrafficDownProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
                 case ProgressType.TRAFFIC_UP:
                     iconData = new TrafficUpProgressIcon(context, statusView, PROGRESS_IDS[index]);
@@ -120,7 +120,7 @@ public class StatusService extends Service {
                 case ProgressType.WIFI:
                     iconData = new WifiProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
-                case ProgressType.NETWORK_SIGN:
+                case ProgressType.NETWORK_SIGN_LENGTH:
                     iconData = new NetworkProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
 

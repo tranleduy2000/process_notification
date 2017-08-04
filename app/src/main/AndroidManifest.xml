@@ -46,6 +46,9 @@
                 <action android:name="com.duy.notifi.ACTION_UPDATE_BATTERY" />
                 <action android:name="com.duy.notifi.ACTION_UPDATE_INTERNAL_STORAGE" />
                 <action android:name="com.duy.notifi.ACTION_UPDATE_EXTERNAL_STORAGE" />
+                <action android:name="com.duy.notifi.ACTION_UPDATE_TRAFFIC_DOWN" />
+                <action android:name="com.duy.notifi.ACTION_UPDATE_TRAFFIC_UP" />
+                <action android:name="com.duy.notifi.ACTION_UPDATE_TRAFFIC_UP_DOWN" />
             </intent-filter>
         </service>
         <service android:name="com.duy.notifi.statusbar.services.ReaderService" />

@@ -25,15 +25,16 @@ import com.duy.notifi.statusbar.data.icon.CpuProgressIcon;
 import com.duy.notifi.statusbar.data.icon.ExternalStorageProgressIcon;
 import com.duy.notifi.statusbar.data.icon.InternalStorageProgressIcon;
 import com.duy.notifi.statusbar.data.icon.RamProgressIcon;
+import com.duy.notifi.statusbar.data.icon.TrafficDownProgressIcon;
+import com.duy.notifi.statusbar.data.icon.TrafficUpProgressIcon;
 import com.duy.notifi.statusbar.data.monitor.CpuUtil;
+import com.duy.notifi.statusbar.data.monitor.TrafficManager;
 import com.duy.notifi.statusbar.utils.StorageUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static com.duy.notifi.statusbar.services.Constants.percent;
 
 public class ReaderService extends Service {
 
@@ -50,6 +51,7 @@ public class ReaderService extends Service {
     private AtomicBoolean canRead = new AtomicBoolean(false);
     private long totalBefore, workBefore;
     private Runnable readRunnable;
+    private TrafficManager mTrafficManager;
 
     public ReaderService() {
         readRunnable = new Runnable() {
@@ -72,6 +74,7 @@ public class ReaderService extends Service {
     @Override
     public void onCreate() {
         Log.d(TAG, "onCreate() called");
+        mTrafficManager = new TrafficManager();
 
         int maxSamples = 2000;
         memoryActivityManager = new ArrayList<>(maxSamples);
@@ -136,11 +139,20 @@ public class ReaderService extends Service {
         }
     }
 
-
     private void readNetUpDown() {
-//        TrafficUtils.getTrafficDownload()
-        Intent intent = new Intent(ExternalStorageProgressIcon.ACTION_UPDATE_EXTERNAL_STORAGE);
+        //if (mStartRX == TrafficStats.UNSUPPORTED || mStartTX == TrafficStats.UNSUPPORTED) {
+        float trafficDown = mTrafficManager.getTrafficDown();
+        float max = 4 * 1024 * 1024; // 4MB
+        int percent = (int) (trafficDown / max * 100f);
+        Intent intent = new Intent(TrafficDownProgressIcon.ACTION_UPDATE_TRAFFIC_DOWN);
         intent.putExtra(ExternalStorageProgressIcon.EXTRA_PERCENT, percent);
+        this.sendBroadcast(intent);
+
+        float trafficUp = mTrafficManager.getTrafficUpLoad();
+        max = 4 * 1024 * 1024; // 4MB
+        percent = (int) (trafficUp / max * 100f);
+        intent = new Intent(TrafficUpProgressIcon.ACTION_UPDATE_TRAFFIC_UP);
+        intent.putExtra(TrafficUpProgressIcon.EXTRA_PERCENT, percent);
         this.sendBroadcast(intent);
     }
 

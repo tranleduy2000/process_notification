@@ -646,6 +646,6 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
         public static final int TRAFFIC_UP = 6;
         public static final int TRAFFIC_DOWN = 7;
         public static final int WIFI = 8;
-        public static final int NETWORK_SIGN = 9;
+        public static final int NETWORK_SIGN_LENGTH = 9;
     }
 }
