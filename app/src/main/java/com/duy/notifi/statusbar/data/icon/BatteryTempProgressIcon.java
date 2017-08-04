@@ -27,6 +27,14 @@ public class BatteryTempProgressIcon extends ProgressIcon<BatteryTempProgressIco
     @Override
     public void register() {
         super.register();
+
+        //init first value
+        IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = getContext().registerReceiver(null, iFilter);
+        if (batteryStatus != null) {
+            int temp = batteryStatus.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1) / 10;
+            onProcessUpdate(temp, 100);
+        }
     }
 
     @Override
@@ -53,10 +61,8 @@ public class BatteryTempProgressIcon extends ProgressIcon<BatteryTempProgressIco
         @Override
         public void onReceive(BatteryTempProgressIcon icon, Intent intent) {
             if (intent != null) {
-                int percent = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1);
-                if (percent != -1) {
-                    icon.onProcessUpdate(percent, 100);
-                }
+                int temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1)/10;
+                icon.onProcessUpdate(temp, 100);
             }
         }
     }

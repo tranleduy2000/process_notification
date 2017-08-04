@@ -33,6 +33,17 @@ public class BatteryLevelProgressIcon extends ProgressIcon<BatteryLevelProgressI
     @Override
     public void register() {
         super.register();
+        //init first value
+        IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = getContext().registerReceiver(null, iFilter);
+
+        int level = batteryStatus != null ? batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) : -1;
+        int scale = batteryStatus != null ? batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1) : -1;
+
+        float batteryPct = level / (float) scale;
+
+        int percent = (int) (batteryPct * 100);
+        onProcessUpdate(percent, 100);
     }
 
     @Override
@@ -60,10 +71,12 @@ public class BatteryLevelProgressIcon extends ProgressIcon<BatteryLevelProgressI
         @Override
         public void onReceive(BatteryLevelProgressIcon icon, Intent intent) {
             if (intent != null) {
-                int percent = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-                if (percent != -1) {
-                    icon.onProcessUpdate(percent, 100);
-                }
+                int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+                int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+                float batteryPct = level / (float) scale;
+
+                int percent = (int) (batteryPct * 100);
+                icon.onProcessUpdate(percent, 100);
             }
         }
     }

@@ -22,6 +22,7 @@ import android.util.Log;
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.data.icon.BatteryLevelProgressIcon;
 import com.duy.notifi.statusbar.data.icon.CpuProgressIcon;
+import com.duy.notifi.statusbar.data.icon.CpuTempProgressIcon;
 import com.duy.notifi.statusbar.data.icon.ExternalStorageProgressIcon;
 import com.duy.notifi.statusbar.data.icon.InternalStorageProgressIcon;
 import com.duy.notifi.statusbar.data.icon.RamProgressIcon;
@@ -31,6 +32,7 @@ import com.duy.notifi.statusbar.data.icon.TrafficUpProgressIcon;
 import com.duy.notifi.statusbar.data.monitor.CpuUtil;
 import com.duy.notifi.statusbar.data.monitor.StorageUtil;
 import com.duy.notifi.statusbar.data.monitor.TrafficManager;
+import com.duy.notifi.statusbar.utils.FileUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -121,12 +123,30 @@ public class ReaderService extends Service {
         try {
             readRamUsage();
             readCpuUsage();
+            readCpuTemp();
 //            readBattery();
             readInternalState();
             readExternalState();
             readNetUpDown();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void readCpuTemp() {
+        String defPath = "/sys/class/thermal/thermal_zone0/temp";
+        try {
+            String s = FileUtil.readFile(defPath);
+            double currentTemp = Double.parseDouble(s);
+            // Calculation
+            double divisor = 1000.0d;
+            currentTemp /= divisor;
+            int percent = (int) (currentTemp / 100.0f);
+            Intent intent = new Intent(CpuTempProgressIcon.ACTION_UPDATE_CPU_TEMP);
+            intent.putExtra(CpuTempProgressIcon.EXTRA_PERCENT, percent);
+            this.sendBroadcast(intent);
+        } catch (Exception e) {
+
         }
     }
 
@@ -151,8 +171,6 @@ public class ReaderService extends Service {
         intent = new Intent(TrafficUpDownProgressIcon.ACTION_UPDATE_TRAFFIC_UP_DOWN);
         intent.putExtra(TrafficUpDownProgressIcon.EXTRA_PERCENT, percent);
         this.sendBroadcast(intent);
-
-
     }
 
     private void readExternalState() {
