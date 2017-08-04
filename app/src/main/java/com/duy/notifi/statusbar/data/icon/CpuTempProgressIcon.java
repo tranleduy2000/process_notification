@@ -1,11 +1,8 @@
 package com.duy.notifi.statusbar.data.icon;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.view.View;
 
 import com.duy.notifi.statusbar.receivers.IconUpdateReceiver;
@@ -14,44 +11,37 @@ import com.duy.notifi.statusbar.views.StatusView;
 /**
  * Created by Duy on 31-Jul-17.
  */
-public class CpuTempProgressIcon extends ProgressIcon
-        implements SensorEventListener {
+public class CpuTempProgressIcon extends ProgressIcon<CpuTempProgressIcon.CpuTempReceiver> {
 
     public static final String ACTION_UPDATE_CPU_TEMP = "com.duy.notifi.ACTION_UPDATE_CPU_TEMP";
     public static final String EXTRA_MAX_VALUE = "max_value";
     public static final String EXTRA_USED_VALUE = "used_value";
     public static final String EXTRA_PERCENT = "percent";
-    private static final String TAG = "BatteryProgressIcon";
+    private static final String TAG = "CpuTempProgressIcon";
 
 
     public CpuTempProgressIcon(Context context, StatusView statusView, int progressId) {
-        super(context, statusView, progressId);
+        super(context,statusView, progressId);
     }
 
     @Override
-    public IconUpdateReceiver getReceiver() {
-        return null;
+    public CpuTempReceiver getReceiver() {
+        return new CpuTempReceiver(this);
     }
 
     @Override
     public void register() {
-        SensorManager sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
-        Sensor tempSensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
-        if (tempSensor != null) {
-            sensorManager.registerListener(this, tempSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
+        super.register();
     }
 
     @Override
     public void unregister() {
-        SensorManager sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
-        sensorManager.unregisterListener(this);
+        super.unregister();
     }
-
 
     @Override
     public View initView() {
-        return super.initView();
+      return super.initView();
     }
 
     @Override
@@ -59,16 +49,23 @@ public class CpuTempProgressIcon extends ProgressIcon
         return new IntentFilter(ACTION_UPDATE_CPU_TEMP);
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        float[] values = event.values;
-        if (values != null) {
-            onProcessUpdate((int) values[0], 100);
+    public static class CpuTempReceiver extends IconUpdateReceiver<CpuTempProgressIcon> {
+
+        public CpuTempReceiver(CpuTempProgressIcon iconData) {
+            super(iconData);
+        }
+
+        @Override
+        public void onReceive(CpuTempProgressIcon icon, Intent intent) {
+            if (intent != null) {
+                if (intent.getAction().equals(ACTION_UPDATE_CPU_TEMP)) {
+                    int percent = intent.getIntExtra(EXTRA_PERCENT, -1);
+                    if (percent != -1) {
+                        icon.onProcessUpdate(percent, 100);
+                    }
+                }
+            }
         }
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
 }

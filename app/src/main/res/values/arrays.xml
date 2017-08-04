@@ -2,9 +2,10 @@
 <resources>
     <array name="filter_types">
         <item>CPU clock</item> <!--0-->
-        <item>CPU temp</item> <!--1-->
+        <item>CPU temperature</item> <!--1-->
         <item>RAM</item> <!--2-->
-        <item>Battery</item><!--3-->
+        <item>Battery level</item><!--3-->
+        <item>Battery temperature</item><!--3-->
         <item>Internal memory</item><!--4-->
         <item>External memory</item><!--5-->
         <item>Internet upload</item><!--6-->

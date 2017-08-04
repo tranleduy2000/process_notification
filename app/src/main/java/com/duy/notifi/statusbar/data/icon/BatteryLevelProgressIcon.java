@@ -3,6 +3,7 @@ package com.duy.notifi.statusbar.data.icon;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.BatteryManager;
 import android.view.View;
 
 import com.duy.notifi.statusbar.receivers.IconUpdateReceiver;
@@ -11,7 +12,7 @@ import com.duy.notifi.statusbar.views.StatusView;
 /**
  * Created by Duy on 31-Jul-17.
  */
-public class BatteryProgressIcon extends ProgressIcon<BatteryProgressIcon.BatteryReceiver> {
+public class BatteryLevelProgressIcon extends ProgressIcon<BatteryLevelProgressIcon.BatteryReceiver> {
 
     public static final String ACTION_UPDATE_BATTERY = "com.duy.notifi.ACTION_UPDATE_BATTERY";
     public static final String EXTRA_MAX_VALUE = "max_value";
@@ -20,9 +21,8 @@ public class BatteryProgressIcon extends ProgressIcon<BatteryProgressIcon.Batter
     private static final String TAG = "BatteryProgressIcon";
 
 
-
-    public BatteryProgressIcon(Context context, StatusView statusView, int progressId) {
-        super(context,statusView, progressId);
+    public BatteryLevelProgressIcon(Context context, StatusView statusView, int progressId) {
+        super(context, statusView, progressId);
     }
 
     @Override
@@ -41,34 +41,30 @@ public class BatteryProgressIcon extends ProgressIcon<BatteryProgressIcon.Batter
     }
 
 
-
     @Override
     public View initView() {
-      return super.initView();
+        return super.initView();
     }
 
     @Override
     public IntentFilter getIntentFilter() {
-        return new IntentFilter(ACTION_UPDATE_BATTERY);
+        return new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
     }
 
-    public static class BatteryReceiver extends IconUpdateReceiver<BatteryProgressIcon> {
+    public static class BatteryReceiver extends IconUpdateReceiver<BatteryLevelProgressIcon> {
 
-        public BatteryReceiver(BatteryProgressIcon iconData) {
+        public BatteryReceiver(BatteryLevelProgressIcon iconData) {
             super(iconData);
         }
 
         @Override
-        public void onReceive(BatteryProgressIcon icon, Intent intent) {
+        public void onReceive(BatteryLevelProgressIcon icon, Intent intent) {
             if (intent != null) {
-                if (intent.getAction().equals(ACTION_UPDATE_BATTERY)) {
-                    int percent = intent.getIntExtra(EXTRA_PERCENT, -1);
-                    if (percent != -1) {
-                        icon.onProcessUpdate(percent, 100);
-                    }
+                int percent = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+                if (percent != -1) {
+                    icon.onProcessUpdate(percent, 100);
                 }
             }
         }
     }
-
 }

@@ -30,7 +30,8 @@ import com.duy.notifi.R;
 import com.duy.notifi.statusbar.activities.AppSettingActivity;
 import com.duy.notifi.statusbar.activities.MainActivity;
 import com.duy.notifi.statusbar.data.AppData;
-import com.duy.notifi.statusbar.data.icon.BatteryProgressIcon;
+import com.duy.notifi.statusbar.data.icon.BatteryLevelProgressIcon;
+import com.duy.notifi.statusbar.data.icon.BatteryTempProgressIcon;
 import com.duy.notifi.statusbar.data.icon.CpuProgressIcon;
 import com.duy.notifi.statusbar.data.icon.CpuTempProgressIcon;
 import com.duy.notifi.statusbar.data.icon.ExternalStorageProgressIcon;
@@ -104,8 +105,11 @@ public class StatusService extends Service {
                 case ProgressType.RAM:
                     iconData = new RamProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
-                case ProgressType.BATTERY:
-                    iconData = new BatteryProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                case ProgressType.BATTERY_LEVEL:
+                    iconData = new BatteryLevelProgressIcon(context, statusView, PROGRESS_IDS[index]);
+                    break;
+                case ProgressType.BATTERY_TEMP:
+                    iconData = new BatteryTempProgressIcon(context, statusView, PROGRESS_IDS[index]);
                     break;
                 case ProgressType.INTERNAL_MEMORY:
                     iconData = new InternalStorageProgressIcon(context, statusView, PROGRESS_IDS[index]);

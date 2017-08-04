@@ -60,7 +60,7 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
             ProgressType.CPU_TEMP,
             ProgressType.CPU_CLOCK,
             ProgressType.RAM,
-            ProgressType.BATTERY};
+            ProgressType.BATTERY_LEVEL};
 
     public static final boolean[] DEF_ENABLE = {false, true, true, true};
 
@@ -640,13 +640,14 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
         public static final int CPU_CLOCK = 0;
         public static final int CPU_TEMP = 1;
         public static final int RAM = 2;
-        public static final int BATTERY = 3;
-        public static final int INTERNAL_MEMORY = 4;
-        public static final int EXTERNAL_MEMORY = 5;
-        public static final int TRAFFIC_UP = 6;
-        public static final int TRAFFIC_DOWN = 7;
-        public static final int TRAFFIC_UP_DOWN = 8;
-        public static final int WIFI = 9;
-        public static final int NETWORK_SIGN_LENGTH = 10;
+        public static final int BATTERY_LEVEL = 3;
+        public static final int BATTERY_TEMP = 4;
+        public static final int INTERNAL_MEMORY = 5;
+        public static final int EXTERNAL_MEMORY = 6;
+        public static final int TRAFFIC_UP = 7;
+        public static final int TRAFFIC_DOWN = 8;
+        public static final int TRAFFIC_UP_DOWN = 9;
+        public static final int WIFI = 10;
+        public static final int NETWORK_SIGN_LENGTH = 11;
     }
 }

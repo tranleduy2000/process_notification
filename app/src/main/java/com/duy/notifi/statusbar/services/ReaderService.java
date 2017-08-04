@@ -14,14 +14,13 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.hardware.Sensor;
 import android.os.BatteryManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
 import com.duy.notifi.R;
-import com.duy.notifi.statusbar.data.icon.BatteryProgressIcon;
+import com.duy.notifi.statusbar.data.icon.BatteryLevelProgressIcon;
 import com.duy.notifi.statusbar.data.icon.CpuProgressIcon;
 import com.duy.notifi.statusbar.data.icon.ExternalStorageProgressIcon;
 import com.duy.notifi.statusbar.data.icon.InternalStorageProgressIcon;
@@ -122,7 +121,7 @@ public class ReaderService extends Service {
         try {
             readRamUsage();
             readCpuUsage();
-            readBattery();
+//            readBattery();
             readInternalState();
             readExternalState();
             readNetUpDown();
@@ -184,8 +183,8 @@ public class ReaderService extends Service {
         float batteryPct = level / (float) scale;
 
         int percent = (int) (batteryPct * 100);
-        Intent intent = new Intent(BatteryProgressIcon.ACTION_UPDATE_BATTERY);
-        intent.putExtra(BatteryProgressIcon.EXTRA_PERCENT, percent);
+        Intent intent = new Intent(BatteryLevelProgressIcon.ACTION_UPDATE_BATTERY);
+        intent.putExtra(BatteryLevelProgressIcon.EXTRA_PERCENT, percent);
         this.sendBroadcast(intent);
     }
 
