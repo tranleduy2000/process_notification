@@ -24,7 +24,7 @@ public class PreferenceUtils {
     public static final String MAX_BATTERY_TEMP = "MAX_BATTERY_TEMP";
     public static final String MAX_UPLOAD_SPEED = "MAX_UPLOAD_SPEED";
     public static final String MAX_DOWN_SPEED = "MAX_DOWN_SPEED";
-    public static final String CPU_TEMP_PATH = "MAX_BATTERY_TEMP";
+    public static final String CPU_TEMP_PATH = "CPU_TEMP_PATH";
 
     private static final int DEF_MAX_CPU_TEMP = 70; //C
     private static final int DEF_MAX_BATTERY_TEMP = 60; //C
@@ -321,6 +321,8 @@ public class PreferenceUtils {
     private static SharedPreferences.Editor edit(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).edit();
     }
+
+
 
 
     public enum PreferenceIdentifier {

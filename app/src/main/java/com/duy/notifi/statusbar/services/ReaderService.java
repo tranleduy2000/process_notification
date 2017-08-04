@@ -12,15 +12,12 @@ package com.duy.notifi.statusbar.services;
 import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.BatteryManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
 import com.duy.notifi.R;
-import com.duy.notifi.statusbar.data.icon.BatteryLevelProgressIcon;
 import com.duy.notifi.statusbar.data.icon.CpuProgressIcon;
 import com.duy.notifi.statusbar.data.icon.CpuTempProgressIcon;
 import com.duy.notifi.statusbar.data.icon.ExternalStorageProgressIcon;
@@ -124,7 +121,6 @@ public class ReaderService extends Service {
             readRamUsage();
             readCpuUsage();
             readCpuTemp();
-//            readBattery();
             readInternalState();
             readExternalState();
             readNetUpDown();
@@ -187,20 +183,6 @@ public class ReaderService extends Service {
         this.sendBroadcast(intent);
     }
 
-    private void readBattery() {
-        IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent batteryStatus = registerReceiver(null, iFilter);
-
-        int level = batteryStatus != null ? batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) : -1;
-        int scale = batteryStatus != null ? batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1) : -1;
-
-        float batteryPct = level / (float) scale;
-
-        int percent = (int) (batteryPct * 100);
-        Intent intent = new Intent(BatteryLevelProgressIcon.ACTION_UPDATE_BATTERY);
-        intent.putExtra(BatteryLevelProgressIcon.EXTRA_PERCENT, percent);
-        this.sendBroadcast(intent);
-    }
 
     private void readCpuUsage() throws IOException {
         try {

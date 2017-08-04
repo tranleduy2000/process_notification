@@ -121,6 +121,8 @@
     <string name="setting">Setting</string>
     <string name="default_cpu_temp_path">sys/class/thermal_zone0/cpu</string>
     <string name="default_upload_speed">2048</string>
+    <string name="enter_path">Enter path</string>
+    <string name="enter_value">Enter value</string>
 
     <string-array name="libraries">
         <item>

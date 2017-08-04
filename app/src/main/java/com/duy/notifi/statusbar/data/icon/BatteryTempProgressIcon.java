@@ -7,6 +7,7 @@ import android.os.BatteryManager;
 import android.view.View;
 
 import com.duy.notifi.statusbar.receivers.IconUpdateReceiver;
+import com.duy.notifi.statusbar.utils.PreferenceUtils;
 import com.duy.notifi.statusbar.views.StatusView;
 
 /**
@@ -61,8 +62,8 @@ public class BatteryTempProgressIcon extends ProgressIcon<BatteryTempProgressIco
         @Override
         public void onReceive(BatteryTempProgressIcon icon, Intent intent) {
             if (intent != null) {
-                int temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1)/10;
-                icon.onProcessUpdate(temp, 100);
+                int temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1) / 10;
+                icon.onProcessUpdate(temp, PreferenceUtils.getMaxBatteryTemp(icon.getContext()));
             }
         }
     }
