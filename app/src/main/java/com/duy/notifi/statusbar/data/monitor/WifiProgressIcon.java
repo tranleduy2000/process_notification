@@ -38,7 +38,7 @@ public class WifiProgressIcon extends ProgressIcon<WifiProgressIcon.WifiReceiver
 
         int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 5);
         if (level > 0) {
-            onProcessUpdate(level, 4);
+            onProcessUpdate(level, 5);
         }
     }
 
@@ -53,7 +53,6 @@ public class WifiProgressIcon extends ProgressIcon<WifiProgressIcon.WifiReceiver
     }
 
 
-
     static class WifiReceiver extends IconUpdateReceiver<WifiProgressIcon> {
 
         private WifiReceiver(WifiProgressIcon iconData) {
@@ -66,9 +65,10 @@ public class WifiProgressIcon extends ProgressIcon<WifiProgressIcon.WifiReceiver
             if (networkInfo == null) networkInfo = icon.connectivityManager.getActiveNetworkInfo();
 
             if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI && networkInfo.isConnected()) {
-                icon.onDrawableUpdate(WifiManager.calculateSignalLevel(icon.wifiManager.getConnectionInfo().getRssi(), 5));
+                int i = WifiManager.calculateSignalLevel(icon.wifiManager.getConnectionInfo().getRssi(), 5);
+                icon.onProcessUpdate(i, 5);
             } else {
-                icon.onDrawableUpdate(-1);
+                icon.onProcessUpdate(0, 5);
             }
         }
     }
