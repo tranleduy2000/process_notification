@@ -13,8 +13,7 @@ import com.duy.notifi.R;
 import com.duy.notifi.statusbar.adapters.SimplePagerAdapter;
 import com.duy.notifi.statusbar.fragments.ProgressTypeFragment;
 import com.duy.notifi.statusbar.fragments.SettingFragment;
-import com.duy.notifi.statusbar.services.ReaderService;
-import com.duy.notifi.statusbar.services.StatusService;
+import com.duy.notifi.statusbar.services.ProgressStatusService;
 import com.duy.notifi.statusbar.utils.PreferenceUtils;
 import com.duy.notifi.statusbar.utils.StaticUtils;
 
@@ -58,22 +57,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 if (b) {
                     PreferenceUtils.putPreference(MainActivity.this,
                             PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, true);
-                    Intent intent = new Intent(StatusService.ACTION_START);
-                    intent.setClass(MainActivity.this, StatusService.class);
-                    startService(intent);
-
-                    intent = new Intent(ReaderService.ACTION_START);
-                    intent.setClass(MainActivity.this, ReaderService.class);
+                    Intent intent = new Intent(ProgressStatusService.ACTION_START);
+                    intent.setClass(MainActivity.this, ProgressStatusService.class);
                     startService(intent);
                 } else {
                     PreferenceUtils.putPreference(MainActivity.this,
                             PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, false);
-                    Intent intent = new Intent(StatusService.ACTION_STOP);
-                    intent.setClass(MainActivity.this, StatusService.class);
-                    stopService(intent);
-
-                    intent = new Intent(ReaderService.ACTION_STOP);
-                    intent.setClass(MainActivity.this, ReaderService.class);
+                    Intent intent = new Intent(ProgressStatusService.ACTION_STOP);
+                    intent.setClass(MainActivity.this, ProgressStatusService.class);
                     stopService(intent);
                 }
             }

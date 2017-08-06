@@ -23,9 +23,7 @@ import android.util.Log;
 import com.duy.notifi.statusbar.StatusApplication;
 import com.duy.notifi.statusbar.activities.StartActivity;
 import com.duy.notifi.statusbar.services.AccessibilityService;
-import com.duy.notifi.statusbar.services.StatusService;
-
-import com.duy.notifi.statusbar.services.ReaderService;
+import com.duy.notifi.statusbar.services.ProgressStatusService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,35 +148,23 @@ public class StaticUtils {
             int i = 0;
             ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-                if (StatusService.class.getName().equals(service.service.getClassName())) {
-                    i++;
-                } else if (ReaderService.class.getName().equals(service.service.getClassName())) {
-                    i++;
+                if (ProgressStatusService.class.getName().equals(service.service.getClassName())) {
+                    return true;
                 }
             }
-            if (i >= 2) {
-                return true;
-            }
 
-            Intent intent = new Intent(StatusService.ACTION_START);
-            intent.setClass(context, StatusService.class);
+            Intent intent = new Intent(ProgressStatusService.ACTION_START);
+            intent.setClass(context, ProgressStatusService.class);
             context.startService(intent);
 
-            intent = new Intent(ReaderService.ACTION_START);
-            intent.setClass(context, ReaderService.class);
-            context.startService(intent);
             return true;
         } else return false;
     }
 
     public static void updateStatusService(Context context) {
         if (isStatusServiceRunning(context)) {
-            Intent intent = new Intent(StatusService.ACTION_START);
-            intent.setClass(context, StatusService.class);
-            context.startService(intent);
-
-            intent = new Intent(ReaderService.ACTION_START);
-            intent.setClass(context, ReaderService.class);
+            Intent intent = new Intent(ProgressStatusService.ACTION_START);
+            intent.setClass(context, ProgressStatusService.class);
             context.startService(intent);
         }
 

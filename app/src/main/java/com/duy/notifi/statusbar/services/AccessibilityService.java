@@ -51,9 +51,9 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
             if (action != null) {
                 switch (action) {
                     case ACTION_GET_COLOR:
-                        Intent i = new Intent(StatusService.ACTION_UPDATE);
-                        i.setClass(this, StatusService.class);
-                        i.putExtra(StatusService.EXTRA_COLOR, color);
+                        Intent i = new Intent(ProgressStatusService.ACTION_UPDATE);
+                        i.setClass(this, ProgressStatusService.class);
+                        i.putExtra(ProgressStatusService.EXTRA_COLOR, color);
                         startService(i);
                         break;
                 }
@@ -178,24 +178,24 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     }
 
     private void setStatusBar(@Nullable @ColorInt Integer color, @Nullable Boolean isTransparent, @Nullable Boolean isFullscreen, @Nullable Boolean isSystemFullscreen, @Nullable String packageName, @Nullable AppData.ActivityData activityData) {
-        Intent intent = new Intent(StatusService.ACTION_UPDATE);
-        intent.setClass(this, StatusService.class);
+        Intent intent = new Intent(ProgressStatusService.ACTION_UPDATE);
+        intent.setClass(this, ProgressStatusService.class);
 
-        if (color != null) intent.putExtra(StatusService.EXTRA_COLOR, color);
+        if (color != null) intent.putExtra(ProgressStatusService.EXTRA_COLOR, color);
 
         if (isTransparent != null)
-            intent.putExtra(StatusService.EXTRA_IS_TRANSPARENT, isTransparent);
+            intent.putExtra(ProgressStatusService.EXTRA_IS_TRANSPARENT, isTransparent);
 
-        if (isFullscreen != null) intent.putExtra(StatusService.EXTRA_IS_FULLSCREEN, isFullscreen);
+        if (isFullscreen != null) intent.putExtra(ProgressStatusService.EXTRA_IS_FULLSCREEN, isFullscreen);
 
         if (isSystemFullscreen != null)
-            intent.putExtra(StatusService.EXTRA_IS_SYSTEM_FULLSCREEN, isSystemFullscreen);
+            intent.putExtra(ProgressStatusService.EXTRA_IS_SYSTEM_FULLSCREEN, isSystemFullscreen);
 
         if (packageName != null)
-            intent.putExtra(StatusService.EXTRA_PACKAGE, packageName);
+            intent.putExtra(ProgressStatusService.EXTRA_PACKAGE, packageName);
 
         if (activityData != null)
-            intent.putExtra(StatusService.EXTRA_ACTIVITY, activityData);
+            intent.putExtra(ProgressStatusService.EXTRA_ACTIVITY, activityData);
 
         startService(intent);
 

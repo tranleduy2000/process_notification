@@ -28,8 +28,7 @@ import com.duy.notifi.R;
 import com.duy.notifi.statusbar.StatusApplication;
 import com.duy.notifi.statusbar.adapters.SimplePagerAdapter;
 import com.duy.notifi.statusbar.fragments.AppPreferenceFragment;
-import com.duy.notifi.statusbar.services.ReaderService;
-import com.duy.notifi.statusbar.services.StatusService;
+import com.duy.notifi.statusbar.services.ProgressStatusService;
 import com.duy.notifi.statusbar.utils.PreferenceUtils;
 import com.duy.notifi.statusbar.utils.StaticUtils;
 
@@ -130,22 +129,15 @@ public class MainActivity2 extends AppCompatActivity implements ViewPager.OnPage
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     PreferenceUtils.putPreference(MainActivity2.this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, true);
-                    Intent intent = new Intent(StatusService.ACTION_START);
-                    intent.setClass(MainActivity2.this, StatusService.class);
+                    Intent intent = new Intent(ProgressStatusService.ACTION_START);
+                    intent.setClass(MainActivity2.this, ProgressStatusService.class);
                     startService(intent);
 
-                    intent = new Intent(ReaderService.ACTION_START);
-                    intent.setClass(MainActivity2.this, ReaderService.class);
-                    startService(intent);
                 } else {
                     PreferenceUtils.putPreference(MainActivity2.this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, false);
-                    Intent intent = new Intent(StatusService.ACTION_STOP);
-                    intent.setClass(MainActivity2.this, StatusService.class);
+                    Intent intent = new Intent(ProgressStatusService.ACTION_STOP);
+                    intent.setClass(MainActivity2.this, ProgressStatusService.class);
                     stopService(intent);
-
-                    intent = new Intent(ReaderService.ACTION_STOP);
-                    intent.setClass(MainActivity2.this, ReaderService.class);
-                    startService(intent);
                 }
             }
         });

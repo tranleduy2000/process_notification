@@ -57,13 +57,13 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
             R.id.spinner_type_4};
 
     public static final int[] DEF_TYPE = {
-            ProgressType.CPU_TEMP,
-            ProgressType.CPU_CLOCK,
             ProgressType.RAM,
-            ProgressType.BATTERY_LEVEL};
+            ProgressType.CPU_CLOCK,
+            ProgressType.BATTERY_LEVEL,
+            ProgressType.TRAFFIC_UP_DOWN};
 
-    public static final boolean[] DEF_ENABLE = {false, true, true, true};
-
+    public static final boolean[] DEF_ENABLE = {true, true, false, false};
+    public static final int COUNT = 4;
     private static final String TAG = "ProgressIcon";
     protected ProgressBar progressBarView;
     protected int progressId;
@@ -169,7 +169,6 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
 
         if (hasDrawableListener()) getDrawableListener().onUpdate(drawable);
     }
-
 
     public boolean isVisible() {
         Boolean isVisible = getBooleanPreference(PreferenceIdentifier.VISIBILITY);

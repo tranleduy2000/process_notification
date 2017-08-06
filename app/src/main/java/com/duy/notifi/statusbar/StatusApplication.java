@@ -4,7 +4,9 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.compat.BuildConfig;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +18,10 @@ public class StatusApplication extends Application {
     private List<OnPreferenceChangedListener> onPreferenceChangedListeners;
 
     public static void showDebug(Context context, String message, int length) {
-//        if (isDebug(context))
-//            Toast.makeText(context, message, length).show();
-//        else
+        if (BuildConfig.DEBUG) {
+            Toast.makeText(context, message, length).show();
             Log.d("Status", message);
+        }
     }
 
     @Override

@@ -28,7 +28,7 @@ public class PreferenceUtils {
 
     private static final int DEF_MAX_CPU_TEMP = 70; //C
     private static final int DEF_MAX_BATTERY_TEMP = 60; //C
-    private static final int DEF_MAX_UP_DOWN = 2048; //KB
+    private static final long DEF_MAX_UP_DOWN = 2 * 1024 * 1024; //2MB/s
     private static final String DEF_CPU_TEMP_PATH = "/sys/class/thermal/thermal_zone0/temp";
     ;
 
@@ -48,20 +48,30 @@ public class PreferenceUtils {
         edit(context).putInt(MAX_BATTERY_TEMP, temp).apply();
     }
 
-    public static int getMaxNetUp(Context context) {
-        return getPref(context).getInt(MAX_UPLOAD_SPEED, DEF_MAX_UP_DOWN);
+    public static long getMaxNetUp(Context context) {
+        return getPref(context).getLong(MAX_UPLOAD_SPEED, DEF_MAX_UP_DOWN);
     }
 
-    public static int getMaxNetDown(Context context) {
-        return getPref(context).getInt(MAX_DOWN_SPEED, DEF_MAX_UP_DOWN);
+    /**
+     *
+     * @param context
+     * @return download speed in byte/s
+     */
+    public static long getMaxNetDown(Context context) {
+        return getPref(context).getLong(MAX_DOWN_SPEED, DEF_MAX_UP_DOWN);
     }
 
-    public static void setMaxUploadSpeed(Context context, int maxUploadSpeed) {
-        edit(context).putInt(MAX_UPLOAD_SPEED, maxUploadSpeed).apply();
+    /**
+     *
+     * @param context
+     * @param maxUploadSpeed - KB/s
+     */
+    public static void setMaxUploadSpeed(Context context, long maxUploadSpeed) {
+        edit(context).putLong(MAX_UPLOAD_SPEED, maxUploadSpeed).apply();
     }
 
-    public static void setMaxDownloadSpeed(Context context, int maxDownSpeed) {
-        edit(context).putInt(MAX_DOWN_SPEED, maxDownSpeed).apply();
+    public static void setMaxDownloadSpeed(Context context, long maxDownSpeed) {
+        edit(context).putLong(MAX_DOWN_SPEED, maxDownSpeed).apply();
     }
 
     public static String getCpuTempPath(Context context) {

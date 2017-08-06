@@ -38,7 +38,7 @@
 
         <receiver android:name="com.duy.notifi.statusbar.receivers.ActivityVisibilitySettingReceiver" />
 
-        <service android:name="com.duy.notifi.statusbar.services.StatusService">
+        <service android:name="com.duy.notifi.statusbar.services.ProgressStatusService">
             <intent-filter>
                 <action android:name="com.duy.notifi.ACTION_UPDATE_RAM" />
                 <action android:name="com.duy.notifi.ACTION_UPDATE_CPU" />
@@ -50,7 +50,6 @@
                 <action android:name="com.duy.notifi.ACTION_UPDATE_TRAFFIC_UP_DOWN" />
             </intent-filter>
         </service>
-        <service android:name="com.duy.notifi.statusbar.services.ReaderService" />
 
         <service
             android:name="com.duy.notifi.statusbar.services.AccessibilityService"
@@ -67,15 +66,15 @@
 
         </service>
 
-        <service
-            android:name="com.duy.notifi.statusbar.services.QuickToggleService"
-            android:icon="@drawable/ic_check_box_enabled"
-            android:label="@string/app_name"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
+        <!--<service-->
+        <!--android:name="com.duy.notifi.statusbar.services.QuickToggleService"-->
+        <!--android:icon="@drawable/ic_check_box_enabled"-->
+        <!--android:label="@string/app_name"-->
+        <!--android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">-->
+        <!--<intent-filter>-->
+        <!--<action android:name="android.service.quicksettings.action.QS_TILE" />-->
+        <!--</intent-filter>-->
+        <!--</service>-->
 
     </application>
 

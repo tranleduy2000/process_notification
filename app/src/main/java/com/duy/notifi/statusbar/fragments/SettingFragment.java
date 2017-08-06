@@ -101,7 +101,7 @@ public class SettingFragment extends SimpleFragment {
             }
         });
         EditText maxUp = view.findViewById(R.id.edit_max_up);
-        maxUp.setText(PreferenceUtils.getMaxNetUp(getContext()) + "");
+        maxUp.setText(PreferenceUtils.getMaxNetUp(getContext()) / 1024 + "");
         maxUp.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -112,12 +112,12 @@ public class SettingFragment extends SimpleFragment {
                         return;
                     }
                     PreferenceUtils.setMaxUploadSpeed(getContext(),
-                            Integer.parseInt(editText.getText().toString()));
+                            Integer.parseInt(editText.getText().toString()) * 1024);
                 }
             }
         });
         EditText maxDown = view.findViewById(R.id.edit_max_down);
-        maxDown.setText(PreferenceUtils.getMaxNetDown(getContext()) + "");
+        maxDown.setText(PreferenceUtils.getMaxNetDown(getContext())/ 1024 + "");
         maxDown.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -128,7 +128,7 @@ public class SettingFragment extends SimpleFragment {
                         return;
                     }
                     PreferenceUtils.setMaxDownloadSpeed(getContext(),
-                            Integer.parseInt(editText.getText().toString()));
+                            Integer.parseInt(editText.getText().toString()) * 1024);
                 }
             }
         });

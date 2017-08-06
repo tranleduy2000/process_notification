@@ -13,7 +13,7 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 
 import com.duy.notifi.R;
-import com.duy.notifi.statusbar.services.StatusService;
+import com.duy.notifi.statusbar.services.ProgressStatusService;
 import com.duy.notifi.statusbar.utils.PreferenceUtils;
 
 import static com.duy.notifi.statusbar.data.icon.ProgressIcon.DEF_ENABLE;
@@ -60,8 +60,8 @@ public class ProgressTypeFragment extends SimpleFragment {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean active) {
                     PreferenceUtils.setProgressActive(getContext(), finalI, active);
-                    Intent intent = new Intent(StatusService.ACTION_START);
-                    intent.setClass(getContext(), StatusService.class);
+                    Intent intent = new Intent(ProgressStatusService.ACTION_START);
+                    intent.setClass(getContext(), ProgressStatusService.class);
                     getActivity().startService(intent);
                 }
             });
@@ -73,8 +73,8 @@ public class ProgressTypeFragment extends SimpleFragment {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int type, long l) {
                     PreferenceUtils.setProgressType(getContext(), finalI, type);
-                    Intent intent = new Intent(StatusService.ACTION_START);
-                    intent.setClass(getContext(), StatusService.class);
+                    Intent intent = new Intent(ProgressStatusService.ACTION_START);
+                    intent.setClass(getContext(), ProgressStatusService.class);
                     getActivity().startService(intent);
                 }
 

@@ -41,16 +41,16 @@ public class QuickToggleService extends TileService {
             if (StaticUtils.isStatusServiceRunning(this)) {
                 PreferenceUtils.putPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, false);
 
-                Intent intent = new Intent(StatusService.ACTION_STOP);
-                intent.setClass(this, StatusService.class);
+                Intent intent = new Intent(ProgressStatusService.ACTION_STOP);
+                intent.setClass(this, ProgressStatusService.class);
                 stopService(intent);
 
                 tile.setIcon(Icon.createWithResource(this, R.drawable.ic_check_box_disabled));
             } else {
                 PreferenceUtils.putPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, true);
 
-                Intent intent = new Intent(StatusService.ACTION_START);
-                intent.setClass(this, StatusService.class);
+                Intent intent = new Intent(ProgressStatusService.ACTION_START);
+                intent.setClass(this, ProgressStatusService.class);
                 startService(intent);
 
                 tile.setIcon(Icon.createWithResource(this, R.drawable.ic_check_box_enabled));
