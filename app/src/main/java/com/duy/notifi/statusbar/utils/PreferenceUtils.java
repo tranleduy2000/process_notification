@@ -324,7 +324,6 @@ public class PreferenceUtils {
         STATUS_ENABLED,
         STATUS_COLOR_AUTO,
         STATUS_COLOR,
-        STATUS_HOME_TRANSPARENT,
         STATUS_ICON_COLOR,
         STATUS_DARK_ICONS,
         STATUS_TINTED_ICONS,

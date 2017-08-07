@@ -12,15 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProgressApplication extends Application {
-
+    private static final String TAG = "ProgressApplication";
     private List<OnActivityResultListener> onActivityResultListeners;
-    private List<OnColorPickedListener> onColorPickedListeners;
     private List<OnPreferenceChangedListener> onPreferenceChangedListeners;
 
     public static void showDebug(Context context, String message, int length) {
         if (BuildConfig.DEBUG) {
             Toast.makeText(context, message, length).show();
-            Log.d("Status", message);
+            Log.d(TAG, "showDebug message = " + message);
         }
     }
 
@@ -29,7 +28,6 @@ public class ProgressApplication extends Application {
         super.onCreate();
 
         onActivityResultListeners = new ArrayList<>();
-        onColorPickedListeners = new ArrayList<>();
         onPreferenceChangedListeners = new ArrayList<>();
     }
 
@@ -41,17 +39,6 @@ public class ProgressApplication extends Application {
         onActivityResultListeners.remove(listener);
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        for (OnActivityResultListener listener : onActivityResultListeners) {
-            listener.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    public void onColor(@Nullable Integer color) {
-        for (OnColorPickedListener listener : onColorPickedListeners) {
-            listener.onColorPicked(color);
-        }
-    }
 
     public void onPreferenceChanged() {
         for (OnPreferenceChangedListener listener : onPreferenceChangedListeners) {
