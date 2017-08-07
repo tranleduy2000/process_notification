@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.widget.CompoundButton;
 
+import com.duy.notifi.BuildConfig;
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.adapters.SimplePagerAdapter;
 import com.duy.notifi.statusbar.fragments.ProgressTypeFragment;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (!StaticUtils.isAccessibilityServiceRunning(this)
+        if ((!StaticUtils.isAccessibilityServiceRunning(this) && !BuildConfig.DEBUG)
                 || !StaticUtils.isPermissionsGranted(this)
                 || !StaticUtils.isIgnoringOptimizations(this)
                 || !StaticUtils.canDrawOverlays(this)) {
