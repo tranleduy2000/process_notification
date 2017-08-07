@@ -9,7 +9,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -23,10 +22,9 @@ import com.duy.notifi.statusbar.receivers.IconUpdateReceiver;
 import com.duy.notifi.statusbar.utils.ColorUtils;
 import com.duy.notifi.statusbar.utils.StaticUtils;
 import com.duy.notifi.statusbar.views.CustomImageView;
-import com.duy.notifi.statusbar.views.StatusView;
+import com.duy.notifi.statusbar.views.GroupProgressView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public abstract class ProgressIcon<T extends IconUpdateReceiver> {
@@ -62,7 +60,7 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
     protected ProgressBar progressBarView;
     protected int progressId;
     protected Boolean active;
-    private StatusView statusView;
+    private GroupProgressView statusView;
     private Context context;
     private DrawableListener drawableListener;
     private TextListener textListener;
@@ -73,26 +71,13 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
     private int progressColor;
     private boolean isRegister;
 
-    public ProgressIcon(Context context, StatusView statusView, int progressId) {
+    public ProgressIcon(Context context, GroupProgressView statusView, int progressId) {
         this.context = context;
         this.progressColor = ColorUtils.getDefaultColor(context);
         this.statusView = statusView;
         this.progressId = progressId;
 
         String name = getStringPreference(PreferenceIdentifier.ICON_STYLE);
-        List<IconStyleData> styles = getIconStyles();
-        if (styles.size() > 0) {
-            if (name != null) {
-                for (IconStyleData style : styles) {
-                    if (style.name.equals(name)) {
-                        this.style = style;
-                        break;
-                    }
-                }
-            }
-
-            if (style == null) style = styles.get(0);
-        }
     }
 
     public final Context getContext() {
@@ -251,16 +236,6 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
         return position;
     }
 
-    public int getDefaultGravity() {
-        return RIGHT_GRAVITY;
-    }
-
-    public final int getGravity() {
-        Integer gravity = getIntegerPreference(PreferenceIdentifier.GRAVITY);
-        if (gravity == null) gravity = getDefaultGravity();
-        return gravity;
-    }
-
     @Nullable
     public Drawable getDrawable() {
         if (hasDrawable()) return drawable;
@@ -275,11 +250,6 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
 
     public String getTitle() {
         return getClass().getSimpleName();
-    }
-
-    @LayoutRes
-    public int getIconLayout() {
-        return R.layout.item_icon;
     }
 
     public View initView() {
@@ -303,10 +273,6 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
     }
 
 
-    public int getIconStyleSize() {
-        return 0;
-    }
-
     public List<IconStyleData> getIconStyles() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -320,30 +286,6 @@ public abstract class ProgressIcon<T extends IconUpdateReceiver> {
         }
 
         return styles;
-    }
-
-    public final void addIconStyle(IconStyleData style) {
-        if (style.getSize() == getIconStyleSize()) {
-            String[] names = getStringArrayPreference(PreferenceIdentifier.ICON_STYLE_NAMES);
-            List<String> list = new ArrayList<>();
-            if (names != null) list.addAll(Arrays.asList(names));
-
-            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-            style.writeToSharedPreferences(editor, getClass().getName());
-            editor.apply();
-
-            list.add(style.name);
-            putPreference(PreferenceIdentifier.ICON_STYLE_NAMES, list.toArray(new String[list.size()]));
-        }
-    }
-
-    public final void removeIconStyle(IconStyleData style) {
-        String[] names = getStringArrayPreference(PreferenceIdentifier.ICON_STYLE_NAMES);
-        List<String> list = new ArrayList<>();
-        if (names != null) list.addAll(Arrays.asList(names));
-
-        list.remove(style.name);
-        putPreference(PreferenceIdentifier.ICON_STYLE_NAMES, list.toArray(new String[list.size()]));
     }
 
     @Nullable

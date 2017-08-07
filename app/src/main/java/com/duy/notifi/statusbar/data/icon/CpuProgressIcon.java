@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.duy.notifi.statusbar.receivers.IconUpdateReceiver;
-import com.duy.notifi.statusbar.views.StatusView;
+import com.duy.notifi.statusbar.views.GroupProgressView;
 
 /**
  * Created by Duy on 31-Jul-17.
@@ -20,9 +20,9 @@ public class CpuProgressIcon extends ProgressIcon<CpuProgressIcon.CpuReceiver> {
     public static final String EXTRA_CPU_INDEX = "cpu_index";
     private static final String TAG = "CpuIconData";
 
-    private StatusView statusView;
+    private GroupProgressView statusView;
 
-    public CpuProgressIcon(Context context, StatusView statusView, int progressId) {
+    public CpuProgressIcon(Context context, GroupProgressView statusView, int progressId) {
         super(context, statusView, progressId);
         this.statusView = statusView;
     }

@@ -75,7 +75,6 @@ public class ImageUtils {
                 }
             }
         }
-
         return resultBitmap;
     }
 

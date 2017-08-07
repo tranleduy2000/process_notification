@@ -11,7 +11,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatusApplication extends Application {
+public class ProgressApplication extends Application {
 
     private List<OnActivityResultListener> onActivityResultListeners;
     private List<OnColorPickedListener> onColorPickedListeners;

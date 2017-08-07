@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.duy.notifi.statusbar.receivers.IconUpdateReceiver;
 import com.duy.notifi.statusbar.utils.PreferenceUtils;
-import com.duy.notifi.statusbar.views.StatusView;
+import com.duy.notifi.statusbar.views.GroupProgressView;
 
 /**
  * Created by Duy on 31-Jul-17.
@@ -16,7 +16,7 @@ import com.duy.notifi.statusbar.views.StatusView;
 public class BatteryTempProgressIcon extends ProgressIcon<BatteryTempProgressIcon.BatteryReceiver> {
     private static final String TAG = "BatteryTempProgressIcon";
 
-    public BatteryTempProgressIcon(Context context, StatusView statusView, int progressId) {
+    public BatteryTempProgressIcon(Context context, GroupProgressView statusView, int progressId) {
         super(context, statusView, progressId);
     }
 

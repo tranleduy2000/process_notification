@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
@@ -18,12 +19,15 @@ import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
 import com.duy.notifi.R;
-import com.duy.notifi.statusbar.StatusApplication;
+import com.duy.notifi.statusbar.ProgressApplication;
 import com.duy.notifi.statusbar.data.AppData;
 import com.duy.notifi.statusbar.utils.ColorUtils;
-import com.duy.notifi.statusbar.utils.PreferenceUtils;
 
 import java.lang.ref.SoftReference;
+
+import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifier;
+import static com.duy.notifi.statusbar.utils.PreferenceUtils.getBooleanPreference;
+import static com.duy.notifi.statusbar.utils.PreferenceUtils.getIntegerPreference;
 
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
 
@@ -39,8 +43,11 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     private int color = Color.BLACK;
 
     public static boolean shouldHideOnVolume(Context context) {
-        Boolean isVolumeHidden = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_HIDE_ON_VOLUME);
-        return (isVolumeHidden == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) || (isVolumeHidden != null && isVolumeHidden);
+        Boolean isVolumeHidden = getBooleanPreference(context,
+                PreferenceIdentifier.STATUS_HIDE_ON_VOLUME);
+        return (isVolumeHidden == null
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                || (isVolumeHidden != null && isVolumeHidden);
     }
 
     @Override
@@ -79,23 +86,28 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             config.flags = AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;
         }
-
         setServiceInfo(config);
     }
 
     @Override
     public void onAccessibilityEvent(final AccessibilityEvent event) {
-        Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
+        Boolean enabled = getBooleanPreference(this, PreferenceIdentifier.STATUS_ENABLED);
         if (enabled != null && enabled) {
             switch (event.getEventType()) {
                 case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
                     final CharSequence packageName = event.getPackageName();
                     final CharSequence className = event.getClassName();
-                    StatusApplication.showDebug(this, event.toString(), Toast.LENGTH_LONG);
+                    ProgressApplication.showDebug(this, event.toString(), Toast.LENGTH_LONG);
 
-                    if (packageManager != null && packageName != null && packageName.length() > 0 && className != null && className.length() > 0) {
+                    if (packageManager != null
+                            && packageName != null && packageName.length() > 0
+                            && className != null && className.length() > 0) {
+                        ComponentName component = new ComponentName(packageName.toString(),
+                                className.toString());
                         try {
-                            activityData = new AppData.ActivityData(packageManager, packageManager.getActivityInfo(new ComponentName(packageName.toString(), className.toString()), PackageManager.GET_META_DATA));
+                            ActivityInfo activityInfo = packageManager.getActivityInfo(component,
+                                    PackageManager.GET_META_DATA);
+                            activityData = new AppData.ActivityData(packageManager, activityInfo);
                         } catch (PackageManager.NameNotFoundException | NullPointerException e) {
                             if (activityData != null) {
                                 if (packageName.toString().equals("com.android.systemui")) {
@@ -103,28 +115,31 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                                         if (event.getText().toString().toLowerCase().contains("hidden")) {
                                             volumeReceiver.cancel();
                                             setStatusBar(null, false, null, false, null, null);
-                                        } else if (!VolumeReceiver.canReceive())
+                                        } else if (!VolumeReceiver.canReceive()) {
                                             volumeReceiver.onVolumeChanged();
-                                    } else setStatusBar(null, false, null, true, null, null);
-                                } else setStatusBar(null, false, null, false, null, null);
+                                        }
+                                    } else {
+                                        setStatusBar(null, false, null, true, null, null);
+                                    }
+                                } else {
+                                    setStatusBar(null, false, null, false, null, null);
+                                }
                             }
                             return;
                         }
 
                         Boolean isFullscreen = activityData.getBooleanPreference(this, AppData.PreferenceIdentifier.FULLSCREEN);
-                        Boolean isTransparentEnabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_HOME_TRANSPARENT);
                         boolean isHome = false;
 
                         if (packageManager != null) {
                             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
                             homeIntent.addCategory(Intent.CATEGORY_HOME);
                             ResolveInfo homeInfo = packageManager.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
-
                             isHome = homeInfo != null && packageName.toString().matches(homeInfo.activityInfo.packageName);
                         }
 
                         Integer color = activityData.getIntegerPreference(this, AppData.PreferenceIdentifier.COLOR);
-                        if (color != null && (!isHome || (isTransparentEnabled != null && !isTransparentEnabled))) {
+                        if (color != null && (!isHome)) {
                             setStatusBar(color, null, isFullscreen, false, packageName.toString(), activityData);
                             return;
                         } else if (isHome) {
@@ -132,7 +147,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             return;
                         }
 
-                        Boolean isColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
+                        Boolean isColorAuto = getBooleanPreference(this, PreferenceIdentifier.STATUS_COLOR_AUTO);
                         if (isColorAuto != null && !isColorAuto) {
                             setStatusBar(getDefaultColor(), null, isFullscreen, false, packageName.toString(), activityData);
                             return;
@@ -156,7 +171,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         }
 
                         if (color == null) {
-                            color = ColorUtils.getPrimaryColor(AccessibilityService.this, new ComponentName(packageName.toString(), className.toString()));
+                            color = ColorUtils.getPrimaryColor(AccessibilityService.this, component);
 
                             if (color != null) {
                                 activityData.putPreference(this, AppData.PreferenceIdentifier.CACHE_COLOR, color);
@@ -172,7 +187,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     @ColorInt
     private int getDefaultColor() {
-        Integer color = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
+        Integer color = getIntegerPreference(this, PreferenceIdentifier.STATUS_COLOR);
         if (color == null) color = Color.BLACK;
         return color;
     }
@@ -183,10 +198,9 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
         if (color != null) intent.putExtra(ProgressStatusService.EXTRA_COLOR, color);
 
-        if (isTransparent != null)
-            intent.putExtra(ProgressStatusService.EXTRA_IS_TRANSPARENT, isTransparent);
 
-        if (isFullscreen != null) intent.putExtra(ProgressStatusService.EXTRA_IS_FULLSCREEN, isFullscreen);
+        if (isFullscreen != null)
+            intent.putExtra(ProgressStatusService.EXTRA_IS_FULLSCREEN, isFullscreen);
 
         if (isSystemFullscreen != null)
             intent.putExtra(ProgressStatusService.EXTRA_IS_SYSTEM_FULLSCREEN, isSystemFullscreen);
@@ -226,7 +240,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                 public void run() {
                     AccessibilityService service = reference.get();
                     if (service != null) {
-                        StatusApplication.showDebug(service, "Volume callback called", Toast.LENGTH_SHORT);
+                        ProgressApplication.showDebug(service, "Volume callback called", Toast.LENGTH_SHORT);
                         service.setStatusBar(null, false, null, false, null, null);
                     }
                 }
@@ -239,14 +253,14 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            StatusApplication.showDebug(context, intent.getExtras().toString(), Toast.LENGTH_SHORT);
+            ProgressApplication.showDebug(context, intent.getExtras().toString(), Toast.LENGTH_SHORT);
             onVolumeChanged();
         }
 
         private void onVolumeChanged() {
             AccessibilityService service = reference.get();
             if (service != null && shouldHideOnVolume(service)) {
-                StatusApplication.showDebug(service, "Volume callback added", Toast.LENGTH_SHORT);
+                ProgressApplication.showDebug(service, "Volume callback added", Toast.LENGTH_SHORT);
                 service.setStatusBar(null, false, null, true, null, null);
                 handler.removeCallbacks(runnable);
 
@@ -257,7 +271,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         private void cancel() {
             AccessibilityService service = reference.get();
             if (service != null)
-                StatusApplication.showDebug(service, "Volume callback removed", Toast.LENGTH_SHORT);
+                ProgressApplication.showDebug(service, "Volume callback removed", Toast.LENGTH_SHORT);
             handler.removeCallbacks(runnable);
         }
     }

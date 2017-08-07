@@ -29,7 +29,7 @@ public class StartActivity extends AppCompatActivity {
 
     public static final int REQUEST_ACCESSIBILITY = 7369, REQUEST_NOTIFICATION = 2285, REQUEST_PERMISSIONS = 9374, REQUEST_OPTIMIZATION = 6264, REQUEST_OVERLAY = 7451;
 
-    SteppersItem accessibilityStep, notificationStep, permissionsStep, optimizationStep, overlayStep;
+    SteppersItem accessibilityStep, permissionsStep, optimizationStep, overlayStep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +101,6 @@ public class StartActivity extends AppCompatActivity {
         super.onResume();
         if (accessibilityStep != null)
             accessibilityStep.setPositiveButtonEnable(StaticUtils.isAccessibilityGranted(this));
-        if (notificationStep != null)
-            notificationStep.setPositiveButtonEnable(StaticUtils.isNotificationGranted(this));
         if (permissionsStep != null)
             permissionsStep.setPositiveButtonEnable(StaticUtils.isPermissionsGranted(this));
         if (optimizationStep != null)
@@ -113,23 +111,23 @@ public class StartActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this) || !StaticUtils.isPermissionsGranted(this) || !StaticUtils.isIgnoringOptimizations(this) || !StaticUtils.canDrawOverlays(this))
+        if (!StaticUtils.isAccessibilityGranted(this)
+                || !StaticUtils.isPermissionsGranted(this)
+                || !StaticUtils.isIgnoringOptimizations(this)
+                || !StaticUtils.canDrawOverlays(this)) {
             System.exit(0);
-        else super.onBackPressed();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         switch (requestCode) {
             case REQUEST_ACCESSIBILITY:
                 if (accessibilityStep != null)
                     accessibilityStep.setPositiveButtonEnable(StaticUtils.isAccessibilityGranted(this));
-                break;
-            case REQUEST_NOTIFICATION:
-                if (notificationStep != null)
-                    notificationStep.setPositiveButtonEnable(StaticUtils.isNotificationGranted(this));
                 break;
             case REQUEST_OPTIMIZATION:
                 if (optimizationStep != null)
@@ -143,8 +141,9 @@ public class StartActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (permissionsStep != null)
+        if (permissionsStep != null) {
             permissionsStep.setPositiveButtonEnable(StaticUtils.isPermissionsGranted(this));
+        }
     }
 
     public static class AccessibilityStepFragment extends Fragment {

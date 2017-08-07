@@ -31,7 +31,7 @@ import static com.duy.notifi.statusbar.utils.PreferenceUtils.PreferenceIdentifie
 import static com.duy.notifi.statusbar.utils.PreferenceUtils.getBooleanPreference;
 import static com.duy.notifi.statusbar.utils.PreferenceUtils.getIntegerPreference;
 
-public class StatusView extends FrameLayout {
+public class GroupProgressView extends FrameLayout {
 
     private LinearLayout statusView;
     private float x, y;
@@ -103,15 +103,15 @@ public class StatusView extends FrameLayout {
         }
     };
 
-    public StatusView(Context context) {
+    public GroupProgressView(Context context) {
         this(context, null);
     }
 
-    public StatusView(Context context, @Nullable AttributeSet attrs) {
+    public GroupProgressView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public StatusView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public GroupProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         handler = new Handler();
     }

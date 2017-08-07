@@ -5,7 +5,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 
-import com.duy.notifi.statusbar.views.StatusView;
+import com.duy.notifi.statusbar.views.GroupProgressView;
 
 import java.lang.ref.SoftReference;
 
@@ -17,7 +17,7 @@ public class NetworkProgressIcon extends ProgressIcon {
     private NetworkListener networkListener;
     private boolean isRegistered;
 
-    public NetworkProgressIcon(Context context, StatusView statusView, int progressId) {
+    public NetworkProgressIcon(Context context, GroupProgressView statusView, int progressId) {
         super(context, statusView, progressId);
         telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
     }

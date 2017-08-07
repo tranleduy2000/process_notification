@@ -53,8 +53,6 @@ public class PreferenceUtils {
     }
 
     /**
-     *
-     * @param context
      * @return download speed in byte/s
      */
     public static long getMaxNetDown(Context context) {
@@ -62,8 +60,6 @@ public class PreferenceUtils {
     }
 
     /**
-     *
-     * @param context
      * @param maxUploadSpeed - KB/s
      */
     public static void setMaxUploadSpeed(Context context, long maxUploadSpeed) {
@@ -80,17 +76,6 @@ public class PreferenceUtils {
 
     public static void setCpuTempPath(Context context, String path) {
         edit(context).putString(CPU_TEMP_PATH, path).apply();
-    }
-
-    @Nullable
-    public static Object getPreference(Context context, PreferenceIdentifier identifier) {
-        if (context == null || identifier == null) return null;
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.contains(identifier.toString()))
-            return prefs.getAll().get(identifier.toString());
-        else
-            return null;
     }
 
     @Nullable
@@ -337,8 +322,6 @@ public class PreferenceUtils {
 
     public enum PreferenceIdentifier {
         STATUS_ENABLED,
-        STATUS_NOTIFICATIONS_COMPAT,
-        STATUS_NOTIFICATIONS_HEADS_UP,
         STATUS_COLOR_AUTO,
         STATUS_COLOR,
         STATUS_HOME_TRANSPARENT,
@@ -346,19 +329,11 @@ public class PreferenceUtils {
         STATUS_DARK_ICONS,
         STATUS_TINTED_ICONS,
         STATUS_LOCKSCREEN_EXPAND,
-        STATUS_HEADS_UP_DURATION,
         STATUS_BACKGROUND_ANIMATIONS,
         STATUS_ICON_ANIMATIONS,
-        STATUS_HEADS_UP_LAYOUT,
         STATUS_HIDE_ON_VOLUME,
         STATUS_PERSISTENT_NOTIFICATION,
-        STATUS_BURNIN_PROTECTION,
-        STATUS_DEBUG,
-
-        ENABLE_PROCESS_1, TYPE_PROGRESS_1,
-        ENABLE_PROCESS_2, TYPE_PROGRESS_2,
-        ENABLE_PROCESS_3, TYPE_PROGRESS_3,
-        ENABLE_PROCESS_4, TYPE_PROGRESS_4, SHOW_IN_FULL_SCREEN,
+        STATUS_BURNIN_PROTECTION
     }
 
 

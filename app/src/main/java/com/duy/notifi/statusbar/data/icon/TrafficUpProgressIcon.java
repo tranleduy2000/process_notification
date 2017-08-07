@@ -6,7 +6,7 @@ import android.content.IntentFilter;
 import android.view.View;
 
 import com.duy.notifi.statusbar.receivers.IconUpdateReceiver;
-import com.duy.notifi.statusbar.views.StatusView;
+import com.duy.notifi.statusbar.views.GroupProgressView;
 
 /**
  * Created by Duy on 31-Jul-17.
@@ -21,7 +21,7 @@ public class TrafficUpProgressIcon extends ProgressIcon<TrafficUpProgressIcon.Ba
 
 
 
-    public TrafficUpProgressIcon(Context context, StatusView statusView, int progressId) {
+    public TrafficUpProgressIcon(Context context, GroupProgressView statusView, int progressId) {
         super(context,statusView, progressId);
     }
 

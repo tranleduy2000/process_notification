@@ -48,7 +48,7 @@ import com.duy.notifi.statusbar.data.monitor.TrafficManager;
 import com.duy.notifi.statusbar.receivers.ActivityVisibilitySettingReceiver;
 import com.duy.notifi.statusbar.utils.PreferenceUtils;
 import com.duy.notifi.statusbar.utils.StaticUtils;
-import com.duy.notifi.statusbar.views.StatusView;
+import com.duy.notifi.statusbar.views.GroupProgressView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,7 +78,7 @@ public class ProgressStatusService extends Service {
 
     private static final int ID_FOREGROUND = 682;
     private ReaderThread mReadThread;
-    private StatusView statusView;
+    private GroupProgressView statusView;
     private View fullscreenView;
     private KeyguardManager keyguardManager;
     private WindowManager windowManager;
@@ -88,7 +88,7 @@ public class ProgressStatusService extends Service {
     private AppData.ActivityData activityData;
 
 
-    public static List<ProgressIcon> getIcons(Context context, StatusView statusView) {
+    public static List<ProgressIcon> getIcons(Context context, GroupProgressView statusView) {
         List<ProgressIcon> icons = new ArrayList<>();
         for (int index = 0; index < COUNT; index++) {
             ProgressIcon iconData = null;
@@ -193,17 +193,17 @@ public class ProgressStatusService extends Service {
                     statusView.setFullscreen(intent.getBooleanExtra(EXTRA_IS_FULLSCREEN,
                             isFullscreen()));
 
-                    if (intent.hasExtra(EXTRA_PACKAGE) && intent.hasExtra(EXTRA_ACTIVITY)) {
-                        Boolean isForeground = getBooleanPreference(ProgressStatusService.this, STATUS_PERSISTENT_NOTIFICATION);
-                        if (isForeground == null || isForeground) {
-                            packageName = intent.getStringExtra(EXTRA_PACKAGE);
-                            activityData = intent.getParcelableExtra(EXTRA_ACTIVITY);
-
-                            startForeground(packageName, activityData);
-                        } else {
-                            stopForeground(true);
-                        }
-                    }
+//                    if (intent.hasExtra(EXTRA_PACKAGE) && intent.hasExtra(EXTRA_ACTIVITY)) {
+//                        Boolean isForeground = getBooleanPreference(ProgressStatusService.this, STATUS_PERSISTENT_NOTIFICATION);
+//                        if (isForeground == null || isForeground) {
+//                            packageName = intent.getStringExtra(EXTRA_PACKAGE);
+//                            activityData = intent.getParcelableExtra(EXTRA_ACTIVITY);
+//
+//                            startForeground(packageName, activityData);
+//                        } else {
+//                            stopForeground(true);
+//                        }
+//                    }
                 }
                 return START_STICKY;
         }
@@ -236,6 +236,7 @@ public class ProgressStatusService extends Service {
     }
 
     private void startForeground(String packageName, AppData.ActivityData activityData) {
+        if (true) return;
         AppData appData;
         try {
             ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
@@ -312,7 +313,7 @@ public class ProgressStatusService extends Service {
     public void setUp() {
         if (statusView == null || statusView.getParent() == null) {
             if (statusView != null) windowManager.removeView(statusView);
-            statusView = new StatusView(ProgressStatusService.this);
+            statusView = new GroupProgressView(ProgressStatusService.this);
 
             WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,

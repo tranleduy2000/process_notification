@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.duy.notifi.statusbar.receivers.IconUpdateReceiver;
-import com.duy.notifi.statusbar.views.StatusView;
+import com.duy.notifi.statusbar.views.GroupProgressView;
 
 /**
  * Created by Duy on 31-Jul-17.
@@ -20,9 +20,9 @@ public class RamProgressIcon extends ProgressIcon<RamProgressIcon.RamReceiver> {
     public static final String EXTRA_INFO = "memory_info";
     private static final String TAG = "RamIconData";
 
-    private StatusView statusView;
+    private GroupProgressView statusView;
 
-    public RamProgressIcon(Context context, StatusView statusView, int progressId) {
+    public RamProgressIcon(Context context, GroupProgressView statusView, int progressId) {
         super(context, statusView, progressId);
         this.statusView = statusView;
     }

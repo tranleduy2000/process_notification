@@ -10,7 +10,7 @@ import android.util.Log;
 
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.receivers.IconUpdateReceiver;
-import com.duy.notifi.statusbar.views.StatusView;
+import com.duy.notifi.statusbar.views.GroupProgressView;
 
 public class WifiProgressIcon extends ProgressIcon<WifiProgressIcon.WifiReceiver> {
 
@@ -18,7 +18,7 @@ public class WifiProgressIcon extends ProgressIcon<WifiProgressIcon.WifiReceiver
     private WifiManager wifiManager;
     private ConnectivityManager connectivityManager;
 
-    public WifiProgressIcon(Context context, StatusView statusView, int progressId) {
+    public WifiProgressIcon(Context context, GroupProgressView statusView, int progressId) {
         super(context, statusView, progressId);
         wifiManager = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -49,10 +49,6 @@ public class WifiProgressIcon extends ProgressIcon<WifiProgressIcon.WifiReceiver
         return getContext().getString(R.string.icon_wifi);
     }
 
-    @Override
-    public int getIconStyleSize() {
-        return 5;
-    }
 
     static class WifiReceiver extends IconUpdateReceiver<WifiProgressIcon> {
 

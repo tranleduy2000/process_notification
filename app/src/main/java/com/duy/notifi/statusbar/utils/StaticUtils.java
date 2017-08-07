@@ -3,24 +3,19 @@ package com.duy.notifi.statusbar.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.PowerManager;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.duy.notifi.statusbar.StatusApplication;
+import com.duy.notifi.statusbar.ProgressApplication;
 import com.duy.notifi.statusbar.activities.StartActivity;
 import com.duy.notifi.statusbar.services.AccessibilityService;
 import com.duy.notifi.statusbar.services.ProgressStatusService;
@@ -36,16 +31,6 @@ public class StaticUtils {
         else return 0;
     }
 
-    public static boolean shouldShowTutorial(Context context, String tutorialName) {
-        return shouldShowTutorial(context, tutorialName, 0);
-    }
-
-    public static boolean shouldShowTutorial(Context context, String tutorialName, int limit) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int shown = prefs.getInt("tutorial" + tutorialName, 0);
-        prefs.edit().putInt("tutorial" + tutorialName, shown + 1).apply();
-        return limit == shown;
-    }
 
     public static int getNavigationBarHeight(Context context) {
         int resId = context.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
@@ -61,27 +46,19 @@ public class StaticUtils {
         return px / Resources.getSystem().getDisplayMetrics().density;
     }
 
-    public static int getBluetoothState(Context context) {
-        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-        if (adapter != null) return adapter.getState();
-        else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)
-                adapter = ((BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
-            if (adapter != null) return adapter.getState();
-            else return BluetoothAdapter.STATE_OFF;
-        }
-    }
+//    public static int getBluetoothState(Context context) {
+//        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+//        if (adapter != null) return adapter.getState();
+//        else {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)
+//                adapter = ((BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
+//            if (adapter != null) return adapter.getState();
+//            else return BluetoothAdapter.STATE_OFF;
+//        }
+//    }
 
     public static boolean isAccessibilityGranted(Context context) {
         return isAccessibilityServiceRunning(context);
-    }
-
-    public static boolean isNotificationGranted(Context context) {
-        for (String packageName : NotificationManagerCompat.getEnabledListenerPackages(context)) {
-            if (packageName.contains(context.getPackageName()) || packageName.equals(context.getPackageName()))
-                return true;
-        }
-        return shouldUseCompatNotifications(context);
     }
 
     public static boolean isIgnoringOptimizations(Context context) {
@@ -168,7 +145,7 @@ public class StaticUtils {
             context.startService(intent);
         }
 
-        ((StatusApplication) context.getApplicationContext()).onPreferenceChanged();
+        ((ProgressApplication) context.getApplicationContext()).onPreferenceChanged();
     }
 
     public static boolean isAccessibilityServiceRunning(Context context) {
@@ -181,8 +158,4 @@ public class StaticUtils {
         return false;
     }
 
-    public static boolean shouldUseCompatNotifications(Context context) {
-        Boolean enabled = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_NOTIFICATIONS_COMPAT);
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 || (enabled != null && enabled);
-    }
 }

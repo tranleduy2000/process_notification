@@ -21,7 +21,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.duy.notifi.R;
-import com.duy.notifi.statusbar.StatusApplication;
+import com.duy.notifi.statusbar.ProgressApplication;
 import com.duy.notifi.statusbar.utils.ColorUtils;
 import com.duy.notifi.statusbar.views.ColorImageView;
 import com.duy.notifi.statusbar.views.CustomImageView;
@@ -29,9 +29,9 @@ import com.duy.notifi.statusbar.views.CustomImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ColorPickerDialog extends PreferenceDialog<Integer> implements StatusApplication.OnActivityResultListener {
+public class ColorPickerDialog extends PreferenceDialog<Integer> implements ProgressApplication.OnActivityResultListener {
 
-    private StatusApplication statusApplication;
+    private ProgressApplication statusApplication;
     private TextWatcher textWatcher;
     private List<Integer> presetColors;
 
@@ -52,7 +52,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_color_picker);
 
-        statusApplication = (StatusApplication) getContext().getApplicationContext();
+        statusApplication = (ProgressApplication) getContext().getApplicationContext();
         statusApplication.addListener(this);
 
         colorImage = (CustomImageView) findViewById(R.id.color);
