@@ -12,7 +12,7 @@
 
     <color name="transparent">#00ffffff</color>
 
-    <array name="defaultColors">
+    <array name="defaultColors">g
         <item>#D32F2F</item>
         <item>#C2185B</item>
         <item>#7B1FA2</item>

@@ -23,8 +23,8 @@
 
     <string name="error_name_exists">An item with this name already exists.</string>
 
-    <string name="service_name">Status Service</string>
-    <string name="service_desc">\'Status Service\' needs to be enabled in order to detect window changes to update the status bar. On some phones you may need to scroll to the bottom of the screen before it becomes visible.</string>
+    <string name="service_name">Progress Service</string>
+    <string name="service_desc">\'Progress Service\' needs to be enabled in order to detect window changes to update the status bar. On some phones you may need to scroll to the bottom of the screen before it becomes visible.</string>
 
     <string name="optimizations_name">Ignore Battery Optimizations</string>
     <string name="optimizations_desc">Battery Optimizations will cause Status to stop working as the system will close Status to save battery life. This must be disabled in order for Status to function correctly.</string>

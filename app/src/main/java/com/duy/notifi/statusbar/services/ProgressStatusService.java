@@ -193,17 +193,17 @@ public class ProgressStatusService extends Service {
                     statusView.setFullscreen(intent.getBooleanExtra(EXTRA_IS_FULLSCREEN,
                             isFullscreen()));
 
-                    if (intent.hasExtra(EXTRA_PACKAGE) && intent.hasExtra(EXTRA_ACTIVITY)) {
-                        Boolean isForeground = getBooleanPreference(ProgressStatusService.this, STATUS_PERSISTENT_NOTIFICATION);
-                        if (isForeground == null || isForeground) {
-                            packageName = intent.getStringExtra(EXTRA_PACKAGE);
-                            activityData = intent.getParcelableExtra(EXTRA_ACTIVITY);
-
-                            startForeground(packageName, activityData);
-                        } else {
-                            stopForeground(true);
-                        }
-                    }
+//                    if (intent.hasExtra(EXTRA_PACKAGE) && intent.hasExtra(EXTRA_ACTIVITY)) {
+//                        Boolean isForeground = getBooleanPreference(ProgressStatusService.this, STATUS_PERSISTENT_NOTIFICATION);
+//                        if (isForeground == null || isForeground) {
+//                            packageName = intent.getStringExtra(EXTRA_PACKAGE);
+//                            activityData = intent.getParcelableExtra(EXTRA_ACTIVITY);
+//
+//                            startForeground(packageName, activityData);
+//                        } else {
+//                            stopForeground(true);
+//                        }
+//                    }
                 }
                 return START_STICKY;
         }
