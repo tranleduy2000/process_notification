@@ -31,7 +31,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (!StaticUtils.isPermissionsGranted(this)
+        if (!StaticUtils.isAccessibilityServiceRunning(this)
+                || !StaticUtils.isPermissionsGranted(this)
                 || !StaticUtils.isIgnoringOptimizations(this)
                 || !StaticUtils.canDrawOverlays(this)) {
             startActivity(new Intent(this, StartActivity.class));

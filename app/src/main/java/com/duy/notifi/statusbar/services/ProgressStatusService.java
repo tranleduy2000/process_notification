@@ -28,7 +28,6 @@ import android.view.WindowManager;
 import com.duy.notifi.R;
 import com.duy.notifi.statusbar.activities.AppSettingActivity;
 import com.duy.notifi.statusbar.activities.MainActivity;
-import com.duy.notifi.statusbar.activities.MainActivity2;
 import com.duy.notifi.statusbar.data.AppData;
 import com.duy.notifi.statusbar.data.icon.BatteryLevelProgressIcon;
 import com.duy.notifi.statusbar.data.icon.BatteryTempProgressIcon;
@@ -214,7 +213,7 @@ public class ProgressStatusService extends Service {
             if (packageName != null && activityData != null)
                 startForeground(packageName, activityData);
             else {
-                Intent contentIntent = new Intent(ProgressStatusService.this, MainActivity2.class);
+                Intent contentIntent = new Intent(ProgressStatusService.this, MainActivity.class);
                 contentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 TaskStackBuilder contentStackBuilder = TaskStackBuilder.create(ProgressStatusService.this);
@@ -246,7 +245,7 @@ public class ProgressStatusService extends Service {
             return;
         }
 
-        Intent contentIntent = new Intent(ProgressStatusService.this, MainActivity2.class);
+        Intent contentIntent = new Intent(ProgressStatusService.this, MainActivity.class);
         contentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         TaskStackBuilder contentStackBuilder = TaskStackBuilder.create(ProgressStatusService.this);

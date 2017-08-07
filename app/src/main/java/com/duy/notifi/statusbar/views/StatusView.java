@@ -205,11 +205,13 @@ public class StatusView extends FrameLayout {
     }
 
     public void setFullscreen(boolean isFullscreen) {
-        if (getVisibility() == View.GONE != isFullscreen
-                && !isSystemShowing
-                && !PreferenceUtils.isShowInFullScreen(getContext())) {
+        this.isFullscreen = isFullscreen;
+        if (PreferenceUtils.isShowInFullScreen(getContext())) {
+            if (isFullscreen) setStatusBarVisibility(true);
+            return;
+        }
+        if (getVisibility() == View.GONE != isFullscreen && !isSystemShowing) {
             setStatusBarVisibility(!isFullscreen);
-            this.isFullscreen = isFullscreen;
         }
     }
 

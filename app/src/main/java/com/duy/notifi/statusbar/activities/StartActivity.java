@@ -74,14 +74,14 @@ public class StartActivity extends AppCompatActivity {
 
             steps.add(optimizationStep);
 
-
-            permissionsStep = new SteppersItem();
-            permissionsStep.setLabel(getString(R.string.permissions_name));
-            permissionsStep.setSubLabel(getString(R.string.permissions_desc));
-            permissionsStep.setFragment(new PermissionsStepFragment());
-            permissionsStep.setPositiveButtonEnable(StaticUtils.isPermissionsGranted(this));
-
-            steps.add(permissionsStep);
+//
+//            permissionsStep = new SteppersItem();
+//            permissionsStep.setLabel(getString(R.string.permissions_name));
+//            permissionsStep.setSubLabel(getString(R.string.permissions_desc));
+//            permissionsStep.setFragment(new PermissionsStepFragment());
+//            permissionsStep.setPositiveButtonEnable(StaticUtils.isPermissionsGranted(this));
+//
+//            steps.add(permissionsStep);
 
             overlayStep = new SteppersItem();
             overlayStep.setLabel(getString(R.string.overlay_name));

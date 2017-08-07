@@ -1,18 +1,12 @@
 <resources>
     <string name="app_name">Progress notification</string>
 
-    <string name="action_setup">Setup</string>
     <string name="action_access_grant">Grant Access</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_ok">OK</string>
-    <string name="action_search">Search</string>
-    <string name="action_about">About</string>
     <string name="action_reset">Reset</string>
-    <string name="action_tutorial">Reset Tutorial</string>
     <string name="action_pick_image_color">Pick Color from Image</string>
-    <string name="action_dismiss">Dismiss</string>
     <string name="action_delete">Delete</string>
-    <string name="action_edit_style">Edit Icon Style</string>
     <string name="action_new_backup">New Backup</string>
     <string name="action_delete_backup">Delete this Backup</string>
     <string name="action_restore_backup">Restore from this Backup</string>
@@ -24,21 +18,13 @@
     <string name="action_app_settings">App Settings</string>
 
     <string name="reset_all">Reset All</string>
-    <string name="notifications_disable">Disable All Notifications</string>
-    <string name="notifications_enable">Enable All Notifications</string>
 
-    <string name="prompt_name">Type a name here…</string>
     <string name="prompt_backup_name">Backup Name</string>
 
-    <string name="error_no_text_name">Please type a name…</string>
     <string name="error_name_exists">An item with this name already exists.</string>
-    <string name="error_missing_icons">You are missing one or more required icons.</string>
 
     <string name="service_name">Status Service</string>
     <string name="service_desc">\'Status Service\' needs to be enabled in order to detect window changes to update the status bar. On some phones you may need to scroll to the bottom of the screen before it becomes visible.</string>
-
-    <string name="permissions_name">Additional Permissions</string>
-    <string name="permissions_desc">This app needs a few additional permissions in order to access parts of the phone relevant to the status bar. An explanation of why these are needed is provided in the Status\'s Play Store page.</string>
 
     <string name="optimizations_name">Ignore Battery Optimizations</string>
     <string name="optimizations_desc">Battery Optimizations will cause Status to stop working as the system will close Status to save battery life. This must be disabled in order for Status to function correctly.</string>
@@ -48,72 +34,16 @@
 
     <string name="tab_apps">Apps</string>
 
-    <string name="preference_icon_style">Icon Style</string>
-    <string name="preference_icon_padding">Horizontal Padding (dp)</string>
-    <string name="preference_icon_scale">Icon Scale (dp)</string>
-    <string name="preference_text_size">Text Size (sp)</string>
-    <string name="preference_gravity">Alignment</string>
-    <string name="preference_show_drawable">Show/Hide Icon</string>
-    <string name="preference_show_text">Display Text</string>
     <string name="preference_status_color">Primary Color</string>
     <string name="preference_fullscreen">Hide Status</string>
     <string name="preference_notifications">Notifications</string>
     <string name="preference_backups">Backup/Restore Settings</string>
 
-    <string name="icon_network">Network Icon</string>
     <string name="icon_wifi">WiFi Icon</string>
-
-    <string name="gravity_center">Center</string>
-    <string name="gravity_left">Left</string>
-    <string name="gravity_right">Right</string>
-
-    <string name="unit_dp">dp</string>
-    <string name="unit_sp">sp</string>
-
-    <string name="icon_style_default">Default</string>
-    <string name="icon_style_circle">Circle</string>
-    <string name="icon_style_classic">Classic</string>
-    <string name="icon_style_clip">Clip</string>
-    <string name="icon_style_curved">Curved</string>
-    <string name="icon_style_triangle">Triangle</string>
-    <string name="icon_style_square">Square</string>
-    <string name="icon_style_retro">Retro</string>
-    <string name="icon_style_radial">Radial</string>
-
-    <string name="tutorial_enable">Enable the Status Bar</string>
-    <string name="tutorial_enable_desc">The switch at the top of the screen allows you to enable and disable the customized status bar. Turn it on to try it!</string>
-    <string name="tutorial_search">Looking for something?</string>
-    <string name="tutorial_search_desc">Find the exact setting you want to change by using Status\'s search bar.</string>
-    <string name="tutorial_help">Need help?</string>
-    <string name="tutorial_help_desc">The help section is always being updated and contains almost all the issues that have been encountered by other users using this app.</string>
-    <string name="tutorial_icon_switch">Don\'t like an icon?</string>
-    <string name="tutorial_icon_switch_desc">Enable or disable an icon by clicking the check box next to its name.</string>
-    <string name="tutorial_icon_order">Re-order Icons</string>
-    <string name="tutorial_icon_order_desc">Change the order of the icons by pressing the up and down buttons next to an icon\'s name.</string>
-    <string name="tutorial_activities">Don\'t want to modify an entire app?</string>
-    <string name="tutorial_activities_desc">Change individual screens by clicking the \'expand\' button next to the app\'s name.</string>
-    <string name="tutorial_donate">Do you like Status?</string>
-    <string name="tutorial_donate_desc">Donate to help keep Status and other apps like it free to use without advertisements.</string>
 
     <string name="red">Red</string>
     <string name="green">Green</string>
     <string name="blue">Blue</string>
-
-    <string name="hint_format">
-        \n
-        h - Hours\n
-        HH - Hours (24h)\n
-        kk - Hours (24h)\n
-        mm - Minutes\n
-        a - AM/PM\n
-        Z - Time Zone\n
-        \n
-        dd - Day of Month\n
-        EEE - Day of Week\n
-        MM - Month (numeric)\n
-        MMM - Month\n
-        yyyy - Year
-    </string>
 
     <string name="empty">Nothing here…</string>
     <string name="reset_apps_confirm">Are you sure you want to reset all the app-specific preferences? This cannot be undone.</string>
@@ -121,29 +51,6 @@
     <string name="setting">Setting</string>
     <string name="default_cpu_temp_path">sys/class/thermal_zone0/cpu</string>
     <string name="default_upload_speed">2048</string>
-    <string name="enter_path">Enter path</string>
     <string name="enter_value">Enter value</string>
 
-    <string-array name="libraries">
-        <item>
-            <a href="https://github.com/bumptech/glide">Glide</a>
-            <i> - BSD, part MIT and Apache 2.0</i>
-            <p>\nGlide is a fast and efficient open source media management and image loading framework for Android that wraps media decoding, memory and disk caching, and resource pooling into a simple and easy to use interface.</p>
-        </item>
-        <item>
-            <a href="https://github.com/drozdzynski/Steppers">Steppers</a>
-            <i> - Apache 2.0</i>
-            <p>\nSteppers is a view library for Android based on Material Design guidelines.</p>
-        </item>
-        <item>
-            <a href="https://github.com/afollestad/async">Async</a>
-            <i> - Apache 2.0</i>
-            <p>\nA library designed to make the organized execution of async processes in Android easy.</p>
-        </item>
-        <item>
-            <a href="https://github.com/google/gson">Gson</a>
-            <i> - Apache 2.0</i>
-            <p>\nGson is a Java library that can be used to convert Java Objects into their JSON representation.</p>
-        </item>
-    </string-array>
 </resources>
